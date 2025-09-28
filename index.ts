@@ -19,7 +19,7 @@ const browser: Browser = Flags.BROWSER_LOCAL ?
 (async () => {
 
     try {
-        let tempMail = "siddhesh123@yopmail.com";
+        let tempMail = "siddhesh124@yopmail.com";
         await wanAIRegistration(tempMail, "Siddhesh Gathibandhe", "Siddhesh18");
         await yopmail(tempMail)
         let otp: string = await getWanOTPFromYopmail();
@@ -35,6 +35,8 @@ const browser: Browser = Flags.BROWSER_LOCAL ?
         let checkInButton = await wanPage.waitForSelector('.sc-jytpVa button', { visible: true }) as ElementHandle<HTMLButtonElement>;
         await checkInButton.evaluate(el => el.scrollIntoView());
         await checkInButton.click();
+
+        browser.close();
     } catch (error) {
         console.error("An error occurred:", error);
     }
