@@ -1,0 +1,22 @@
+{
+  "name": "automation",
+  "version": "1.0.0",
+  "type": "module",
+  "main": "index.js",
+  "dependencies": {
+    "@sparticuz/chromium": "^138.0.2",
+    "node-cron": "^4.2.1",
+    "puppeteer": "^24.22.3",
+    "puppeteer-core": "^24.22.3"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  },
+  "scripts": {
+    "run": "node dist/index.js",
+    "build": "tsc",
+    "start": "npm run build && npm run run"
+  }
+}
