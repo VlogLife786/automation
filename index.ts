@@ -136,21 +136,27 @@ async function getPageFromOpenedByPageName(pageName: string): Promise<Page> {
 
 async function getWanOTPFromYopmail(): Promise<string> {
     let yopmail: Page = await getPageFromOpenedByPageName(PageNames.INBOX);
-    const iframeHandle = await yopmail.$('iframe#ifmail'); // Replace with your iframe selector
-    if (!iframeHandle) throw new Error("Iframe not found");
+    try {
+        const iframeHandle = await yopmail.$('iframe#ifmail'); // Replace with your iframe selector
+        if (!iframeHandle) throw new Error("Iframe not found");
 
-    // 2. Get the content frame
-    const frame = await iframeHandle.contentFrame();
-    if (!frame) throw new Error("Failed to get iframe content");
+        // 2. Get the content frame
+        const frame = await iframeHandle.contentFrame();
+        if (!frame) throw new Error("Failed to get iframe content");
 
-    // 3. Wait for the div inside the iframe to appear
-    await frame.waitForSelector('#mail');
+        // 3. Wait for the div inside the iframe to appear
+        await frame.waitForSelector('#mail');
 
-    let divText: string | null = await frame.$eval('#mail', el => el.textContent?.trim() ?? null);
-    let match = divText?.match(/\b\d{6}\b/); // match exactly 6 digits
-    let otp = match ? match[0] : ""
+        let divText: string | null = await frame.$eval('#mail', el => el.textContent?.trim() ?? null);
+        let match = divText?.match(/\b\d{6}\b/); // match exactly 6 digits
+        let otp = match ? match[0] : ""
 
-    return otp;
+        return otp;
+    }
+    catch (err) {
+        await yopmail.screenshot({ path: "example.png" });
+        throw new Error("Something went wrong: " + err);
+    }
 }
 
 async function sleep(ms: number): Promise<void> {
