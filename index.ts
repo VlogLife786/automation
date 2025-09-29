@@ -161,6 +161,30 @@ async function getWanOTPFromYopmail(): Promise<string> {
     }
 }
 
+async function getEmailFromTempMailSo(): Promise<string> {
+    let tempMailSo = await browser.newPage();
+    try {
+        await tempMailSo.goto("https://tempmail.so/", { waitUntil: "load" });
+        const title = await tempMailSo.title();
+        console.log("Page title: ", title);
+        let initialEmailId: string = await tempMailSo.$eval('[class="text-base truncate"]', el => (el as HTMLSpanElement).innerText.trim());
+        await tempMailSo.click('temp-mail-inbox .h-8');
+        await tempMailSo.waitForFunction(() => {
+            let modelPopUp: HTMLDivElement = document.querySelector('#home-guide-modal') as HTMLDivElement;
+            return (modelPopUp && !modelPopUp.classList.contains("hidden"));
+        });
+        await tempMailSo.click("#home-guide-modal button");
+        await tempMailSo.waitForFunction(() => {
+            let latestEmailId = document.querySelector('[class="text-base truncate"]')?.textContent?.trim();
+            return (latestEmailId && initialEmailId != latestEmailId);
+        });
+        return await tempMailSo.$eval('[class="text-base truncate"]', el => (el as HTMLSpanElement).innerText.trim());
+    } catch (err) {
+        await tempMailSo.screenshot({ path: "tempmailSo.png" });
+        throw new Error("Something went wrong: " + err);
+    }
+}
+
 async function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
