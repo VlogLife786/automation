@@ -11,7 +11,7 @@ Flags.BROWSER_LOCAL = true;
 Flags.BROWSER_SERVER = false;
 export class Configs {
 }
-Configs.SCHEDULAR_CONFIG = "*/2 * * * *";
+Configs.SCHEDULAR_CONFIG = "*/30 * * * *";
 export class ApiURLs {
 }
 ApiURLs.USER_DETAILS_API = "https://randomuser.me//api?nat=IN";
