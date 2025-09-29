@@ -18,7 +18,7 @@ export async function startProcessOfAccountCreation() {
         try {
             await validateWANOtp(wanPage, otp, tempMail);
             await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?email=${tempMail}&fullName=${userFullName}&password=${password}`);
-            // console.log(`Account created successfully for email id - ${tempMail}, Full name - ${userFullName} and password - ${password}`);
+            console.log(`Account created successfully.`);
         }
         catch (error) {
             await wanPage.screenshot({ path: "wanOTPValidation.png" });
