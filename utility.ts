@@ -1,4 +1,4 @@
-import puppeteer, { Browser, Page } from "puppeteer";   // If "type": "module" in package.json
+import puppeteer, { Browser, Page } from "puppeteer-core";   // If "type": "module" in package.json
 import { ApiURLs, Configs, Flags, PageNames } from "./constants.js";
 import Chromium from "@sparticuz/chromium";
 import nodeCron from "node-cron";
@@ -260,7 +260,7 @@ export async function openNewBrowser(instanceType: Flags): Promise<Browser> {
             args: Chromium.args,
             defaultViewport: null,         // optional: to see full page
             executablePath: await Chromium.executablePath(),
-            headless: false,
+            headless: true,
         }); // headless:false shows the browser
 }
 

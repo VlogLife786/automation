@@ -1,4 +1,4 @@
-import puppeteer from "puppeteer"; // If "type": "module" in package.json
+import puppeteer from "puppeteer-core"; // If "type": "module" in package.json
 import { ApiURLs, Flags, PageNames } from "./constants.js";
 import Chromium from "@sparticuz/chromium";
 import { getRestResponse } from "./restTemplate.js";
@@ -242,7 +242,7 @@ export async function openNewBrowser(instanceType) {
                 args: Chromium.args,
                 defaultViewport: null, // optional: to see full page
                 executablePath: await Chromium.executablePath(),
-                headless: false,
+                headless: true,
             }); // headless:false shows the browser
 }
 /**
