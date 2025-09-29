@@ -3,38 +3,28 @@ import { Flags, PageNames } from "./constants.js";
 import Chromium from "@sparticuz/chromium";
 import nodeCron from "node-cron";
 
-const browser: Browser = Flags.BROWSER_LOCAL ?
-    await puppeteer.launch({
-        headless: false,
-        defaultViewport: null,
-        args: ['--start-maximized']
-    })
-    :
-    await puppeteer.launch({
-        args: Chromium.args,
-        defaultViewport: null,         // optional: to see full page
-        executablePath: await Chromium.executablePath(),
-        headless: false,
-    }); // headless:false shows the browser
+var browser: Browser;
 
 async function startProcessOfAccountCreation() {
     try {
-
         let tempMail: string = await getEmailFromTempMailSo();
-        // let tempMail = "siddhesh129@yopmail.com";
         await wanAIRegistration(tempMail, "Siddhesh Gathibandhe", "Siddhesh18");
+        await focusOnPage(PageNames.TEMP_EMAIL_SO);
         let otp: string = await getWanOTPFromTempMailSo();
-        // await yopmail(tempMail)
-        // let otp: string = await getWanOTPFromYopmail();
         await focusOnPage(PageNames.WAN_AI);
         let wanPage: Page = await getPageFromOpenedByPageName(PageNames.WAN_AI);
-
-        wanPage.type('[placeholder="Verification code"]', otp);
-        await sleep(3000);
-        await wanPage.click('[type="submit"]');
-        await wanPage.waitForNavigation();
-        await wanPage.waitForSelector('[aria-label="Close"]');;
-        await wanPage.click('[aria-label="Close"]');
+        try {
+            await wanPage.type('[placeholder="Verification code"]', otp);
+            await sleep(3000);
+            await wanPage.click('[type="submit"]');
+            await wanPage.waitForSelector('[role="dialog"]', { visible: true });
+            await sleep(3000);
+            await wanPage.click('[class="ant-modal-close-x"]');
+            console.log("Account created successfully for email id - " + tempMail);
+        } catch (error) {
+            await wanPage.screenshot({ path: "wanOTPValidation.png" });
+            console.error("An error occurred while validating OTP: ", error);
+        }
     } catch (error) {
         console.error("An error occurred:", error);
     } finally {
@@ -170,7 +160,7 @@ async function getWanOTPFromYopmail(): Promise<string> {
         return otp;
     }
     catch (err) {
-        await yopmail.screenshot({ path: "example.png" });
+        await yopmail.screenshot({ path: "yopmailError.png" });
         throw new Error("Something went wrong: " + err);
     }
 }
@@ -181,21 +171,28 @@ async function getWanOTPFromYopmail(): Promise<string> {
  */
 async function getEmailFromTempMailSo(): Promise<string> {
     let tempMailSo = await browser.newPage();
-    await tempMailSo.goto("https://tempmail.so/", { waitUntil: "load" });
-    const title = await tempMailSo.title();
-    console.log("Page title: ", title);
-    let initialEmailId: string = await tempMailSo.$eval('[class="text-base truncate"]', el => (el as HTMLSpanElement).innerText.trim());
-    await tempMailSo.click('temp-mail-inbox .h-8');
-    await tempMailSo.waitForFunction(() => {
-        let modelPopUp: HTMLDivElement = document.querySelector('#home-guide-modal') as HTMLDivElement;
-        return (modelPopUp && !modelPopUp.classList.contains("hidden"));
-    });
-    await tempMailSo.click("#home-guide-modal button");
-    await tempMailSo.waitForFunction(() => {
-        let latestEmailId = document.querySelector('[class="text-base truncate"]')?.textContent?.trim();
-        return (latestEmailId && initialEmailId != latestEmailId);
-    });
-    return await tempMailSo.$eval('[class="text-base truncate"]', el => (el as HTMLSpanElement).innerText.trim());
+    try {
+        await tempMailSo.goto("https://tempmail.so/", { waitUntil: "load" });
+        const title = await tempMailSo.title();
+        console.log("Page title: ", title);
+
+        await tempMailSo.click('temp-mail-inbox .h-8');
+        await tempMailSo.waitForFunction(() => {
+            let modelPopUp: HTMLDivElement = document.querySelector('#home-guide-modal') as HTMLDivElement;
+            return (modelPopUp && !modelPopUp.classList.contains("hidden"));
+        });
+
+        await tempMailSo.click("#home-guide-modal button");
+        await tempMailSo.waitForFunction(() => {
+            let latestEmailId = document.querySelector('[class="text-base truncate"]')?.textContent?.trim();
+            return (latestEmailId && latestEmailId != "");
+        });
+        await sleep(3000);
+        return await tempMailSo.$eval('[class="text-base truncate"]', el => (el as HTMLSpanElement).innerText.trim());
+    } catch (error) {
+        await tempMailSo.screenshot({ path: "tempmailSoError.png" });
+        throw new Error("Something went wrong: " + error);
+    }
 }
 
 /**
@@ -211,7 +208,8 @@ async function getWanOTPFromTempMailSo(): Promise<string> {
     await tempMailSo.click("#home-guide-modal button");
     const emailText = await tempMailSo.evaluate(() => {
         const nodes = Array.from(document.querySelectorAll('.overflow-y-auto div'));
-        const found = nodes.reverse().find(x => x.textContent?.includes("crayfish55636@aminating.com"));
+        let emailId = document.querySelector('[class="text-base truncate"]')?.textContent?.trim() ?? "";
+        const found = nodes.reverse().find(x => x.textContent?.includes(emailId));
         return found?.textContent?.trim() ?? null;
     });
     let match = emailText?.match(/\b\d{6}\b/); // match exactly 6 digits
@@ -229,8 +227,29 @@ async function sleep(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
+/**
+ * 
+ * @param instanceType Open new browser to start the process
+ * @returns new browser instance
+ */
+async function openNewBrowser(instanceType: Flags): Promise<Browser> {
+    return instanceType ?
+        await puppeteer.launch({
+            headless: false,
+            defaultViewport: null,
+            args: ['--start-maximized']
+        })
+        :
+        await puppeteer.launch({
+            args: Chromium.args,
+            defaultViewport: null,         // optional: to see full page
+            executablePath: await Chromium.executablePath(),
+            headless: false,
+        }); // headless:false shows the browser
+}
+
 // Schedular will run the process in certain time.
-nodeCron.schedule("* * * * *", () => {
-    console.log("Running job every minute at", new Date().toISOString());
-    startProcessOfAccountCreation();
+nodeCron.schedule("* * * * *", async () => {
+        browser = await openNewBrowser(Flags.BROWSER_SERVER);
+        await startProcessOfAccountCreation();
 });

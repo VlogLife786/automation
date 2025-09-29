@@ -6,5 +6,6 @@ export enum PageNames {
 }
 
 export class Flags {
-    static readonly BROWSER_LOCAL: boolean = false;
+    static readonly BROWSER_LOCAL: boolean = true;
+    static readonly BROWSER_SERVER: boolean = false;
 }
