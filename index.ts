@@ -1,26 +1,26 @@
 import puppeteer, { Browser, ElementHandle, Page } from "puppeteer";   // If "type": "module" in package.json
-import { Flags, PageNames } from "./constants.js";
+import { ApiURLs, Configs, Flags, PageNames } from "./constants.js";
 import Chromium from "@sparticuz/chromium";
 import nodeCron from "node-cron";
+import { getRestResponse } from "./restTemplate.js";
 
 var browser: Browser;
 
 async function startProcessOfAccountCreation() {
     try {
         let tempMail: string = await getEmailFromTempMailSo();
-        await wanAIRegistration(tempMail, "Siddhesh Gathibandhe", "Siddhesh18");
+        let userDetails = await getRestResponse(ApiURLs.USER_DETAILS_API)
+        let userFullName: string = `${userDetails.results[0].name.first} ${userDetails.results[0].name.last}`
+        let password: string = await generatePassword(12);
+        await wanAIRegistration(tempMail, userFullName, password);
         await focusOnPage(PageNames.TEMP_EMAIL_SO);
         let otp: string = await getWanOTPFromTempMailSo();
         await focusOnPage(PageNames.WAN_AI);
         let wanPage: Page = await getPageFromOpenedByPageName(PageNames.WAN_AI);
         try {
-            await wanPage.type('[placeholder="Verification code"]', otp);
-            await sleep(3000);
-            await wanPage.click('[type="submit"]');
-            await wanPage.waitForSelector('[role="dialog"]', { visible: true });
-            await sleep(3000);
-            await wanPage.click('[class="ant-modal-close-x"]');
-            console.log("Account created successfully for email id - " + tempMail);
+            await validateWANOtp(wanPage, otp, tempMail);
+            await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?email=${tempMail}&fullName=${userFullName}&password=${password}`)
+            // console.log(`Account created successfully for email id - ${tempMail}, Full name - ${userFullName} and password - ${password}`);
         } catch (error) {
             await wanPage.screenshot({ path: "wanOTPValidation.png" });
             console.error("An error occurred while validating OTP: ", error);
@@ -31,6 +31,21 @@ async function startProcessOfAccountCreation() {
         await browser.close();
     }
 };
+
+/**
+ * Validate OTP in WAN
+ * @param wanPage WAN page object 
+ * @param otp OTP
+ * @param tempMail email ID 
+ */
+async function validateWANOtp(wanPage: Page, otp: string, tempMail: string) {
+    await wanPage.type('[placeholder="Verification code"]', otp);
+    await sleep(3000);
+    await wanPage.click('[type="submit"]');
+    await wanPage.waitForSelector('[role="dialog"]', { visible: true });
+    await sleep(3000);
+    await wanPage.click('[class="ant-modal-close-x"]');
+}
 
 /**
  * Check the latest email in yopmail.
@@ -248,8 +263,40 @@ async function openNewBrowser(instanceType: Flags): Promise<Browser> {
         }); // headless:false shows the browser
 }
 
+/**
+ * Generate password based on input length
+ * @param length Length of the password
+ * @returns Password
+ */
+async function generatePassword(length: number = 12): Promise<string> {
+    const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+    const lowerCase = "abcdefghijklmnopqrstuvwxyz";
+    const numbers = "0123456789";
+
+    const allChars = upperCase + lowerCase + numbers;
+
+    let password = "";
+
+    // Ensure at least one from each category
+    password += upperCase[Math.floor(Math.random() * upperCase.length)];
+    password += lowerCase[Math.floor(Math.random() * lowerCase.length)];
+    password += numbers[Math.floor(Math.random() * numbers.length)];
+
+    // Fill the rest
+    for (let i = 3; i < length; i++) {
+        password += allChars[Math.floor(Math.random() * allChars.length)];
+    }
+
+    // Shuffle to avoid predictable positions
+    return password
+        .split("")
+        .sort(() => Math.random() - 0.5)
+        .join("");
+}
+
+
 // Schedular will run the process in certain time.
-nodeCron.schedule("* * * * *", async () => {
-        browser = await openNewBrowser(Flags.BROWSER_SERVER);
-        await startProcessOfAccountCreation();
+nodeCron.schedule(Configs.SCHEDULAR_CONFIG, async () => {
+    browser = await openNewBrowser(Flags.BROWSER_SERVER);
+    await startProcessOfAccountCreation();
 });
