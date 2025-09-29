@@ -1,7 +1,8 @@
 export enum PageNames {
     WAN_AI = "Wan AI",
     YOPMAIL = "YOPmail",
-    INBOX = "Inbox"
+    INBOX = "Inbox",
+    TEMP_EMAIL_SO = "Your Temporary Email Address"
 }
 
 export class Flags {
