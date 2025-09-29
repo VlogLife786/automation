@@ -2,7 +2,7 @@ import nodeCron from "node-cron";
 import { startProcessOfAccountCreation } from "./utility.js";
 
 
-export async function main() {
+export default async function main() {
     await startProcessOfAccountCreation();
 }
 
