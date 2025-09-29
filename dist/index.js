@@ -271,7 +271,12 @@ async function generatePassword(length = 12) {
         .join("");
 }
 // Schedular will run the process in certain time.
-nodeCron.schedule(Configs.SCHEDULAR_CONFIG.toString(), async () => {
+// nodeCron.schedule(Configs.SCHEDULAR_CONFIG.toString(), async () => {
+//     browser = await openNewBrowser(Flags.BROWSER_SERVER);
+//     await startProcessOfAccountCreation();
+// });
+
+export async function main() {
     browser = await openNewBrowser(Flags.BROWSER_SERVER);
     await startProcessOfAccountCreation();
-});
+}
