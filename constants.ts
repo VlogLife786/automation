@@ -11,7 +11,7 @@ export class Flags {
 }
 
 export class Configs{
-    static readonly SCHEDULAR_CONFIG: string = "*/30 * * * *";
+    static readonly SCHEDULAR_CONFIG: string = "*/3 * * * *";
 }
 
 export class ApiURLs {
