@@ -8,12 +8,12 @@ var browser: Browser;
 /**
  * Login on daily basis.
  */
-export async function login() {
+export async function startProcessOfAccountLogin() {
     try {
         console.log("Data validation process started.");
-        
+
         let userDetails: any = await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=checkDailyLogin`);
-        
+
         if (userDetails.message !== "No past date found") {
             browser = await openNewBrowser(Flags.BROWSER_SERVER);
             // Launch browser
@@ -39,6 +39,8 @@ export async function login() {
                 console.log("Operation closed.");
                 await browser.close();
             }
+        } else {
+            console.log("No past date found");
         }
     } catch (error) {
         console.log("Something went wrong: " + error);

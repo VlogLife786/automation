@@ -2,7 +2,7 @@ import nodeCron from "node-cron";
 import { startProcessOfAccountCreation } from "./utility.js";
 import { Configs, Constant } from "./constants.js";
 import { configDotenv } from "dotenv";
-import { login } from "./login.js";
+import { startProcessOfAccountLogin } from "./login.js";
 configDotenv();
 const schedularTime = process.env.SCHEDULAR_TIME || Configs.SCHEDULAR_CONFIG;
 // export default async function main({ req, res }: any) {
@@ -14,7 +14,7 @@ nodeCron.schedule(schedularTime, async () => {
             await startProcessOfAccountCreation();
             break;
         case Constant.ACTION_LOGIN:
-            await login();
+            await startProcessOfAccountLogin();
             break;
         default:
             console.log("Invalid action");

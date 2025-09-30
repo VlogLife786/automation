@@ -5,7 +5,7 @@ var browser;
 /**
  * Login on daily basis.
  */
-export async function login() {
+export async function startProcessOfAccountLogin() {
     try {
         console.log("Data validation process started.");
         let userDetails = await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=checkDailyLogin`);
@@ -36,6 +36,9 @@ export async function login() {
                 console.log("Operation closed.");
                 await browser.close();
             }
+        }
+        else {
+            console.log("No past date found");
         }
     }
     catch (error) {
