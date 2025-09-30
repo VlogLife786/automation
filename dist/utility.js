@@ -4,6 +4,7 @@ import Chromium from "@sparticuz/chromium";
 import { getRestResponse } from "./restTemplate.js";
 var browser;
 export async function startProcessOfAccountCreation() {
+    console.log("Data creation process started.");
     browser = await openNewBrowser(Flags.BROWSER_SERVER);
     try {
         let tempMail = await getEmailFromTempMailSo();
@@ -17,8 +18,8 @@ export async function startProcessOfAccountCreation() {
         let wanPage = await getPageFromOpenedByPageName(PageNames.WAN_AI);
         try {
             await validateWANOtp(wanPage, otp, tempMail);
-            await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?email=${tempMail}&fullName=${userFullName}&password=${password}`);
-            console.log(`Account created successfully.`);
+            await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=add&email=${tempMail}&fullName=${userFullName}&password=${password}`);
+            console.log(`Data created successfully.`);
         }
         catch (error) {
             await wanPage.screenshot({ path: "wanOTPValidation.png" });
@@ -29,6 +30,7 @@ export async function startProcessOfAccountCreation() {
         console.error("An error occurred:", error);
     }
     finally {
+        console.log("Operation closed.");
         await browser.close();
     }
 }
@@ -57,7 +59,6 @@ export async function yopmail(emailId) {
         waitUntil: "load"
     });
     const yopmailTitle = await yopmail.title();
-    console.log("Page title: ", yopmailTitle);
     await yopmail.waitForSelector('#ycptcpt');
     await yopmail.type('[placeholder="Enter your inbox here"]', emailId);
     await Promise.all([
@@ -78,7 +79,6 @@ export async function generateTempMail() {
         waitUntil: "load"
     });
     const tempMailTitle = await tempMail.title();
-    console.log("Page title: ", tempMailTitle);
     await tempMail.waitForFunction(() => {
         let emailId = document.querySelector('#i-email');
         return (emailId && emailId.value && emailId.value.trim() != '');
@@ -101,7 +101,6 @@ export async function wanAIRegistration(emailId, name, password) {
     });
     // Extract the title
     const title = await page.title();
-    console.log("Page title: ", title);
     await page.waitForSelector('.sc-cokDIm');
     await page.click(".sc-cokDIm");
     await page.waitForSelector('[placeholder="Confirm password"]', { visible: true });
@@ -177,7 +176,6 @@ export async function getEmailFromTempMailSo() {
     try {
         await tempMailSo.goto("https://tempmail.so/", { waitUntil: "load" });
         const title = await tempMailSo.title();
-        console.log("Page title: ", title);
         await tempMailSo.click('temp-mail-inbox .h-8');
         await tempMailSo.waitForFunction(() => {
             let modelPopUp = document.querySelector('#home-guide-modal');

@@ -5,6 +5,7 @@
   "main": "index.js",
   "dependencies": {
     "@sparticuz/chromium": "^138.0.2",
+    "dotenv": "^17.2.3",
     "node-cron": "^4.2.1",
     "puppeteer": "^24.22.3",
     "puppeteer-core": "^24.22.3"
