@@ -1,5 +1,5 @@
 import nodeCron from "node-cron";
-import { startProcessOfAccountCreation } from "./utility.js";
+import { sleep, startProcessOfAccountCreation } from "./utility.js";
 import { Configs, Constant } from "./constants.js";
 import { configDotenv } from "dotenv";
 import { startProcessOfAccountLogin } from "./login.js";
@@ -8,6 +8,8 @@ import { registerToDremaniaAi } from "./dremaniaRegister.js";
 
 configDotenv();
 const schedularTime: string = process.env.SCHEDULAR_TIME || Configs.SCHEDULAR_CONFIG;
+let isJobInProgress: boolean = false;
+
 
 // (async function main() {
 //     switch (process.env.ACTION) {
@@ -30,21 +32,37 @@ const schedularTime: string = process.env.SCHEDULAR_TIME || Configs.SCHEDULAR_CO
 // })();
 
 nodeCron.schedule(schedularTime, async () => {
-    switch (process.env.ACTION) {
-        case Constant.ACTION_REGISTER:
-            await startProcessOfAccountCreation();
-            break;
+    if (isJobInProgress) {
+        return;
+    }
 
-        case Constant.ACTION_LOGIN:
-            await startProcessOfAccountLogin();
-            break;
+    try {
+        isJobInProgress = true;
+        let listOfActions: string[] = process.env.ACTION?.split(",") || [];
 
-        case Constant.DREMANIA_REGISTER:
-            await registerToDremaniaAi();
-            break;
+        for (const action of listOfActions) {
+            switch (action) {
+                case Constant.ACTION_REGISTER:
+                    await startProcessOfAccountCreation();
+                    break;
 
-        default:
-            console.log("Invalid action");
-            break;
+                case Constant.ACTION_LOGIN:
+                    await startProcessOfAccountLogin();
+                    break;
+
+                case Constant.DREMANIA_REGISTER:
+                    await registerToDremaniaAi();
+                    break;
+
+                default:
+                    console.log("Invalid action");
+                    break;
+            }
+            await sleep(60000);
+        }
+    } catch (error) {
+        console.log("Somethig went wrong in job: " + error);
+    } finally {
+        isJobInProgress = false;
     }
 })
