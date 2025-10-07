@@ -93,13 +93,14 @@ export async function registerToDremaniaAi() {
         await page.waitForFunction((expectedTitle) => document.title != expectedTitle, {}, PageNames.DREMANIA_AI);
         await sleep(10000);
         await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=addDremania&email=${tempMail}&password=${password}`);
-        await browser.close();
         console.log("Process completed.");
     }
     catch (err) {
-        await page.screenshot({ path: "test.png" });
         console.log("Something went wrong: " + err);
+    }
+    finally {
         await browser.close();
+        console.log("Operation closed.");
     }
 }
 /**
