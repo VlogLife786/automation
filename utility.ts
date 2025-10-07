@@ -272,24 +272,18 @@ export async function generatePassword(length: number = 12, appendSpecialCharact
     const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const lowerCase = "abcdefghijklmnopqrstuvwxyz";
     const numbers = "0123456789";
-    const specialCharacters = "!@#$%";
 
-    const allChars = upperCase + lowerCase + numbers + (appendSpecialCharacters ? specialCharacters : "");
+    const allChars = upperCase + lowerCase + numbers;
 
     let password = "";
 
-    // Start by ensuring at least one character from each required set
+    // Ensure at least one from each category
     password += upperCase[Math.floor(Math.random() * upperCase.length)];
     password += lowerCase[Math.floor(Math.random() * lowerCase.length)];
     password += numbers[Math.floor(Math.random() * numbers.length)];
 
-    if (appendSpecialCharacters) {
-        password += specialCharacters[Math.floor(Math.random() * specialCharacters.length)];
-    }
-
-    // Calculate how many more characters we need
-    const requiredLength = password.length;
-    for (let i = requiredLength; i < length; i++) {
+    // Fill the rest
+    for (let i = 3; i < length; i++) {
         password += allChars[Math.floor(Math.random() * allChars.length)];
     }
 
