@@ -4,6 +4,7 @@ export var PageNames;
     PageNames["YOPMAIL"] = "YOPmail";
     PageNames["INBOX"] = "Inbox";
     PageNames["TEMP_EMAIL_SO"] = "Your Temporary Email Address";
+    PageNames["DREMANIA_AI"] = "Dreamina";
 })(PageNames || (PageNames = {}));
 export class Flags {
 }
@@ -15,7 +16,7 @@ Configs.SCHEDULAR_CONFIG = "* * * * *";
 export class ApiURLs {
 }
 ApiURLs.USER_DETAILS_API = "https://randomuser.me//api?nat=IN";
-ApiURLs.USER_DETAILS_GOOGLE_SHEET = "https://script.google.com/macros/s/AKfycbyEFiVjlCIkoffoVFrNXs3MRVCK_lDC57rXwZSE_YUkcys8nEJYbJOoPSxyhrwRWo9g/exec";
+ApiURLs.USER_DETAILS_GOOGLE_SHEET = "https://script.google.com/macros/s/AKfycbz7_3cq_Z7lKdpf03PrjvFCEkjj33z6i-x27zlam6KdnpDYtxBdPHlrG3EvBpv7_mcB/exec";
 export class Constant {
 }
 Constant.CHECK_IN_TO = "Check in to";

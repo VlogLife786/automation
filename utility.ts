@@ -125,7 +125,7 @@ export async function wanAIRegistration(emailId: string, name: string, password:
  * Focus on the specific tab by name.
  * @param pageName Tab name
  */
-export async function focusOnPage(browserObject: Browser, pageName: string): Promise<void> {
+export async function focusOnPage(browserObject: Browser, pageName: PageNames): Promise<void> {
     let pages: Page[] = await browserObject.pages();
     for (const page of pages) {
         let currentPageName = await page.title();
@@ -272,7 +272,7 @@ export async function generatePassword(length: number = 12, appendSpecialCharact
     const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const lowerCase = "abcdefghijklmnopqrstuvwxyz";
     const numbers = "0123456789";
-    const specialCharacters = "!@#$%^&*";
+    const specialCharacters = "!@#$%";
 
     const allChars = upperCase + lowerCase + numbers;
 
@@ -283,8 +283,10 @@ export async function generatePassword(length: number = 12, appendSpecialCharact
     password += lowerCase[Math.floor(Math.random() * lowerCase.length)];
     password += numbers[Math.floor(Math.random() * numbers.length)];
     if (appendSpecialCharacters) {
-        password += numbers[Math.floor(Math.random() * specialCharacters.length)];
+        password += specialCharacters[Math.floor(Math.random() * specialCharacters.length)];
     }
+    console.log(password);
+    
     // Fill the rest
     for (let i = 3; i < length; i++) {
         password += allChars[Math.floor(Math.random() * allChars.length)];
