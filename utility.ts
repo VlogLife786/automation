@@ -10,15 +10,15 @@ export async function startProcessOfAccountCreation() {
     console.log("Data creation process started.");
     browser = await openNewBrowser(Flags.BROWSER_SERVER);
     try {
-        let tempMail: string = await getEmailFromTempMailSo();
+        let tempMail: string = await getEmailFromTempMailSo(browser);
         let userDetails = await getRestResponse(ApiURLs.USER_DETAILS_API)
         let userFullName: string = `${userDetails.results[0].name.first} ${userDetails.results[0].name.last}`
         let password: string = await generatePassword(12);
         await wanAIRegistration(tempMail, userFullName, password);
-        await focusOnPage(PageNames.TEMP_EMAIL_SO);
+        await focusOnPage(browser, PageNames.TEMP_EMAIL_SO);
         let otp: string = await getWanOTPFromTempMailSo();
-        await focusOnPage(PageNames.WAN_AI);
-        let wanPage: Page = await getPageFromOpenedByPageName(PageNames.WAN_AI);
+        await focusOnPage(browser, PageNames.WAN_AI);
+        let wanPage: Page = await getPageFromOpenedPages(browser, PageNames.WAN_AI);
         try {
             await validateWANOtp(wanPage, otp, tempMail);
             await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=add&email=${tempMail}&fullName=${userFullName}&password=${password}`)
@@ -125,8 +125,8 @@ export async function wanAIRegistration(emailId: string, name: string, password:
  * Focus on the specific tab by name.
  * @param pageName Tab name
  */
-export async function focusOnPage(pageName: string): Promise<void> {
-    let pages: Page[] = await browser.pages();
+export async function focusOnPage(browserObject: Browser, pageName: string): Promise<void> {
+    let pages: Page[] = await browserObject.pages();
     for (const page of pages) {
         let currentPageName = await page.title();
         if (currentPageName.includes(pageName)) {
@@ -140,8 +140,8 @@ export async function focusOnPage(pageName: string): Promise<void> {
  * @param pageName Page name
  * @returns Page object
  */
-export async function getPageFromOpenedByPageName(pageName: string): Promise<Page> {
-    let pages: Page[] = await browser.pages();
+export async function getPageFromOpenedPages(browserObject: Browser, pageName: string): Promise<Page> {
+    let pages: Page[] = await browserObject.pages();
     for (const page of pages) {
         let currentPageName = await page.title();
         if (currentPageName.includes(pageName)) {
@@ -156,7 +156,7 @@ export async function getPageFromOpenedByPageName(pageName: string): Promise<Pag
  * @returns OTP
  */
 export async function getWanOTPFromYopmail(): Promise<string> {
-    let yopmail: Page = await getPageFromOpenedByPageName(PageNames.INBOX);
+    let yopmail: Page = await getPageFromOpenedPages(browser, PageNames.INBOX);
     try {
         const iframeHandle = await yopmail.$('iframe#ifmail'); // Replace with your iframe selector
         if (!iframeHandle) throw new Error("Iframe not found");
@@ -184,8 +184,9 @@ export async function getWanOTPFromYopmail(): Promise<string> {
  * Get new email from temp mail.so
  * @returns New generated email Id.
  */
-export async function getEmailFromTempMailSo(): Promise<string> {
-    let tempMailSo = await browser.newPage();
+export async function getEmailFromTempMailSo(browserInstannce: Browser): Promise<string> {
+    browser = browserInstannce;
+    let tempMailSo: Page = await browser.newPage();
     try {
         await tempMailSo.goto("https://tempmail.so/", { waitUntil: "load" });
         const title = await tempMailSo.title();
@@ -214,7 +215,7 @@ export async function getEmailFromTempMailSo(): Promise<string> {
  * @returns OTP
  */
 export async function getWanOTPFromTempMailSo(): Promise<string> {
-    let tempMailSo: Page = await getPageFromOpenedByPageName(PageNames.TEMP_EMAIL_SO);
+    let tempMailSo: Page = await getPageFromOpenedPages(browser, PageNames.TEMP_EMAIL_SO);
     await tempMailSo.waitForFunction(() => {
         let modelPopUp: HTMLDivElement = document.querySelector('#home-guide-modal') as HTMLDivElement;
         return (modelPopUp && !modelPopUp.classList.contains("hidden"));
@@ -247,7 +248,7 @@ export async function sleep(ms: number): Promise<void> {
  * @returns new browser instance
  */
 export async function openNewBrowser(instanceType: Flags): Promise<Browser> {
-    return instanceType ?
+    return instanceType == Flags.BROWSER_LOCAL ?
         await puppeteer.launch({
             headless: false,
             defaultViewport: null,
@@ -267,10 +268,11 @@ export async function openNewBrowser(instanceType: Flags): Promise<Browser> {
  * @param length Length of the password
  * @returns Password
  */
-export async function generatePassword(length: number = 12): Promise<string> {
+export async function generatePassword(length: number = 12, appendSpecialCharacters: boolean = false): Promise<string> {
     const upperCase = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     const lowerCase = "abcdefghijklmnopqrstuvwxyz";
     const numbers = "0123456789";
+    const specialCharacters = "!@#$%^&*";
 
     const allChars = upperCase + lowerCase + numbers;
 
@@ -280,7 +282,9 @@ export async function generatePassword(length: number = 12): Promise<string> {
     password += upperCase[Math.floor(Math.random() * upperCase.length)];
     password += lowerCase[Math.floor(Math.random() * lowerCase.length)];
     password += numbers[Math.floor(Math.random() * numbers.length)];
-
+    if (appendSpecialCharacters) {
+        password += numbers[Math.floor(Math.random() * specialCharacters.length)];
+    }
     // Fill the rest
     for (let i = 3; i < length; i++) {
         password += allChars[Math.floor(Math.random() * allChars.length)];

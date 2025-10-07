@@ -1,6 +1,6 @@
 import { Browser, Page } from "puppeteer";
 import { ApiURLs, Constant, Flags, PageNames } from "./constants.js";
-import { getPageFromOpenedByPageName, openNewBrowser, sleep } from "./utility.js";
+import { getPageFromOpenedPages, openNewBrowser, sleep } from "./utility.js";
 import { getRestResponse } from "./restTemplate.js";
 
 var browser: Browser;

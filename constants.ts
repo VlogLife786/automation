@@ -23,4 +23,5 @@ export class Constant{
     static readonly CHECK_IN_TO : string = "Check in to";
     static readonly ACTION_REGISTER : string = "register";
     static readonly ACTION_LOGIN : string = "login";
+    static readonly DREMANIA_REGISTER : string = "dremania_register";
 }

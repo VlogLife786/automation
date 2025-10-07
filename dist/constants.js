@@ -21,3 +21,4 @@ export class Constant {
 Constant.CHECK_IN_TO = "Check in to";
 Constant.ACTION_REGISTER = "register";
 Constant.ACTION_LOGIN = "login";
+Constant.DREMANIA_REGISTER = "dremania_register";

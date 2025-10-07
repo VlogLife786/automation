@@ -3,13 +3,15 @@ import { startProcessOfAccountCreation } from "./utility.js";
 import { Configs, Constant } from "./constants.js";
 import { configDotenv } from "dotenv";
 import { startProcessOfAccountLogin } from "./login.js";
+import { constants } from "buffer";
+import { registerToDremaniaAi } from "./dremaniaRegister.js";
 
 configDotenv();
 const schedularTime: string = process.env.SCHEDULAR_TIME || Configs.SCHEDULAR_CONFIG;
 
-// export default async function main({ req, res }: any) {
-//     await startProcessOfAccountCreation();
-// }
+// (async function main() {
+//     await registerToDremaniaAi();
+// })();
 
 nodeCron.schedule(schedularTime, async () => {
     switch (process.env.ACTION) {
@@ -19,6 +21,10 @@ nodeCron.schedule(schedularTime, async () => {
 
         case Constant.ACTION_LOGIN:
             await startProcessOfAccountLogin();
+            break;
+
+        case Constant.DREMANIA_REGISTER:
+            await registerToDremaniaAi();
             break;
 
         default:
