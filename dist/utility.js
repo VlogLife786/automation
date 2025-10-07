@@ -263,7 +263,6 @@ export async function generatePassword(length = 12, appendSpecialCharacters = fa
     if (appendSpecialCharacters) {
         password += specialCharacters[Math.floor(Math.random() * specialCharacters.length)];
     }
-    console.log(password);
     // Fill the rest
     for (let i = 3; i < length; i++) {
         password += allChars[Math.floor(Math.random() * allChars.length)];

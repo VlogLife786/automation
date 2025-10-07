@@ -12,7 +12,6 @@ export async function registerToDremaniaAi() {
         //Generate temp user details
         let tempMail: string = await getEmailFromTempMailSo(browser);
         let password: string = await generatePassword(12, true);
-        console.log(password);
 
         // Navigate to dremania ai page
         await page.goto("https://dreamina.capcut.com/ai-tool/login", { waitUntil: "load" });
