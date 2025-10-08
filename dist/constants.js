@@ -23,3 +23,4 @@ Constant.CHECK_IN_TO = "Check in to";
 Constant.ACTION_REGISTER = "register";
 Constant.ACTION_LOGIN = "login";
 Constant.DREMANIA_REGISTER = "dremania_register";
+Constant.ASIA_KOLKATA_TIME_ZONE = "Asia/Kolkata";

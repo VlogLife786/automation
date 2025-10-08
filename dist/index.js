@@ -25,6 +25,7 @@ let isJobInProgress = false;
 // })();
 nodeCron.schedule(schedularTime, async () => {
     if (isJobInProgress) {
+        console.log("An ongoing process is going on, Hence skipping thisone on: " + new Date().toLocaleString());
         return;
     }
     try {
@@ -45,7 +46,7 @@ nodeCron.schedule(schedularTime, async () => {
                     console.log("Invalid action");
                     break;
             }
-            await sleep(60000);
+            await sleep(30000);
         }
     }
     catch (error) {
@@ -54,4 +55,4 @@ nodeCron.schedule(schedularTime, async () => {
     finally {
         isJobInProgress = false;
     }
-});
+}, { timezone: Constant.ASIA_KOLKATA_TIME_ZONE });

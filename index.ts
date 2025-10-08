@@ -33,6 +33,7 @@ let isJobInProgress: boolean = false;
 
 nodeCron.schedule(schedularTime, async () => {
     if (isJobInProgress) {
+        console.log("An ongoing process is going on, Hence skipping thisone on: " + new Date().toLocaleString());
         return;
     }
 
@@ -58,11 +59,11 @@ nodeCron.schedule(schedularTime, async () => {
                     console.log("Invalid action");
                     break;
             }
-            await sleep(60000);
+            await sleep(30000);
         }
     } catch (error) {
         console.log("Somethig went wrong in job: " + error);
     } finally {
         isJobInProgress = false;
     }
-})
+}, { timezone: Constant.ASIA_KOLKATA_TIME_ZONE })
