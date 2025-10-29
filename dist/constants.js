@@ -1,3 +1,5 @@
+import { configDotenv } from "dotenv";
+configDotenv();
 export var PageNames;
 (function (PageNames) {
     PageNames["WAN_AI"] = "Wan AI";
@@ -24,3 +26,8 @@ Constant.ACTION_REGISTER = "register";
 Constant.ACTION_LOGIN = "login";
 Constant.DREMANIA_REGISTER = "dremania_register";
 Constant.ASIA_KOLKATA_TIME_ZONE = "Asia/Kolkata";
+export class EnvConstants {
+}
+EnvConstants.ENV_SCHEDULAR_TIME = process.env.SCHEDULAR_TIME || Configs.SCHEDULAR_CONFIG;
+EnvConstants.ENV_ACTION = process.env.ACTION;
+EnvConstants.ENV_ENABLE_SCREEN_SHOT = process.env.ENABLE_SCREEN_SHOT || 'false';

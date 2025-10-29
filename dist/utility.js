@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer-core"; // If "type": "module" in package.json
-import { ApiURLs, Flags, PageNames } from "./constants.js";
+import { ApiURLs, EnvConstants, Flags, PageNames } from "./constants.js";
 import Chromium from "@sparticuz/chromium";
 import { getRestResponse } from "./restTemplate.js";
 var browser;
@@ -22,7 +22,7 @@ export async function startProcessOfAccountCreation() {
             console.log(`Data created successfully.`);
         }
         catch (error) {
-            await wanPage.screenshot({ path: "wanOTPValidation.png" });
+            await captureScreenShot(wanPage, "wanOTPValidation");
             console.error("An error occurred while validating OTP: ", error);
         }
     }
@@ -163,7 +163,7 @@ export async function getWanOTPFromYopmail() {
         return otp;
     }
     catch (err) {
-        await yopmail.screenshot({ path: "yopmailError.png" });
+        await captureScreenShot(yopmail, "yopmailError");
         throw new Error("Something went wrong: " + err);
     }
 }
@@ -191,7 +191,7 @@ export async function getEmailFromTempMailSo(browserInstannce) {
         return await tempMailSo.$eval('[class="text-base truncate"]', el => el.innerText.trim());
     }
     catch (error) {
-        await tempMailSo.screenshot({ path: "tempmailSoError.png" });
+        await captureScreenShot(tempMailSo, "tempmailSoError");
         throw new Error("Something went wrong: " + error);
     }
 }
@@ -268,4 +268,14 @@ export async function generatePassword(length = 12, appendSpecialCharacters = fa
         .split("")
         .sort(() => Math.random() - 0.5)
         .join("");
+}
+/**
+ * Capture screenshot if enabled
+ * @param page Page Name
+ * @param imageName Image name
+ */
+export async function captureScreenShot(page, imageName) {
+    if (EnvConstants.ENV_ENABLE_SCREEN_SHOT === 'true') {
+        await page.screenshot({ path: `${imageName}.png` });
+    }
 }

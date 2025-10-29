@@ -1,7 +1,8 @@
 import { Browser, Page } from "puppeteer";
 import { ApiURLs, Constant, Flags, PageNames } from "./constants.js";
-import { getPageFromOpenedPages, openNewBrowser, sleep } from "./utility.js";
+import { captureScreenShot, getPageFromOpenedPages, openNewBrowser, sleep } from "./utility.js";
 import { getRestResponse } from "./restTemplate.js";
+import { error } from "console";
 
 var browser: Browser;
 
@@ -33,7 +34,7 @@ export async function startProcessOfAccountLogin() {
                 await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=updateCredit&email=${userDetails.message.email}&credit=${credit}`);
                 console.log("Details updated successfully.");
             } catch (error) {
-                await page.screenshot({ path: "LoginError.png" });
+                await captureScreenShot(page, "LoginError");
                 console.log("Something went wrong: " + error);
             } finally {
                 console.log("Operation closed.");
@@ -59,7 +60,7 @@ async function RenewCredit(page: Page) {
     let credit: string = await page.$eval('[data-test-id="header-popover-button-credit"]', el => (el as HTMLDivElement).innerText.trim() ?? '0');
 
     await page.evaluate(async () => {
-        await (document.querySelector('[data-test-id="header-popover-button-credit"] .sc-cOpnSz') as HTMLDivElement).click();
+        await (document.querySelector('[data-test-id="header-popover-button-credit"] .sc-jyxMhz') as HTMLDivElement).click();
     });
     await page.waitForSelector('.ant-popover-inner', { visible: true });
 

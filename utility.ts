@@ -1,5 +1,5 @@
 import puppeteer, { Browser, Page } from "puppeteer-core";   // If "type": "module" in package.json
-import { ApiURLs, Configs, Flags, PageNames } from "./constants.js";
+import { ApiURLs, Configs, EnvConstants, Flags, PageNames } from "./constants.js";
 import Chromium from "@sparticuz/chromium";
 import nodeCron from "node-cron";
 import { getRestResponse } from "./restTemplate.js";
@@ -24,7 +24,7 @@ export async function startProcessOfAccountCreation() {
             await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=add&email=${tempMail}&fullName=${userFullName}&password=${password}`)
             console.log(`Data created successfully.`);
         } catch (error) {
-            await wanPage.screenshot({ path: "wanOTPValidation.png" });
+            await captureScreenShot(wanPage, "wanOTPValidation");
             console.error("An error occurred while validating OTP: ", error);
         }
     } catch (error) {
@@ -175,7 +175,7 @@ export async function getWanOTPFromYopmail(): Promise<string> {
         return otp;
     }
     catch (err) {
-        await yopmail.screenshot({ path: "yopmailError.png" });
+        await captureScreenShot(yopmail, "yopmailError");
         throw new Error("Something went wrong: " + err);
     }
 }
@@ -205,7 +205,7 @@ export async function getEmailFromTempMailSo(browserInstannce: Browser): Promise
         await sleep(3000);
         return await tempMailSo.$eval('[class="text-base truncate"]', el => (el as HTMLSpanElement).innerText.trim());
     } catch (error) {
-        await tempMailSo.screenshot({ path: "tempmailSoError.png" });
+        await captureScreenShot(tempMailSo, "tempmailSoError");
         throw new Error("Something went wrong: " + error);
     }
 }
@@ -292,4 +292,15 @@ export async function generatePassword(length: number = 12, appendSpecialCharact
         .split("")
         .sort(() => Math.random() - 0.5)
         .join("");
+}
+
+/**
+ * Capture screenshot if enabled    
+ * @param page Page Name    
+ * @param imageName Image name
+ */
+export async function captureScreenShot(page: Page, imageName: string): Promise<void> {
+    if (EnvConstants.ENV_ENABLE_SCREEN_SHOT === 'true') {
+        await page.screenshot({ path: `${imageName}.png` });
+    }
 }

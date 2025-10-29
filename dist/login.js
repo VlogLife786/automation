@@ -1,5 +1,5 @@
 import { ApiURLs, Constant, Flags } from "./constants.js";
-import { openNewBrowser, sleep } from "./utility.js";
+import { captureScreenShot, openNewBrowser, sleep } from "./utility.js";
 import { getRestResponse } from "./restTemplate.js";
 var browser;
 /**
@@ -29,7 +29,7 @@ export async function startProcessOfAccountLogin() {
                 console.log("Details updated successfully.");
             }
             catch (error) {
-                await page.screenshot({ path: "LoginError.png" });
+                await captureScreenShot(page, "LoginError");
                 console.log("Something went wrong: " + error);
             }
             finally {
@@ -56,7 +56,7 @@ async function RenewCredit(page) {
     await page.waitForSelector('[data-test-id="header-popover-button-credit"]', { visible: true });
     let credit = await page.$eval('[data-test-id="header-popover-button-credit"]', el => el.innerText.trim() ?? '0');
     await page.evaluate(async () => {
-        await document.querySelector('[data-test-id="header-popover-button-credit"] .sc-cOpnSz').click();
+        await document.querySelector('[data-test-id="header-popover-button-credit"] .sc-jyxMhz').click();
     });
     await page.waitForSelector('.ant-popover-inner', { visible: true });
     const buttonHandles = await page.$$('.ant-popover-inner button'); // returns ElementHandle[]
