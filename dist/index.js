@@ -5,22 +5,23 @@ import { startProcessOfAccountLogin } from "./login.js";
 import { registerToDremaniaAi } from "./dremaniaRegister.js";
 // const schedularTime: string = process.env.SCHEDULAR_TIME || Configs.SCHEDULAR_CONFIG;
 let isJobInProgress = false;
-// (async function main() {
-//     switch (EnvConstants.ENV_ACTION) {
-//         case Constant.ACTION_REGISTER:
-//             await startProcessOfAccountCreation();
-//             break;
-//         case Constant.ACTION_LOGIN:
-//             await startProcessOfAccountLogin();
-//             break;
-//         case Constant.DREMANIA_REGISTER:
-//             await registerToDremaniaAi();
-//             break;
-//         default:
-//             console.log("Invalid action");
-//             break;
-//     }
-// })();
+// (async () => { await starterFunction("login"); })();
+async function starterFunction(action) {
+    switch (action) {
+        case Constant.ACTION_REGISTER:
+            await startProcessOfAccountCreation();
+            break;
+        case Constant.ACTION_LOGIN:
+            await startProcessOfAccountLogin();
+            break;
+        case Constant.DREMANIA_REGISTER:
+            await registerToDremaniaAi();
+            break;
+        default:
+            console.log("Invalid action");
+            break;
+    }
+}
 nodeCron.schedule(EnvConstants.ENV_SCHEDULAR_TIME, async () => {
     if (isJobInProgress) {
         console.log("An ongoing process is going on, Hence skipping thisone on: " + new Date().toLocaleString());
@@ -30,20 +31,7 @@ nodeCron.schedule(EnvConstants.ENV_SCHEDULAR_TIME, async () => {
         isJobInProgress = true;
         let listOfActions = EnvConstants.ENV_ACTION?.split(",") || [];
         for (const action of listOfActions) {
-            switch (action) {
-                case Constant.ACTION_REGISTER:
-                    await startProcessOfAccountCreation();
-                    break;
-                case Constant.ACTION_LOGIN:
-                    await startProcessOfAccountLogin();
-                    break;
-                case Constant.DREMANIA_REGISTER:
-                    await registerToDremaniaAi();
-                    break;
-                default:
-                    console.log("Invalid action");
-                    break;
-            }
+            await starterFunction(action);
             await sleep(30000);
         }
     }

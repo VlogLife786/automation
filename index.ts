@@ -9,25 +9,27 @@ import { registerToDremaniaAi } from "./dremaniaRegister.js";
 let isJobInProgress: boolean = false;
 
 
-// (async function main() {
-//     switch (EnvConstants.ENV_ACTION) {
-//         case Constant.ACTION_REGISTER:
-//             await startProcessOfAccountCreation();
-//             break;
+// (async () => { await starterFunction("login"); })();
 
-//         case Constant.ACTION_LOGIN:
-//             await startProcessOfAccountLogin();
-//             break;
+async function starterFunction(action: string) {
+    switch (action) {
+        case Constant.ACTION_REGISTER:
+            await startProcessOfAccountCreation();
+            break;
 
-//         case Constant.DREMANIA_REGISTER:
-//             await registerToDremaniaAi();
-//             break;
+        case Constant.ACTION_LOGIN:
+            await startProcessOfAccountLogin();
+            break;
 
-//         default:
-//             console.log("Invalid action");
-//             break;
-//     }
-// })();
+        case Constant.DREMANIA_REGISTER:
+            await registerToDremaniaAi();
+            break;
+
+        default:
+            console.log("Invalid action");
+            break;
+    }
+}
 
 nodeCron.schedule(EnvConstants.ENV_SCHEDULAR_TIME, async () => {
     if (isJobInProgress) {
@@ -40,23 +42,7 @@ nodeCron.schedule(EnvConstants.ENV_SCHEDULAR_TIME, async () => {
         let listOfActions: string[] = EnvConstants.ENV_ACTION?.split(",") || [];
 
         for (const action of listOfActions) {
-            switch (action) {
-                case Constant.ACTION_REGISTER:
-                    await startProcessOfAccountCreation();
-                    break;
-
-                case Constant.ACTION_LOGIN:
-                    await startProcessOfAccountLogin();
-                    break;
-
-                case Constant.DREMANIA_REGISTER:
-                    await registerToDremaniaAi();
-                    break;
-
-                default:
-                    console.log("Invalid action");
-                    break;
-            }
+            await starterFunction(action);
             await sleep(30000);
         }
     } catch (error) {
