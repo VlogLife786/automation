@@ -6,14 +6,17 @@
   "dependencies": {
     "@sparticuz/chromium": "^138.0.2",
     "dotenv": "^17.2.3",
+    "express": "^5.2.1",
     "node-cron": "^4.2.1",
     "puppeteer": "^24.22.3",
     "puppeteer-core": "^24.22.3"
   },
   "devDependencies": {
+    "@types/express": "^5.0.6",
     "@types/node": "^24.5.2",
+    "nodemon": "^3.1.14",
     "ts-node": "^10.9.2",
-    "typescript": "^5.9.2"
+    "typescript": "^5.9.3"
   },
   "scripts": {
     "run": "node dist/index.js",

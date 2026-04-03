@@ -5,6 +5,9 @@ import { Flags } from "./constants.js";
 var browser: Browser;
 
 export async function GenerateWANAiVideos(prompt: string, loginEmail: string, loginPassword: string) {
+
+    console.log("Received the request of execution.");
+
     browser = await openNewBrowser(Flags.BROWSER_SERVER);
     let page: Page = await browser.newPage();
     try {
@@ -44,7 +47,7 @@ export async function GenerateWANAiVideos(prompt: string, loginEmail: string, lo
         await sleep(2000);
         await captureScreenShot(page, "credits")
         await page.reload({ waitUntil: "networkidle2" });
-
+        await sleep(5000);
 
 
         //Enter the prompt
@@ -79,10 +82,15 @@ export async function GenerateWANAiVideos(prompt: string, loginEmail: string, lo
         console.log(text);
 
         let videoUrl = "";
+        //Check generation process is started
         if (text.includes("Generating")) {
             console.log("Video generation is on queue");
+
+            //Wait until generation process not ends
             outerLoop: for (let index = 0; index < 100; index++) {
                 let newlyCreatedVideoCount = await page.$$eval('[data-test-id="dragable-content"]', els => els.length);
+
+                //get the video url of latest video
                 if (newlyCreatedVideoCount > alreadyCreatedVideoCount) {
                     await page.reload({ waitUntil: "load" });
                     await sleep(5000);
@@ -95,11 +103,11 @@ export async function GenerateWANAiVideos(prompt: string, loginEmail: string, lo
                         if (src && src != "") {
                             console.log(src);
                             videoUrl = src;
-                            break outerLoop;
-                        } else {
-                            await sleep(2000);
-                        }
+                            console.log(videoUrl);
 
+                            break outerLoop;
+                        }
+                        await sleep(2000);
                     }
 
                 } else {
@@ -113,13 +121,6 @@ export async function GenerateWANAiVideos(prompt: string, loginEmail: string, lo
         if (videoUrl == "") {
             throw new Error(`Video is not generated for user: ${loginEmail}`)
         }
-
-
-        //Check generation process is started
-
-        //Wait until generation process not ends
-
-        //get the video url of latest video
 
         //Logout current user
         await page.click('[data-test-id="header-popover-button-user"]');
@@ -141,6 +142,7 @@ export async function GenerateWANAiVideos(prompt: string, loginEmail: string, lo
 
     } catch (error) {
         console.log(error);
+        throw error;
     } finally {
         await captureScreenShot(page, "testing");
         await browser.close();
