@@ -26,6 +26,7 @@ Constant.ACTION_REGISTER = "register";
 Constant.ACTION_LOGIN = "login";
 Constant.DREMANIA_REGISTER = "dremania_register";
 Constant.ASIA_KOLKATA_TIME_ZONE = "Asia/Kolkata";
+Constant.WAN_AI_GENERATE_VIDEO = "generate-wan-ai-video";
 export class EnvConstants {
 }
 EnvConstants.ENV_SCHEDULAR_TIME = process.env.SCHEDULAR_TIME || Configs.SCHEDULAR_CONFIG;

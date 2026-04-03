@@ -30,6 +30,7 @@ export class Constant {
     static readonly ACTION_LOGIN: string = "login";
     static readonly DREMANIA_REGISTER: string = "dremania_register";
     static readonly ASIA_KOLKATA_TIME_ZONE: string = "Asia/Kolkata";
+    static readonly WAN_AI_GENERATE_VIDEO = "generate-wan-ai-video";
 }
 
 

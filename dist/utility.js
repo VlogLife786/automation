@@ -279,3 +279,8 @@ export async function captureScreenShot(page, imageName) {
         await page.screenshot({ path: `${imageName}.png` });
     }
 }
+export async function clickBySelector(page, selector) {
+    await page.waitForSelector(selector);
+    const el = await page.$(selector);
+    await el?.evaluate((e) => e.click());
+}

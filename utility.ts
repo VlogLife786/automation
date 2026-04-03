@@ -304,3 +304,13 @@ export async function captureScreenShot(page: Page, imageName: string): Promise<
         await page.screenshot({ path: `${imageName}.png` });
     }
 }
+
+
+
+export async function clickBySelector(page: Page, selector: string) {
+
+    await page.waitForSelector(selector);
+
+    const el = await page.$(selector);
+    await el?.evaluate((e: any) => e.click());
+}
