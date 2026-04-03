@@ -314,3 +314,6 @@ export async function clickBySelector(page: Page, selector: string) {
     const el = await page.$(selector);
     await el?.evaluate((e: any) => e.click());
 }
+
+export const getTextOfElement = async (page: Page, elementName: string) =>
+    await page.$eval(elementName, (els: any) => els.textContent);

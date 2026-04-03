@@ -18,6 +18,7 @@
   "scripts": {
     "run": "node dist/index.js",
     "build": "tsc",
-    "start": "npm run build && npm run run"
+    "start": "npm run build && npm run run",
+    "docker": "docker system prune && docker build -t automation . &&  docker run -p 3000:3000 automation"
   }
 }

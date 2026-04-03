@@ -18,7 +18,7 @@ async function starterFunction(action) {
             await registerToDremaniaAi();
             break;
         case Constant.WAN_AI_GENERATE_VIDEO:
-            await GenerateWANAiVideos("Boy Playing cricket on ground with ninja hattori");
+            await GenerateWANAiVideos("Boy Playing cricket on ground with ninja hattori", "hornet14892@mailshan.com", "rzIfsb6HAUWg");
             break;
         default:
             console.log("Invalid action");
