@@ -2,7 +2,9 @@ import puppeteer, { Browser, Page } from "puppeteer-core";   // If "type": "modu
 import { ApiURLs, Configs, EnvConstants, Flags, PageNames } from "./constants.js";
 import Chromium from "@sparticuz/chromium";
 import nodeCron from "node-cron";
+import fs from "fs";
 import { getRestResponse } from "./restTemplate.js";
+import path from "path";
 
 var browser: Browser;
 
@@ -256,7 +258,7 @@ export async function openNewBrowser(instanceType: Flags): Promise<Browser> {
         })
         :
         await puppeteer.launch({
-            args: Chromium.args,
+            args: ['--no-sandbox', '--disable-setuid-sandbox'],
             defaultViewport: null,         // optional: to see full page
             executablePath: await Chromium.executablePath(),
             headless: true,
@@ -317,3 +319,18 @@ export async function clickBySelector(page: Page, selector: string) {
 
 export const getTextOfElement = async (page: Page, elementName: string) =>
     await page.$eval(elementName, (els: any) => els.textContent);
+
+
+export async function saveScreenShotInDockerLocal(page: Page, imageName: string) {
+    const publicDir = path.join(process.cwd(), "public");
+    if (!fs.existsSync(publicDir)) fs.mkdirSync(publicDir);
+
+    // Full path to save the screenshot inside public
+    const fileName = `screenshot-${imageName}`;
+    const filePath = path.join(publicDir, fileName);
+
+    console.log(filePath);
+
+    // Take screenshot and save it to public folder
+    await page.screenshot({ path: `${filePath}.png` });
+}

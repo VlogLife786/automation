@@ -23,6 +23,6 @@
     "build": "tsc",
     "start": "npm run build && npm run run",
     "docker": "docker system prune && docker build -t automation . &&  docker run -p 3000:3000 automation",
-    "docker-push": "docker system prune && docker build -t automation:1.1 . && docker tag automation:1.1 vloglife643/automation:1.1 && docker push vloglife643/automation:1.1"
+    "docker-push": "docker system prune -f && docker build -t automation:${npm_config_tag} . && docker tag automation:${npm_config_tag} vloglife643/automation:${npm_config_tag} && docker push vloglife643/automation:${npm_config_tag}"
   }
 }

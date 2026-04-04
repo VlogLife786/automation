@@ -18,14 +18,16 @@ let running = false;
 app.get('/', (req, res) => res.send('Puppeteer API running!'));
 
 app.post('/generate/video', async (req, res) => {
-    const { userEmail, userPassword, textPrompt } = req.body;
-    if (!userEmail || !userPassword || !textPrompt) return res.status(400).send({ error: 'Missing important details.' });
+    const { userEmail, userPassword, textPrompt, emailToSendVideo, rowNumber } = req.body;
+    if (!userEmail || !userPassword || !textPrompt || !emailToSendVideo) return res.status(400).send({ error: 'Missing important details.' });
 
     try {
         queue.push(async () => {
             await GenerateWANAiVideos(textPrompt,
                 userEmail,
-                userPassword
+                userPassword,
+                emailToSendVideo,
+                rowNumber
             );
         });
 
@@ -58,12 +60,13 @@ async function starterFunction(action: string) {
             await registerToDremaniaAi();
             break;
 
-        case Constant.WAN_AI_GENERATE_VIDEO:
-            await GenerateWANAiVideos("Boy Playing cricket on ground with ninja hattori",
-                "hornet14892@mailshan.com",
-                "rzIfsb6HAUWg"
-            );
-            break;
+        // case Constant.WAN_AI_GENERATE_VIDEO:
+        //     await GenerateWANAiVideos("Boy Playing cricket on ground with ninja hattori",
+        //         "hornet14892@mailshan.com",
+        //         "rzIfsb6HAUWg"
+
+        //     );
+        //     break;
 
         default:
             console.log("Invalid action");

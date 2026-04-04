@@ -1,24 +1,24 @@
 import { Browser, Page } from "puppeteer-core";
-import { captureScreenShot, clickBySelector, getTextOfElement, openNewBrowser, sleep, yopmail } from "./utility.js";
+import { captureScreenShot, clickBySelector, getTextOfElement, openNewBrowser, saveScreenShotInDockerLocal, sleep, yopmail } from "./utility.js";
 import { Flags } from "./constants.js";
 
 var browser: Browser;
 
-export async function GenerateWANAiVideos(prompt: string, loginEmail: string, loginPassword: string) {
+export async function GenerateWANAiVideos(prompt: string, loginEmail: string, loginPassword: string, emailToSendVideo: string, rowNumber: number = 0) {
 
-    console.log("Received the request of execution.");
+    console.log("Received the request of execution...");
 
     browser = await openNewBrowser(Flags.BROWSER_SERVER);
     let page: Page = await browser.newPage();
     try {
 
         //Navigate to wan ai
-        await page.goto("https://create.wan.video/", { waitUntil: "load" });
+        await page.goto("https://create.wan.video/generate", { waitUntil: "load" });
         await sleep(3000);
 
         //Navigate to login page
-        await clickBySelector(page, "[class*=HeaderContainer] [class*=RightContent] button");
-        await sleep(2000);
+        // await clickBySelector(page, "[class*=HeaderContainer] [class*=RightContent] button");
+        // await sleep(2000);
 
         //Login with user credentials
         await page.type('[data-test-id="login-form-box-address"]', loginEmail, { delay: 120 });
@@ -45,7 +45,7 @@ export async function GenerateWANAiVideos(prompt: string, loginEmail: string, lo
         await sleep(500);
         await page.click('[class*=BtnContainer] button:last-of-type');
         await sleep(2000);
-        await captureScreenShot(page, "credits")
+        // await captureScreenShot(page, "credits")
         await page.reload({ waitUntil: "networkidle2" });
         await sleep(5000);
 
@@ -73,7 +73,7 @@ export async function GenerateWANAiVideos(prompt: string, loginEmail: string, lo
 
         //Click on generate video
         await page.click('[data-test-id="creation-form-button-submit"]');
-        await sleep(4000);
+        await sleep(5000);
 
         //Check video generation is added in queue
         await page.reload({ waitUntil: "networkidle2" });
@@ -101,7 +101,6 @@ export async function GenerateWANAiVideos(prompt: string, loginEmail: string, lo
                         );
 
                         if (src && src != "") {
-                            console.log(src);
                             videoUrl = src;
                             console.log(videoUrl);
 
@@ -111,7 +110,7 @@ export async function GenerateWANAiVideos(prompt: string, loginEmail: string, lo
                     }
 
                 } else {
-                    await captureScreenShot(page, "testing" + index);
+                    // await captureScreenShot(page, "testing" + index);
                     await sleep(7000);
                 }
             }
@@ -144,7 +143,8 @@ export async function GenerateWANAiVideos(prompt: string, loginEmail: string, lo
         console.log(error);
         throw error;
     } finally {
-        await captureScreenShot(page, "testing");
+        // await captureScreenShot(page, "testing");
+        // await saveScreenShotInDockerLocal(page, "error");
         await browser.close();
     }
 }
