@@ -18,8 +18,8 @@ let running = false;
 app.get('/', (req, res) => res.send('Puppeteer API running!'));
 
 app.post('/generate/video', async (req, res) => {
-    const { userEmail, userPassword, textPrompt, emailToSendVideo, rowNumber } = req.body;
-    if (!userEmail || !userPassword || !textPrompt || !emailToSendVideo) return res.status(400).send({ error: 'Missing important details.' });
+    const { userEmail, userPassword, textPrompt, emailToSendVideo, rowNumber, webhookUrl } = req.body;
+    if (!userEmail || !userPassword || !textPrompt || !emailToSendVideo || !webhookUrl) return res.status(400).send({ error: 'Missing important details.' });
 
     try {
         queue.push(async () => {
@@ -27,6 +27,7 @@ app.post('/generate/video', async (req, res) => {
                 userEmail,
                 userPassword,
                 emailToSendVideo,
+                webhookUrl,
                 rowNumber
             );
         });

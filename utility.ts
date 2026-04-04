@@ -334,3 +334,5 @@ export async function saveScreenShotInDockerLocal(page: Page, imageName: string)
     // Take screenshot and save it to public folder
     await page.screenshot({ path: `${filePath}.png` });
 }
+
+

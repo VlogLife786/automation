@@ -1,10 +1,11 @@
 import { Browser, Page } from "puppeteer-core";
 import { captureScreenShot, clickBySelector, getTextOfElement, openNewBrowser, saveScreenShotInDockerLocal, sleep, yopmail } from "./utility.js";
 import { Flags } from "./constants.js";
+import { postRestResponse } from "./restTemplate.js";
 
 var browser: Browser;
 
-export async function GenerateWANAiVideos(prompt: string, loginEmail: string, loginPassword: string, emailToSendVideo: string, rowNumber: number = 0) {
+export async function GenerateWANAiVideos(prompt: string, loginEmail: string, loginPassword: string, emailToSendVideo: string, webhookUrl: string, rowNumber: number = 0) {
 
     console.log("Received the request of execution...");
 
@@ -104,6 +105,12 @@ export async function GenerateWANAiVideos(prompt: string, loginEmail: string, lo
                             videoUrl = src;
                             console.log(videoUrl);
 
+                            //Send video to user
+                            await postRestResponse(webhookUrl, {
+                                "rowNumber": rowNumber,
+                                "videoUrlToSend": videoUrl,
+                                "emailToSendVideo": emailToSendVideo
+                            });
                             break outerLoop;
                         }
                         await sleep(2000);
@@ -141,10 +148,11 @@ export async function GenerateWANAiVideos(prompt: string, loginEmail: string, lo
 
     } catch (error) {
         console.log(error);
+        console.log("Execution completed with errors.");
         throw error;
     } finally {
-        // await captureScreenShot(page, "testing");
-        // await saveScreenShotInDockerLocal(page, "error");
+        console.log("Execution completed.");
         await browser.close();
+        // await captureScreenShot(page, "testing");
     }
 }
