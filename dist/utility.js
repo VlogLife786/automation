@@ -241,7 +241,10 @@ export async function openNewBrowser(instanceType) {
         :
             await puppeteer.launch({
                 args: ['--no-sandbox', '--disable-setuid-sandbox'],
-                defaultViewport: null, // optional: to see full page
+                defaultViewport: {
+                    width: 1920,
+                    height: 1080
+                }, // optional: to see full page
                 executablePath: await Chromium.executablePath(),
                 headless: true,
             }); // headless:false shows the browser

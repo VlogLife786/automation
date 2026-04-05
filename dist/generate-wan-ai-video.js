@@ -104,11 +104,19 @@ export async function GenerateWANAiVideos(prompt, loginEmail, loginPassword, ema
                             break outerLoop;
                         }
                         await sleep(2000);
+                        if (index % 20 == 0) {
+                            await page.reload({ waitUntil: "load" });
+                            await sleep(5000);
+                        }
                     }
                 }
                 else {
                     // await captureScreenShot(page, "testing" + index);
                     await sleep(7000);
+                    if (index % 20 == 0) {
+                        await page.reload({ waitUntil: "load" });
+                        await sleep(5000);
+                    }
                 }
             }
         }
@@ -142,6 +150,7 @@ export async function GenerateWANAiVideos(prompt, loginEmail, loginPassword, ema
             const screenshot = await page.screenshot({ fullPage: true, type: "png" });
             formData.append("image", new Blob([Buffer.from(screenshot)], { type: "image/png" }), "error-screenshot.png");
             formData.append("executionSteps", JSON.stringify(executionSteps));
+            formData.append("videoTitle", videoTitle);
             await postRestFormResponse(webhookUrl + "/send/error-email", formData);
         }
         catch (error) {

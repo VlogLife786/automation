@@ -113,6 +113,7 @@ export async function GenerateWANAiVideos(prompt: string, loginEmail: string, lo
                 if (newlyCreatedVideoCount > alreadyCreatedVideoCount) {
                     await page.reload({ waitUntil: "load" });
                     await sleep(5000);
+
                     executionSteps.push("Video is generated, Now grabbing the video url.");
 
                     for (let index = 0; index < 100; index++) {
@@ -136,11 +137,19 @@ export async function GenerateWANAiVideos(prompt: string, loginEmail: string, lo
                             break outerLoop;
                         }
                         await sleep(2000);
+                        if (index % 20 == 0) {
+                            await page.reload({ waitUntil: "load" });
+                            await sleep(5000);
+                        }
                     }
 
                 } else {
                     // await captureScreenShot(page, "testing" + index);
                     await sleep(7000);
+                    if (index % 20 == 0) {
+                        await page.reload({ waitUntil: "load" });
+                        await sleep(5000);
+                    }
                 }
             }
         }
@@ -175,7 +184,7 @@ export async function GenerateWANAiVideos(prompt: string, loginEmail: string, lo
 
     } catch (error: any) {
         try {
-            executionSteps.push("Error: "+ error?.message);
+            executionSteps.push("Error: " + error?.message);
 
             let formData = new FormData();
             const screenshot = await page.screenshot({ fullPage: true, type: "png" });
@@ -183,6 +192,7 @@ export async function GenerateWANAiVideos(prompt: string, loginEmail: string, lo
                 new Blob([Buffer.from(screenshot)], { type: "image/png" }),
                 "error-screenshot.png");
             formData.append("executionSteps", JSON.stringify(executionSteps));
+            formData.append("videoTitle", videoTitle);
 
             await postRestFormResponse(webhookUrl + "/send/error-email", formData);
         } catch (error) {
