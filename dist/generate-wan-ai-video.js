@@ -140,7 +140,7 @@ export async function GenerateWANAiVideos(prompt, loginEmail, loginPassword, ema
             executionSteps.push("Error: " + error?.message);
             let formData = new FormData();
             const screenshot = await page.screenshot({ fullPage: true, type: "png" });
-            formData.append("image", new Blob([screenshot], { type: "image/png" }), "error-screenshot.png");
+            formData.append("image", new Blob([Buffer.from(screenshot)], { type: "image/png" }), "error-screenshot.png");
             formData.append("executionSteps", JSON.stringify(executionSteps));
             await postRestFormResponse(webhookUrl + "/send/error-email", formData);
         }

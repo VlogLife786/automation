@@ -180,7 +180,7 @@ export async function GenerateWANAiVideos(prompt: string, loginEmail: string, lo
             let formData = new FormData();
             const screenshot = await page.screenshot({ fullPage: true, type: "png" });
             formData.append("image",
-                new Blob([screenshot], { type: "image/png" }),
+                new Blob([Buffer.from(screenshot)], { type: "image/png" }),
                 "error-screenshot.png");
             formData.append("executionSteps", JSON.stringify(executionSteps));
 
