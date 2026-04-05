@@ -6,6 +6,13 @@ export async function postRestResponse(url, body) {
     });
     return await response.json();
 }
+export async function postRestFormResponse(url, formData) {
+    const response = await fetch(url, {
+        method: "POST",
+        body: formData,
+    });
+    return await response.json();
+}
 export async function getRestResponse(url) {
     const response = await fetch(url, {
         method: "GET",

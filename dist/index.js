@@ -12,12 +12,12 @@ const queue = [];
 let running = false;
 app.get('/', (req, res) => res.send('Puppeteer API running!'));
 app.post('/generate/video', async (req, res) => {
-    const { userEmail, userPassword, textPrompt, emailToSendVideo, rowNumber, webhookUrl } = req.body;
-    if (!userEmail || !userPassword || !textPrompt || !emailToSendVideo || !webhookUrl)
+    const { userEmail, userPassword, textPrompt, emailToSendVideo, rowNumber, webhookUrl, videoTitle } = req.body;
+    if (!userEmail || !userPassword || !textPrompt || !emailToSendVideo || !webhookUrl || !videoTitle)
         return res.status(400).send({ error: 'Missing important details.' });
     try {
         queue.push(async () => {
-            await GenerateWANAiVideos(textPrompt, userEmail, userPassword, emailToSendVideo, webhookUrl, rowNumber);
+            await GenerateWANAiVideos(textPrompt, userEmail, userPassword, emailToSendVideo, webhookUrl, videoTitle, rowNumber);
         });
         runNext();
         res.json({ success: true, message: "Task execution is in progress." });
@@ -27,6 +27,24 @@ app.post('/generate/video', async (req, res) => {
         res.status(500).send({ success: false, error: 'Failed to schedule task videos' });
     }
 });
+const runNext = async () => {
+    if (running || queue.length === 0)
+        return;
+    running = true;
+    const task = queue.shift();
+    if (task) {
+        try {
+            await task();
+        }
+        catch (err) {
+            console.error('Task failed:', err);
+        }
+    }
+    running = false;
+    await sleep(10000);
+    // Run the next task
+    runNext();
+};
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 // (async () => { await starterFunction(Constant.WAN_AI_GENERATE_VIDEO); })();
@@ -70,21 +88,3 @@ async function starterFunction(action) {
 //         isJobInProgress = false;
 //     }
 // }, { timezone: Constant.ASIA_KOLKATA_TIME_ZONE })
-const runNext = async () => {
-    if (running || queue.length === 0)
-        return;
-    running = true;
-    const task = queue.shift();
-    if (task) {
-        try {
-            await task();
-        }
-        catch (err) {
-            console.error('Task failed:', err);
-        }
-    }
-    running = false;
-    await sleep(10000);
-    // Run the next task
-    runNext();
-};

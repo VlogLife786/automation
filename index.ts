@@ -18,8 +18,8 @@ let running = false;
 app.get('/', (req, res) => res.send('Puppeteer API running!'));
 
 app.post('/generate/video', async (req, res) => {
-    const { userEmail, userPassword, textPrompt, emailToSendVideo, rowNumber, webhookUrl } = req.body;
-    if (!userEmail || !userPassword || !textPrompt || !emailToSendVideo || !webhookUrl) return res.status(400).send({ error: 'Missing important details.' });
+    const { userEmail, userPassword, textPrompt, emailToSendVideo, rowNumber, webhookUrl, videoTitle } = req.body;
+    if (!userEmail || !userPassword || !textPrompt || !emailToSendVideo || !webhookUrl || !videoTitle) return res.status(400).send({ error: 'Missing important details.' });
 
     try {
         queue.push(async () => {
@@ -28,6 +28,7 @@ app.post('/generate/video', async (req, res) => {
                 userPassword,
                 emailToSendVideo,
                 webhookUrl,
+                videoTitle,
                 rowNumber
             );
         });
@@ -40,6 +41,27 @@ app.post('/generate/video', async (req, res) => {
         res.status(500).send({ success: false, error: 'Failed to schedule task videos' });
     }
 });
+
+
+const runNext = async () => {
+    if (running || queue.length === 0) return;
+
+    running = true;
+    const task = queue.shift();
+    if (task) {
+        try {
+            await task();
+        } catch (err) {
+            console.error('Task failed:', err);
+        }
+    }
+    running = false;
+
+    await sleep(10000);
+    // Run the next task
+    runNext();
+};
+
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
@@ -96,24 +118,3 @@ async function starterFunction(action: string) {
 //     }
 // }, { timezone: Constant.ASIA_KOLKATA_TIME_ZONE })
 
-
-
-
-const runNext = async () => {
-    if (running || queue.length === 0) return;
-
-    running = true;
-    const task = queue.shift();
-    if (task) {
-        try {
-            await task();
-        } catch (err) {
-            console.error('Task failed:', err);
-        }
-    }
-    running = false;
-
-    await sleep(10000);
-    // Run the next task
-    runNext();
-};
