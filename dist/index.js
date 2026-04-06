@@ -3,9 +3,9 @@ import { sleep, startProcessOfAccountCreation } from "./utility.js";
 import { Constant } from "./constants.js";
 import { startProcessOfAccountLogin } from "./login.js";
 import { registerToDremaniaAi } from "./dremaniaRegister.js";
-import { GenerateWANAiVideos } from "./generate-wan-ai-video.js";
+import { GenerateWANAiVideosByApi } from "./generate-wan-videos-api.js";
 // const schedularTime: string = process.env.SCHEDULAR_TIME || Configs.SCHEDULAR_CONFIG;
-let isJobInProgress = false;
+// let isJobInProgress: boolean = false;
 const app = express();
 app.use(express.json());
 const queue = [];
@@ -17,7 +17,15 @@ app.post('/generate/video', async (req, res) => {
         return res.status(400).send({ error: 'Missing important details.' });
     try {
         queue.push(async () => {
-            await GenerateWANAiVideos(textPrompt, userEmail, userPassword, emailToSendVideo, webhookUrl, videoTitle, rowNumber);
+            await GenerateWANAiVideosByApi({
+                rowNumber: rowNumber,
+                emailToSendVideo: emailToSendVideo,
+                loginEmail: userEmail,
+                loginPassword: userPassword,
+                prompt: textPrompt,
+                videoTitle: videoTitle,
+                webhookUrl: webhookUrl
+            });
         });
         runNext();
         res.json({ success: true, message: "Task execution is in progress." });
@@ -27,9 +35,21 @@ app.post('/generate/video', async (req, res) => {
         res.status(500).send({ success: false, error: 'Failed to schedule task videos' });
     }
 });
+// (async () => {
+//     await GenerateWANAiVideosByApi({
+//         rowNumber: 4,
+//         emailToSendVideo: "siddhesh@yopmail.com",
+//         loginEmail: "cow42381@aminating.com",
+//         loginPassword: "Wc1Lj1nts3Lg",
+//         prompt: "A young fair boy walking slowly along a village path carrying a beautifully detailed Lord Ganesha idol on his head, holding it carefully with both hands, wearing traditional attire, calm and devotional expression. Cinematic 3D realistic animation, soft golden sunlight, gentle wind moving clothes, spiritual atmosphere. Drone shot from above slowly descending and circling, wide landscape view, smooth motion, ultra-detailed textures, realistic lighting, 4K quality.",
+//         videoTitle: "River Dance Dream",
+//         webhookUrl: "https://workflow-vhlk.onrender.com/webhook"
+//     });
+// })();
 const runNext = async () => {
     if (running || queue.length === 0)
         return;
+    console.log("New task found, Executing the task.");
     running = true;
     const task = queue.shift();
     if (task) {
