@@ -43,7 +43,7 @@ export async function GenerateWANAiVideosByApi(requestModel) {
                     break;
                 }
                 console.log("Video generation is in progress, Wait for sometime.");
-                await sleep(7000);
+                await sleep(6000);
             }
             if (videoDownloadUrl == "") {
                 throw new Error("Video is not generated or taking too much time for " + requestModel.loginEmail);
@@ -56,7 +56,8 @@ export async function GenerateWANAiVideosByApi(requestModel) {
         executionSteps.push("Error: " + error?.message);
         await postRestResponse(requestModel.webhookUrl + "/send/error-email", {
             "executionSteps": JSON.stringify(executionSteps),
-            "videoTitle": requestModel.videoTitle
+            "videoTitle": requestModel.videoTitle,
+            "rowNumber": requestModel.rowNumber
         });
         throw error;
     }
@@ -152,7 +153,7 @@ export async function startVideoGeneration(textPrompt) {
             "deductMode": "credit_mode",
             "taskType": "text_to_video",
             "taskInput": {
-                "modelVersion": "2_7",
+                "modelVersion": "2_6",
                 "duration": 5,
                 "generationMode": "imaginative",
                 "prompt": textPrompt,
