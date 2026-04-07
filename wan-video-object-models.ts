@@ -92,3 +92,26 @@ export interface GenericApiResponse {
     failed: boolean;
     traceId: string;
 }
+
+export interface AvailableCreditsApiResponse {
+    success: boolean;
+    httpCode: number;
+    errorCode: string;
+    data: Data;
+    requestId: string;
+    failed: boolean;
+    traceId: string;
+}
+
+interface Data {
+    availableCount: number;
+    totalCount: number;
+    amount: Amount;
+}
+
+interface Amount {
+    total: number;
+    member: number;
+    topUp: number;
+    bonus: number;
+}

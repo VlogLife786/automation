@@ -1,6 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import crypto from "crypto";
-import { ExecutionRequestModel, GenericApiResponse, LoginRequestModel, StartVideoGenerationResponse, TaskResultByIdResponse } from "./wan-video-object-models";
+import { AvailableCreditsApiResponse, ExecutionRequestModel, GenericApiResponse, LoginRequestModel, StartVideoGenerationResponse, TaskResultByIdResponse } from "./wan-video-object-models";
 import { sleep } from "./utility.js";
 import { postRestResponse } from "./restTemplate.js";
 
@@ -26,6 +26,14 @@ export async function GenerateWANAiVideosByApi(requestModel: ExecutionRequestMod
 
         await claimDailyReward();
         executionSteps.push("Daily reward claimed.");
+        await sleep(5000);
+
+        let availableCredits: AvailableCreditsApiResponse = await getAvailableCredits();
+        console.log(availableCredits);
+
+        if (availableCredits.data.availableCount < 10) {
+            throw new Error("User does not have sufficient credits to generate videos.");
+        }
         await sleep(5000);
 
         let videoGenerationResponse: StartVideoGenerationResponse = await startVideoGeneration(requestModel.prompt);
@@ -63,19 +71,27 @@ export async function GenerateWANAiVideosByApi(requestModel: ExecutionRequestMod
         }
 
 
-        await logoutCurrentUser();
-        executionSteps.push("Logout done.");
-
     } catch (error: any) {
         executionSteps.push("Error: " + error?.message)
-        await postRestResponse(requestModel.webhookUrl + "/send/error-email", {
-            "executionSteps": JSON.stringify(executionSteps),
-            "videoTitle": requestModel.videoTitle,
-            "rowNumber": requestModel.rowNumber
-        });
         throw error;
     } finally {
         authHeaders = "";
+        try {
+            let availableCredits: AvailableCreditsApiResponse = await getAvailableCredits();
+            await postRestResponse(requestModel.webhookUrl + "/send/error-email", {
+                "executionSteps": JSON.stringify(executionSteps),
+                "videoTitle": requestModel.videoTitle,
+                "rowNumber": requestModel.rowNumber,
+                "emailToSendVideo": requestModel.emailToSendVideo,
+                "resetUserStatus": availableCredits.data.availableCount < 10 ? false : true
+            });
+
+            await logoutCurrentUser();
+            executionSteps.push("Logout done.");
+        } catch (error) {
+            console.log("Internal error happened...");
+            console.log(error);
+        }
         console.log("Execution completed.");
     }
 }
@@ -176,7 +192,7 @@ export async function startVideoGeneration(textPrompt: string): Promise<StartVid
             "deductMode": "credit_mode",
             "taskType": "text_to_video",
             "taskInput": {
-                "modelVersion": "2_6",
+                "modelVersion": "2_7",
                 "duration": 5,
                 "generationMode": "imaginative",
                 "prompt": textPrompt,
@@ -307,6 +323,45 @@ export async function logoutCurrentUser() {
         await axios.request(config);
     } catch (error) {
         throw error
+    }
+}
+
+export async function getAvailableCredits(): Promise<AvailableCreditsApiResponse> {
+    try {
+        let data = JSON.stringify({});
+
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://create.wan.video/wanx/api/common/imagineCount',
+            headers: {
+                'accept': 'application/json, text/plain, */*',
+                'accept-language': 'en-US,en;q=0.9',
+                'bx-v': '2.5.36',
+                'content-type': 'application/json',
+                'origin': 'https://create.wan.video',
+                'priority': 'u=1, i',
+                'referer': 'https://create.wan.video/',
+                'sec-ch-ua': '"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"',
+                'sec-ch-ua-mobile': '?0',
+                'sec-ch-ua-platform': '"Windows"',
+                'sec-fetch-dest': 'empty',
+                'sec-fetch-mode': 'cors',
+                'sec-fetch-site': 'same-origin',
+                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36',
+                'x-platform': 'web',
+                'x-wan-uid': '1293031729177674722',
+                'x-xsrf-token': '91591d0d-db4b-4e44-9157-ead729910e87',
+                'Cookie': '_ga=GA1.1.1888983041.1759128751; cna=shphIWhQYjYCAcqUPRFOtYiF; sca=0c24b11f; xlly_s=1;_ga_Z4KVB8RMTT=GS2.1.s1775561641$o45$g1$t1775562514$j42$l0$h0; cnaui=1293031729177674722; aui=1293031729177674722; atpsida=300d0aaf90c489f2ec91de63_1775562544_6; tfstk=gNpZdJaveAHNGr0k43XqTFinvcXOMtu7bK_fmnxcfNbiWswV33LPiPG9cBPD5UA15Ov29--JDdiOhcB9XtBmP4MWuhKOHwdQScJNKMjcbxZgnX6ntIOPz4MSFhcGXttnPC_Jb6SVmtjGSt4nYis0jiYcsvXhJiI0Si2iYHbd-PVgn-D3xij8ItXDoHmFDwjGnsYDxDSA-Zcm4Zb7Lg5ib6UGzWGDQ17kjwyyypsiLakRR-2DLG-FrhVYn-vFb1JE2V3IW1OD2_p6qxydC3RhKiJxqS7VaIv1Kd0nE6CDKejH5mNAYI-DeOBzmAxFQN5kK1EbCUxemQ1ed0DRQObMGOKb4VteQFt9LnZ0tOW6T_JNEYUGlBty3iJxkv8ym3dcTKzN4FUAx6PkHCz0g1jdYaiEYvxcP0Q_8mBUMSC99M7SXcFYM1jdYaiEYSFA69IFPcnO.; isg=BBkZJAItlFyIaEnGh8iXcXhHKAXzpg1Y3AUPZDvOAcC_QjrUgPOCKOUURB40eqWQ; ' + authHeaders
+            },
+            data: data
+        };
+
+        let response = await axios.request(config);
+
+        return response.data;
+    } catch (error) {
+        throw error;
     }
 }
 

@@ -45,18 +45,18 @@ app.post('/generate/video', async (req, res) => {
 });
 
 
-// (async () => {
-//     await GenerateWANAiVideosByApi({
-//         rowNumber: 4,
-//         emailToSendVideo: "siddhesh@yopmail.com",
-//         loginEmail: "cow42381@aminating.com",
-//         loginPassword: "Wc1Lj1nts3Lg",
-//         prompt: "A young fair boy walking slowly along a village path carrying a beautifully detailed Lord Ganesha idol on his head, holding it carefully with both hands, wearing traditional attire, calm and devotional expression. Cinematic 3D realistic animation, soft golden sunlight, gentle wind moving clothes, spiritual atmosphere. Drone shot from above slowly descending and circling, wide landscape view, smooth motion, ultra-detailed textures, realistic lighting, 4K quality.",
-//         videoTitle: "River Dance Dream",
-//         webhookUrl: "https://workflow-vhlk.onrender.com/webhook"
+(async () => {
+    await GenerateWANAiVideosByApi({
+        rowNumber: 4,
+        emailToSendVideo: "siddhesh@yopmail.com",
+        loginEmail: "beetle89304@aminating.com",
+        loginPassword: "OCt5IYnkE3Te",
+        prompt: "A young fair boy walking slowly along a village path carrying a beautifully detailed Lord Ganesha idol on his head, holding it carefully with both hands, wearing traditional attire, calm and devotional expression. Cinematic 3D realistic animation, soft golden sunlight, gentle wind moving clothes, spiritual atmosphere. Drone shot from above slowly descending and circling, wide landscape view, smooth motion, ultra-detailed textures, realistic lighting, 4K quality.",
+        videoTitle: "River Dance Dream",
+        webhookUrl: "https://workflow-vhlk.onrender.com/webhook"
 
-//     });
-// })();
+    });
+})();
 
 
 const runNext = async () => {
@@ -87,33 +87,33 @@ app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 
 // (async () => { await starterFunction(Constant.WAN_AI_GENERATE_VIDEO); })();
 
-async function starterFunction(action: string) {
-    switch (action) {
-        case Constant.ACTION_REGISTER:
-            await startProcessOfAccountCreation();
-            break;
+// async function starterFunction(action: string) {
+//     switch (action) {
+//         case Constant.ACTION_REGISTER:
+//             await startProcessOfAccountCreation();
+//             break;
 
-        case Constant.ACTION_LOGIN:
-            await startProcessOfAccountLogin();
-            break;
+//         case Constant.ACTION_LOGIN:
+//             await startProcessOfAccountLogin();
+//             break;
 
-        case Constant.DREMANIA_REGISTER:
-            await registerToDremaniaAi();
-            break;
+//         case Constant.DREMANIA_REGISTER:
+//             await registerToDremaniaAi();
+//             break;
 
-        // case Constant.WAN_AI_GENERATE_VIDEO:
-        //     await GenerateWANAiVideos("Boy Playing cricket on ground with ninja hattori",
-        //         "hornet14892@mailshan.com",
-        //         "rzIfsb6HAUWg"
+//         // case Constant.WAN_AI_GENERATE_VIDEO:
+//         //     await GenerateWANAiVideos("Boy Playing cricket on ground with ninja hattori",
+//         //         "hornet14892@mailshan.com",
+//         //         "rzIfsb6HAUWg"
 
-        //     );
-        //     break;
+//         //     );
+//         //     break;
 
-        default:
-            console.log("Invalid action");
-            break;
-    }
-}
+//         default:
+//             console.log("Invalid action");
+//             break;
+//     }
+// }
 
 // nodeCron.schedule(EnvConstants.ENV_SCHEDULAR_TIME, async () => {
 //     if (isJobInProgress) {
