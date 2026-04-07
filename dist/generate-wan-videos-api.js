@@ -21,7 +21,6 @@ export async function GenerateWANAiVideosByApi(requestModel) {
         executionSteps.push("Daily reward claimed.");
         await sleep(5000);
         let availableCredits = await getAvailableCredits();
-        console.log(availableCredits);
         if (availableCredits.data.availableCount < 10) {
             throw new Error("User does not have sufficient credits to generate videos.");
         }
