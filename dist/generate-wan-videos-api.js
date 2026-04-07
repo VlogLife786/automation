@@ -63,7 +63,6 @@ export async function GenerateWANAiVideosByApi(requestModel) {
         throw error;
     }
     finally {
-        authHeaders = "";
         isUserLoggedIn = false;
         try {
             let availableCredits = await getAvailableCredits();
@@ -81,6 +80,7 @@ export async function GenerateWANAiVideosByApi(requestModel) {
             console.log("Internal error happened...");
             console.log(error);
         }
+        authHeaders = "";
         console.log("Execution completed.");
     }
 }
