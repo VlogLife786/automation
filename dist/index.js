@@ -1,8 +1,5 @@
 import express from 'express';
-import { sleep, startProcessOfAccountCreation } from "./utility.js";
-import { Constant } from "./constants.js";
-import { startProcessOfAccountLogin } from "./login.js";
-import { registerToDremaniaAi } from "./dremaniaRegister.js";
+import { sleep } from "./utility.js";
 import { GenerateWANAiVideosByApi } from "./generate-wan-videos-api.js";
 // const schedularTime: string = process.env.SCHEDULAR_TIME || Configs.SCHEDULAR_CONFIG;
 // let isJobInProgress: boolean = false;
@@ -35,17 +32,17 @@ app.post('/generate/video', async (req, res) => {
         res.status(500).send({ success: false, error: 'Failed to schedule task videos' });
     }
 });
-(async () => {
-    await GenerateWANAiVideosByApi({
-        rowNumber: 4,
-        emailToSendVideo: "siddhesh@yopmail.com",
-        loginEmail: "beetle89304@aminating.com",
-        loginPassword: "OCt5IYnkE3Te",
-        prompt: "A young fair boy walking slowly along a village path carrying a beautifully detailed Lord Ganesha idol on his head, holding it carefully with both hands, wearing traditional attire, calm and devotional expression. Cinematic 3D realistic animation, soft golden sunlight, gentle wind moving clothes, spiritual atmosphere. Drone shot from above slowly descending and circling, wide landscape view, smooth motion, ultra-detailed textures, realistic lighting, 4K quality.",
-        videoTitle: "River Dance Dream",
-        webhookUrl: "https://workflow-vhlk.onrender.com/webhook"
-    });
-})();
+// (async () => {
+//     await GenerateWANAiVideosByApi({
+//         rowNumber: 4,
+//         emailToSendVideo: "siddhesh@yopmail.com",
+//         loginEmail: "beetle89304@aminating.com",
+//         loginPassword: "OCt5IYnkE3Te",
+//         prompt: "A young fair boy walking slowly along a village path carrying a beautifully detailed Lord Ganesha idol on his head, holding it carefully with both hands, wearing traditional attire, calm and devotional expression. Cinematic 3D realistic animation, soft golden sunlight, gentle wind moving clothes, spiritual atmosphere. Drone shot from above slowly descending and circling, wide landscape view, smooth motion, ultra-detailed textures, realistic lighting, 4K quality.",
+//         videoTitle: "River Dance Dream",
+//         webhookUrl: "https://workflow-vhlk.onrender.com/webhook"
+//     });
+// })();
 const runNext = async () => {
     if (running || queue.length === 0)
         return;
@@ -68,28 +65,28 @@ const runNext = async () => {
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 // (async () => { await starterFunction(Constant.WAN_AI_GENERATE_VIDEO); })();
-async function starterFunction(action) {
-    switch (action) {
-        case Constant.ACTION_REGISTER:
-            await startProcessOfAccountCreation();
-            break;
-        case Constant.ACTION_LOGIN:
-            await startProcessOfAccountLogin();
-            break;
-        case Constant.DREMANIA_REGISTER:
-            await registerToDremaniaAi();
-            break;
-        // case Constant.WAN_AI_GENERATE_VIDEO:
-        //     await GenerateWANAiVideos("Boy Playing cricket on ground with ninja hattori",
-        //         "hornet14892@mailshan.com",
-        //         "rzIfsb6HAUWg"
-        //     );
-        //     break;
-        default:
-            console.log("Invalid action");
-            break;
-    }
-}
+// async function starterFunction(action: string) {
+//     switch (action) {
+//         case Constant.ACTION_REGISTER:
+//             await startProcessOfAccountCreation();
+//             break;
+//         case Constant.ACTION_LOGIN:
+//             await startProcessOfAccountLogin();
+//             break;
+//         case Constant.DREMANIA_REGISTER:
+//             await registerToDremaniaAi();
+//             break;
+//         // case Constant.WAN_AI_GENERATE_VIDEO:
+//         //     await GenerateWANAiVideos("Boy Playing cricket on ground with ninja hattori",
+//         //         "hornet14892@mailshan.com",
+//         //         "rzIfsb6HAUWg"
+//         //     );
+//         //     break;
+//         default:
+//             console.log("Invalid action");
+//             break;
+//     }
+// }
 // nodeCron.schedule(EnvConstants.ENV_SCHEDULAR_TIME, async () => {
 //     if (isJobInProgress) {
 //         console.log("An ongoing process is going on, Hence skipping thisone on: " + new Date().toLocaleString());
