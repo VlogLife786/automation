@@ -3,6 +3,7 @@ import crypto from "crypto";
 import { sleep } from "./utility.js";
 import { postRestResponse } from "./restTemplate.js";
 let authHeaders = "";
+let isUserLoggedIn = false;
 export async function GenerateWANAiVideosByApi(requestModel) {
     let executionSteps = [];
     console.log("Received the request of execution...");
@@ -15,6 +16,8 @@ export async function GenerateWANAiVideosByApi(requestModel) {
         if (!loginResponse.success) {
             throw new Error("Authentication failed, Please check credentials.");
         }
+        isUserLoggedIn = true;
+        callCountApi();
         executionSteps.push("Login done with user credentials.");
         await sleep(5000);
         await claimDailyReward();
@@ -30,7 +33,7 @@ export async function GenerateWANAiVideosByApi(requestModel) {
         await sleep(3000);
         let videoDownloadUrl = "";
         if (videoGenerationResponse.success && videoGenerationResponse.data) {
-            for (let index = 0; index < 100; index++) {
+            for (let index = 1; index <= 300; index++) {
                 let taskResultResponse = await getTaskDetailsById(videoGenerationResponse.data);
                 // console.log(taskResultResponse);
                 if (taskResultResponse?.data?.taskResult && taskResultResponse.data.taskResult.length > 0
@@ -47,8 +50,8 @@ export async function GenerateWANAiVideosByApi(requestModel) {
                     executionSteps.push("Generated video link is shared over email.");
                     break;
                 }
-                console.log("Video generation is in progress, Wait for sometime.");
-                await sleep(6000);
+                console.log("Video generation is in progress, Wait for sometime. Try No: " + index);
+                await sleep(2000);
             }
             if (videoDownloadUrl == "") {
                 throw new Error("Video is not generated or taking too much time for " + requestModel.loginEmail);
@@ -61,6 +64,7 @@ export async function GenerateWANAiVideosByApi(requestModel) {
     }
     finally {
         authHeaders = "";
+        isUserLoggedIn = false;
         try {
             let availableCredits = await getAvailableCredits();
             await postRestResponse(requestModel.webhookUrl + "/send/error-email", {
@@ -325,6 +329,45 @@ export async function getAvailableCredits() {
     }
     catch (error) {
         throw error;
+    }
+}
+export async function callCountApi() {
+    try {
+        while (isUserLoggedIn) {
+            let data = JSON.stringify({});
+            let config = {
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: 'https://create.wan.video/wanx/api/common/task/progress/count',
+                headers: {
+                    'accept': 'application/json, text/plain, */*',
+                    'accept-language': 'en-US,en;q=0.9',
+                    'bx-v': '2.5.36',
+                    'content-type': 'application/json',
+                    'origin': 'https://create.wan.video',
+                    'priority': 'u=1, i',
+                    'referer': 'https://create.wan.video/generate',
+                    'sec-ch-ua': '"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"',
+                    'sec-ch-ua-mobile': '?0',
+                    'sec-ch-ua-platform': '"Windows"',
+                    'sec-fetch-dest': 'empty',
+                    'sec-fetch-mode': 'cors',
+                    'sec-fetch-site': 'same-origin',
+                    'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36',
+                    'x-platform': 'web',
+                    'x-wan-uid': '5857469546000430138',
+                    'x-xsrf-token': '0d2dcbd1-a2aa-414d-b6bc-081f5aa0ec4c',
+                    'Cookie': '_ga=GA1.1.1888983041.1759128751; cna=shphIWhQYjYCAcqUPRFOtYiF; sca=0c24b11f; xlly_s=1; cnaui=5857469546000430138; aui=5857469546000430138; _ga_Z4KVB8RMTT=GS2.1.s1775571800$o46$g1$t1775572374$j60$l0$h0; atpsida=6320e525b10888f277407f0e_1775572404_8; tfstk=gLJs3M0kSP4_DMntkPoUAKoEY96X6Dkr1osvqneaDOBOlsLyl-RwDRWXGwtybKoGQeaXzeRN0fb4hlvBP-yZSfxYhtWxz4krUhmGnt3PRlE975jP2lH46RBGpzcqKCMrUhxTbGnyvYRaU5Sf0ZBA6NKLvwj4WRLA6kUd-ijYWietAHQhJGEOXsCL9gjYHrLAHDtd-iBAXECtAHQhDtQxN2gCxf_9fm3T2ssuObKfR-evdMnGyhMbFGJdf9_JXpJD3pwh1aKOR-3s3Dxllwv-8XtHkCLNxEMSRTdkRK1RhAalfBK5pNW-NW66YFv5BLg_QM5f5BpOOoevf9bG9ITs55b9_e1lv6EjEM8PJhv9Om4pXU71BMCEe0tdMBJGZduLCTdkbORvy2PNWQsA4ZePPXT3Gk1uhM_rADN0ii0An2uwlr1f6MjeUDiQ5SfOxM_rADN0i1IhY_oIAPNc.; isg=BOPj8-wwjh-3rkMkKca98_4xcieN2HcamvOFxhVCk8KYVAJ2naoiaqDKTjzadM8S; ' + authHeaders
+                },
+                data: data
+            };
+            await axios.request(config);
+            console.log("Count API executed in interval");
+            await sleep(2000);
+        }
+    }
+    catch {
+        console.log("Count API failed.");
     }
 }
 export async function extractAuthHeader(headers, cookies) {
