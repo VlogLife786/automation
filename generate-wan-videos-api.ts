@@ -77,7 +77,6 @@ export async function GenerateWANAiVideosByApi(requestModel: ExecutionRequestMod
         executionSteps.push("Error: " + error?.message)
         throw error;
     } finally {
-        authHeaders = "";
         isUserLoggedIn = false;
 
         try {
@@ -96,6 +95,7 @@ export async function GenerateWANAiVideosByApi(requestModel: ExecutionRequestMod
             console.log("Internal error happened...");
             console.log(error);
         }
+        authHeaders = "";
         console.log("Execution completed.");
     }
 }
