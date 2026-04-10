@@ -6,6 +6,7 @@ export interface ExecutionRequestModel {
     webhookUrl: string,
     videoTitle: string,
     rowNumber: number | 0
+    startImageName: string | ""
 }
 
 
@@ -115,3 +116,34 @@ interface Amount {
     topUp: number;
     bonus: number;
 }
+
+
+export interface GetPolicyApiResponse {
+    success: boolean;
+    httpCode: number;
+    errorCode: string;
+    data: GetPolicyData;
+    requestId: string;
+    failed: boolean;
+    traceId: string;
+}
+
+export interface GetPolicyData {
+    accessId: string;
+    policy: string;
+    signature: string;
+    dir: string;
+    host: string;
+    expire: number;
+    key: string;
+}
+
+export interface UploadedFileOssUrlResponse {
+    success: boolean;
+    httpCode: number;
+    errorCode: string;
+    data: string; // 👈 URL string
+    requestId: string;
+    failed: boolean;
+    traceId: string;
+  }

@@ -2,6 +2,8 @@ import axios from "axios";
 import crypto from "crypto";
 import { sleep } from "./utility.js";
 import { postRestResponse } from "./restTemplate.js";
+import { fileTypeFromFile } from "file-type";
+import { Configs } from "./constants";
 let authHeaders = "";
 let isUserLoggedIn = false;
 export async function GenerateWANAiVideosByApi(requestModel) {
@@ -28,7 +30,23 @@ export async function GenerateWANAiVideosByApi(requestModel) {
             throw new Error("User does not have sufficient credits to generate videos.");
         }
         await sleep(5000);
-        let videoGenerationResponse = await startVideoGeneration(requestModel.prompt);
+        let videoGenerationResponse = {};
+        if (requestModel.startImageName && requestModel.startImageName != null && requestModel.startImageName != "") {
+            let filetype = await fileTypeFromFile(Configs.UPLOADED_IMAGE_DIR + requestModel.startImageName);
+            let policyResponse = await getPolicyForFile(requestModel.startImageName + "." + (filetype?.ext ?? "png"));
+            executionSteps.push("Created policy for uploaded image.");
+            await sleep(1000);
+            await uploadFileToServer(requestModel.startImageName, policyResponse);
+            executionSteps.push("Created image uploaded on server.");
+            await sleep(1000);
+            let ossResponse = await GenerateOssResponse(policyResponse.data.key);
+            executionSteps.push("Generated OSS URL for uploaded image.");
+            await sleep(1000);
+            videoGenerationResponse = await generateVideoByImage(ossResponse.data, requestModel.prompt);
+        }
+        else {
+            videoGenerationResponse = await startVideoGeneration(requestModel.prompt);
+        }
         executionSteps.push("Video generation started.");
         await sleep(3000);
         let videoDownloadUrl = "";
@@ -82,6 +100,182 @@ export async function GenerateWANAiVideosByApi(requestModel) {
         }
         authHeaders = "";
         console.log("Execution completed.");
+    }
+}
+async function generateVideoByImage(baseImageUrl, textPrompt) {
+    try {
+        let data = JSON.stringify({
+            "deductMode": "credit_mode",
+            "taskType": "image_to_video",
+            "taskInput": {
+                "modelVersion": "2_7",
+                "duration": 5,
+                "assistInfo": "{}",
+                "prompt": textPrompt,
+                "promptMeta": {
+                    "originPrompt": textPrompt,
+                    "orderedKeys": [],
+                    "refs": {}
+                },
+                "generationMode": "imaginative",
+                "baseImage": baseImageUrl,
+                "selectedResolution": "720P",
+                "multiShots": "single",
+                "subType": "basic"
+            }
+        });
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://create.wan.video/wanx/api/common/imageGen',
+            headers: {
+                'accept': 'application/json, text/plain, */*',
+                'accept-language': 'en-US,en;q=0.9',
+                'bx-ua': '231!D0B3qkmUfGv+j7sAO47Jsv0oUAGvmIUlW2PKK+t1BjPfrHGGugULjx7uafPhUQ/URkw+b1CFsksEtvzKgZRVGrK0x971XY27d0DIyvSBFJJiv8qFzwiEKerqGFyL7jVuuTtfO4lUGXqcsGqMEqMLyyvRrb95g6JJ/4o3x20JBuKt5DCGzVIf52UUcmuoFfglOTPLAQG/gKT7EiG4bteSVSmCjf/DcWBVyK01zbQA13LJKVHyFN3snfKSP8ivzYB0wMXCV+q62wsMGBGAlmUxUSfl61dIBaUe7bAmCRsIbm3EMOGr+wMep4Dqk+I9xGdFfOB4KFlCok+++4mWYi++6bFljOt38I0Dj+8UbxQxCPg3jf0vemUJ1T2B6lg2Ul9xujCjtedczvzXoKWmutZfQkhH9BniZlMy8DD+h9o+r0xQBJ8zu3OFiC535NRxKxzSMMxUPmHUClUzFzDT8h9pY7olPA049BNtPj1uVFwykkNBO27yLtHTiwewSh2I//dg3VXzxefiiXQarAC7Z7AliJqBMfe10Pcp8ro6mzj0aw6EaBq2SW9x7FDNVc94zhExwY3dR1iUMKPJn5MsxIC80gI3HhsBMse1pA7qE1LRS9yhjY+LSuyX3X4s3TEkF6bDLF/+15wywu9sQb1nwm0nMyyP9m7KwAYBOLEr9ypVRQKm8wCXJYxrE3jhJNjBq9UdxKPredCHsy+zAoJXjyWq1GE7dVupM3if7PTmTPMG4E4wtJ6o1yZVC0NN1Kp1NJq64v0RV9TL6Rz8WaYtxYsAUQgaeTSJTwyXUE7/EJ/pC/osje7hhWWIQpMGGzrt48+ukraFHzwL7CQsgJj9+5n5WTrjaglgxUEHn5yZvPCL2Y4eGaL91H2RlHJR9QgzH03Ggx2DYJiKfSFYAJmjSYUo7XBOzUEHIuxKevYqVPj3R4W8xwddZ84cA2uX1DToRpV8ItHYahoxx8LaknTbUKe7HqLGnX4etILY3GtKekZWe+2QugXDpO5g1vkvAgphsSiPzrtUlPVL/ixjsF9Z+ImMKR86Qyrl9DizdBeGw14dSLc6vhbKBZdUAzGBQJuSH73s1FZyyQA9RV1RJROVr6dcQoM6EyFxfP7KXFDGiErSYAqlMTGcQXd6AmZCU6WQR1aUW4fQ4OkazIHr3YztMvy2shODcVxJamgiUNRYlySw39irkQo1GHW1wervsGUGVSxGhGPWZrJr2dOumMC4MAsSxTRyOcNHzUV28MnY/tx5Pt7/+rdKk45xAX+FYRTfBY5hbnNdgyy3ht+2MjVaZ7yo0SXxCTmP1Ry+54to9drCd3x6XkKWD5bVs4E/6k6FDJ4O8GaRUyYVXNjnUZliVJKVBBeZbYZO9j7PPNp8auyFV6baSlfHN0P+Z0WIJJfpAfK9foPOXJaNJ+ZzKkfbXr5xkcWJn0Z+Qve9PjT4V3m06dLlRdyoAo8htYNbpPgU4cxRwzdQrqpBZcDWl4DO7afrYtmLkackw4sASkCUN0oHmTJZgmxDnbmYW/TWA3EF3z/d16t/8YzURhhLFzOlxyjlVVm7o/2UOGT4cAO5uj72ANryA7bCgT4SBMOcdtd2YxqfLUwDHIE80KW4VjSA+E8F6xHDmGUdmsB2ZoN79GmW8QDGl9+8xTYpo3FcFkIasgwE0tFlAWhUlrfiENtIXJwhQgD3FHQUR4==',
+                'bx-umidtoken': 'T2gAq0hC8ojtwWDDzC4aya-LhRU4T3gbbIqLSmA-0KvXH8ByToa6Iu2Xm3arqO-tL-8=',
+                'bx-v': '2.5.36',
+                'content-type': 'application/json',
+                'origin': 'https://create.wan.video',
+                'priority': 'u=1, i',
+                'referer': 'https://create.wan.video/generate/video/generate?model=wan2.7',
+                'sec-ch-ua': '"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"',
+                'sec-ch-ua-mobile': '?0',
+                'sec-ch-ua-platform': '"Windows"',
+                'sec-fetch-dest': 'empty',
+                'sec-fetch-mode': 'cors',
+                'sec-fetch-site': 'same-origin',
+                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36',
+                'x-platform': 'web',
+                'x-wan-uid': '2262817915197336356',
+                'x-xsrf-token': '2d2f52a6-3d76-4bd4-86bf-54dc8dd0d956',
+                'Cookie': '_ga=GA1.1.1888983041.1759128751; cna=shphIWhQYjYCAcqUPRFOtYiF; xlly_s=1; sca=ac107df6; cnaui=2262817915197336356; aui=2262817915197336356; atpsida=ca35581f3482d00714b9186d_1775648365_5; _ga_Z4KVB8RMTT=GS2.1.s1775648300$o47$g1$t1775648417$j13$l0$h0; tfstk=gB5jVpZhmmmbz4zYXmzrPG8feDR60zPe6VTO-NhqWIdvfdIFffWVWjR1C3_Fu1zDggi1YgW27-xZ1g_Cc1W2gIns1gsB7rxaoqXlYwhVg-AZ1IAM6krUTWzcoCAOeO5UWqAJ7elT_nLtyIYwdtiHqW7co43jXyW8T5MFsiT9XGpv2aL22mHtMGp-wFx-MFhvW0UWS3dtMFdty0LpRFK9BGQ8PFxJXCpAXLUWS3K96ChWDuTuhnQbWuClSYUuUttS6fCWyrbClliMeG8fFH7AGK9cNXvXvZKS6oNarwx6q6EzFajOHi8lfWZW99j51pd_GDYfewOJ0BeIFI_Pm6OAOoG2zdtfespSWfQXZnvRCiZjnnBVVpYJeVNHzM-RosB7S0QAYnOvyLPLRapOUsvhguhX99b2gOIL4x-AdFIyHX-QFgDsPpc6PHz7PADMSldg4oSsfd9vrU5UPzijIKLkPHz7PADMHUYyLzaScAf..; isg=BJSULBCsgZHqaBRR8tNCjgW8ZdIG7bjX0Y5yky5krJ6wGRtjB_kEZjrfGQmB4fAv; ' + authHeaders
+            },
+            data: data
+        };
+        let response = await axios.request(config);
+        return response.data;
+    }
+    catch (error) {
+        throw error;
+    }
+}
+async function GenerateOssResponse(key) {
+    try {
+        let data = JSON.stringify({
+            "key": key,
+            "taskType": ""
+        });
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://create.wan.video/wanx/api/oss/generateOssUrl',
+            headers: {
+                'accept': 'application/json, text/plain, */*',
+                'accept-language': 'en-US,en;q=0.9',
+                'bx-v': '2.5.36',
+                'content-type': 'application/json',
+                'origin': 'https://create.wan.video',
+                'priority': 'u=1, i',
+                'referer': 'https://create.wan.video/generate/video/generate?model=wan2.7',
+                'sec-ch-ua': '"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"',
+                'sec-ch-ua-mobile': '?0',
+                'sec-ch-ua-platform': '"Windows"',
+                'sec-fetch-dest': 'empty',
+                'sec-fetch-mode': 'cors',
+                'sec-fetch-site': 'same-origin',
+                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36',
+                'x-platform': 'web',
+                'x-wan-uid': '2262817915197336356',
+                'x-xsrf-token': '2d2f52a6-3d76-4bd4-86bf-54dc8dd0d956',
+                'Cookie': '_ga=GA1.1.1888983041.1759128751; cna=shphIWhQYjYCAcqUPRFOtYiF; xlly_s=1; sca=ac107df6; cnaui=2262817915197336356; aui=2262817915197336356; atpsida=ca35581f3482d00714b9186d_1775648365_5; _ga_Z4KVB8RMTT=GS2.1.s1775648300$o47$g1$t1775648417$j13$l0$h0; tfstk=gnKx0ame0bccG2mS9o0kjAF1EUDkh4v2FIJQj1f05QdJ1dYm31D2y5OMZNaMofr96_OeoNDVSGB6t_zMnfk26QdB9NYcSqW_Xi-kolfmgGp6tGhntDmH3KSPfXcneAoYzM6L5rNGGga5jOUvkk5y3KSaU8Vs-U9qXyBuAOs61g15Q9S_GNZjea6hCGZf5oa7N_W1fG1fCLw5d9zfCG_seL1PCG161ZMRP_W1f1O1fjy_H12f6lL56rfUX8rbxkxRHZCTosq9XFEhQ69PwlGBwtFFOK18fl1QK4-DeKcYYLj2fBBHi0Zv9d9e5aKTNXCw2LtX5LPxFMpJrebvyjZOZnXORG_8Cl9R2_7HfMiQwT8WnFt2MRE13nxhW67-Cl7GVHbBRIeZLLsfCC7ejXrVGd9eYejKDWWvPpIR4eKHvRrLt6BglYH87P7fUwDxbiyfNwmOe6DurPzNrTWRtYH87P7fUTCnE04a7aXP.; isg=BOLidNLS_-v2E-K7cF2sRGfaM2hEM-ZNs6jk-Sx1DtUP_6h5E8EDXFQ5LyMDb17l; ' + authHeaders
+            },
+            data: data
+        };
+        let response = await axios.request(config);
+        return response.data;
+    }
+    catch (error) {
+        throw error;
+    }
+}
+async function uploadFileToServer(fileName, policyResponse) {
+    try {
+        const FormData = require('form-data');
+        const fs = require('fs');
+        let data = new FormData();
+        data.append('OSSAccessKeyId', policyResponse.data.accessId);
+        data.append('policy', policyResponse.data.policy);
+        data.append('signature', policyResponse.data.signature);
+        data.append('key', policyResponse.data.key);
+        data.append('dir', policyResponse.data.dir);
+        data.append('success_action_status', '200');
+        data.append('file', fs.createReadStream(Configs.UPLOADED_IMAGE_DIR + fileName));
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://tongyi-wanx-international.oss-accelerate.aliyuncs.com/',
+            headers: {
+                'Accept': '*/*',
+                'Accept-Language': 'en-US,en;q=0.9',
+                'Connection': 'keep-alive',
+                'Origin': 'https://create.wan.video',
+                'Referer': 'https://create.wan.video/generate/video/generate?model=wan2.7',
+                'Sec-Fetch-Dest': 'empty',
+                'Sec-Fetch-Mode': 'cors',
+                'Sec-Fetch-Site': 'cross-site',
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36',
+                'X-Requested-With': 'XMLHttpRequest',
+                'sec-ch-ua': '"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"',
+                'sec-ch-ua-mobile': '?0',
+                'sec-ch-ua-platform': '"Windows"',
+                ...data.getHeaders()
+            },
+            data: data
+        };
+        let response = await axios.request(config);
+        return response.data;
+    }
+    catch (error) {
+        throw error;
+    }
+}
+export async function getPolicyForFile(fileName) {
+    try {
+        let data = JSON.stringify({
+            "fileName": fileName,
+            "taskType": ""
+        });
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: 'https://create.wan.video/wanx/api/oss/getPolicy',
+            headers: {
+                'accept': 'application/json, text/plain, */*',
+                'accept-language': 'en-US,en;q=0.9',
+                'bx-v': '2.5.36',
+                'content-type': 'application/json',
+                'origin': 'https://create.wan.video',
+                'priority': 'u=1, i',
+                'referer': 'https://create.wan.video/generate/video/generate?model=wan2.7',
+                'sec-ch-ua': '"Chromium";v="146", "Not-A.Brand";v="24", "Google Chrome";v="146"',
+                'sec-ch-ua-mobile': '?0',
+                'sec-ch-ua-platform': '"Windows"',
+                'sec-fetch-dest': 'empty',
+                'sec-fetch-mode': 'cors',
+                'sec-fetch-site': 'same-origin',
+                'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/146.0.0.0 Safari/537.36',
+                'x-platform': 'web',
+                'x-wan-uid': '2262817915197336356',
+                'x-xsrf-token': '2d2f52a6-3d76-4bd4-86bf-54dc8dd0d956',
+                'Cookie': '_ga=GA1.1.1888983041.1759128751; cna=shphIWhQYjYCAcqUPRFOtYiF; xlly_s=1; sca=ac107df6; cnaui=2262817915197336356; aui=2262817915197336356; atpsida=ca35581f3482d00714b9186d_1775648365_5; _ga_Z4KVB8RMTT=GS2.1.s1775648300$o47$g1$t1775648417$j13$l0$h0; tfstk=g1fE05mRMWFEL1qcuZAzQQZtrvRpXQrXq_tWrabkRHx3vLGyaZI2EDwdPOklAiXBABfIaTSfPyh7JBDuaiI2AHfQJTlPzgl5d_7-aUbl2yK7JR_dJQducoszGwQLcisfe68nIfb9yeDuCpcI9vH8coNb1J0MakrfRE3kmdYJjecHZv4ZjELvZUYHZP-MzEHoxgAu7P8kl3motXcMIULWZ3jkZP7MXURkrgAu7Nx9rjR2qnGwup4enfg6pDmJBnbHbbcqXF9nIgHSAD1w8p5lKh86518eLnvrVsthtG_lO6pTLvAR5tSPEiqsdHX2uGJfLolF0MLlzUjUMq-GTa5wpOinKEReYKfHLqGcuLXN_B132xQ17Hv21OwTALOFYtKvKREO4N-Cq6JiYlt5hN1HQiqs_gpPE6OGtlVV4mnJSdkcw9ooUpY97naa75bkcrKIbzdZeYpdBF-bJyH-epY97naa7YHJpCLwcyUd.; isg=BGdnZodtwqi7Q0coBbLhJ1rt9psx7DvOvl-ByjnZe_YSKK3qRr7-H5luSjC2wBNG; ' + authHeaders
+            },
+            data: data
+        };
+        let response = await axios.request(config);
+        return response.data;
+    }
+    catch (error) {
+        throw error;
     }
 }
 export async function loginToWanAI(loginrequest) {

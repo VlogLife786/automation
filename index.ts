@@ -22,7 +22,7 @@ let running = false;
 
 // Store files in a temporary folder inside container
 const upload = multer({
-    dest: 'tmp/', // auto-created, temporary
+    dest: Configs.UPLOADED_IMAGE_DIR, // auto-created, temporary
     limits: {
         fileSize: 5 * 1024 * 1024, // 5MB limit
     },
@@ -41,7 +41,7 @@ const upload = multer({
 app.get('/', (req, res) => res.send('Puppeteer API running!'));
 
 app.post('/generate/video', async (req, res) => {
-    const { userEmail, userPassword, textPrompt, emailToSendVideo, rowNumber, webhookUrl, videoTitle } = req.body;
+    const { userEmail, userPassword, textPrompt, emailToSendVideo, rowNumber, webhookUrl, videoTitle, startImageName } = req.body;
     if (!userEmail || !userPassword || !textPrompt || !emailToSendVideo || !webhookUrl || !videoTitle) return res.status(400).send({ error: 'Missing important details.' });
 
     try {
@@ -53,7 +53,8 @@ app.post('/generate/video', async (req, res) => {
                 loginPassword: userPassword,
                 prompt: textPrompt,
                 videoTitle: videoTitle,
-                webhookUrl: webhookUrl
+                webhookUrl: webhookUrl,
+                startImageName: startImageName
             });
         });
 
@@ -99,13 +100,13 @@ app.post(
 
 app.delete('/delete-files', async (req, res) => {
     try {
-        const dir = 'tmp/';
 
-        if (!fs.existsSync(dir)) {
+
+        if (!fs.existsSync(Configs.UPLOADED_IMAGE_DIR)) {
             return res.status(404).json({ message: 'Folder not found' });
         }
 
-        const files = await fs.promises.readdir(dir);
+        const files = await fs.promises.readdir(Configs.UPLOADED_IMAGE_DIR);
 
         if (files.length === 0) {
             return res.json({ message: 'No files to delete' });
@@ -113,7 +114,7 @@ app.delete('/delete-files', async (req, res) => {
 
         await Promise.all(
             files.map((file) =>
-                fs.promises.unlink(path.join(dir, file))
+                fs.promises.unlink(path.join(Configs.UPLOADED_IMAGE_DIR, file))
             )
         );
 

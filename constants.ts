@@ -17,6 +17,7 @@ export class Flags {
 
 export class Configs {
     static readonly SCHEDULAR_CONFIG: string = "* * * * *";
+    static readonly UPLOADED_IMAGE_DIR = 'temp/images/';
 }
 
 export class ApiURLs {

@@ -15,6 +15,7 @@ Flags.BROWSER_SERVER = false;
 export class Configs {
 }
 Configs.SCHEDULAR_CONFIG = "* * * * *";
+Configs.UPLOADED_IMAGE_DIR = 'temp/images/';
 export class ApiURLs {
 }
 ApiURLs.USER_DETAILS_API = "https://randomuser.me//api?nat=IN";
