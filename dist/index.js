@@ -1,12 +1,31 @@
 import express from 'express';
 import { sleep } from "./utility.js";
 import { GenerateWANAiVideosByApi } from "./generate-wan-videos-api.js";
+import multer from "multer";
+import fs from 'fs';
+import path from 'path';
 // const schedularTime: string = process.env.SCHEDULAR_TIME || Configs.SCHEDULAR_CONFIG;
 // let isJobInProgress: boolean = false;
 const app = express();
 app.use(express.json());
 const queue = [];
 let running = false;
+// Store files in a temporary folder inside container
+const upload = multer({
+    dest: 'tmp/', // auto-created, temporary
+    limits: {
+        fileSize: 5 * 1024 * 1024, // 5MB limit
+    },
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/webp'];
+        if (allowedTypes.includes(file.mimetype)) {
+            cb(null, true);
+        }
+        else {
+            cb(new Error('Only image files are allowed'));
+        }
+    },
+});
 app.get('/', (req, res) => res.send('Puppeteer API running!'));
 app.post('/generate/video', async (req, res) => {
     const { userEmail, userPassword, textPrompt, emailToSendVideo, rowNumber, webhookUrl, videoTitle } = req.body;
@@ -30,6 +49,50 @@ app.post('/generate/video', async (req, res) => {
     catch (err) {
         console.error(err);
         res.status(500).send({ success: false, error: 'Failed to schedule task videos' });
+    }
+});
+app.post('/upload-image', upload.single('file'), (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({
+                status: false,
+                message: 'No file uploaded'
+            });
+        }
+        console.log('Uploaded file:', req.file);
+        res.json({
+            status: true,
+            message: 'Image uploaded successfully',
+            fileName: req.file.filename,
+        });
+    }
+    catch (error) {
+        return res.status(400).json({
+            status: false,
+            message: 'No file uploaded',
+            error: error
+        });
+    }
+});
+app.delete('/delete-files', async (req, res) => {
+    try {
+        const dir = 'tmp/';
+        if (!fs.existsSync(dir)) {
+            return res.status(404).json({ message: 'Folder not found' });
+        }
+        const files = await fs.promises.readdir(dir);
+        if (files.length === 0) {
+            return res.json({ message: 'No files to delete' });
+        }
+        await Promise.all(files.map((file) => fs.promises.unlink(path.join(dir, file))));
+        res.json({
+            message: 'All files deleted',
+            count: files.length,
+        });
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).json({ message: 'Delete failed' });
     }
 });
 // (async () => {
