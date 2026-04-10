@@ -4,7 +4,9 @@ import { AvailableCreditsApiResponse, ExecutionRequestModel, GenericApiResponse,
 import { sleep } from "./utility.js";
 import { postRestResponse } from "./restTemplate.js";
 import { fileTypeFromFile } from "file-type";
-import { Configs } from "./constants";
+import { Configs } from "./constants.js";
+import FormData from "form-data";
+import fs from 'fs';
 
 let authHeaders = "";
 let isUserLoggedIn = false;
@@ -224,8 +226,7 @@ async function GenerateOssResponse(key: string) {
 
 async function uploadFileToServer(fileName: string, policyResponse: GetPolicyApiResponse) {
     try {
-        const FormData = require('form-data');
-        const fs = require('fs');
+        let type = await fileTypeFromFile(Configs.UPLOADED_IMAGE_DIR + fileName)
         let data = new FormData();
         data.append('OSSAccessKeyId', policyResponse.data.accessId);
         data.append('policy', policyResponse.data.policy);
@@ -233,7 +234,10 @@ async function uploadFileToServer(fileName: string, policyResponse: GetPolicyApi
         data.append('key', policyResponse.data.key);
         data.append('dir', policyResponse.data.dir);
         data.append('success_action_status', '200');
-        data.append('file', fs.createReadStream(Configs.UPLOADED_IMAGE_DIR + fileName));
+        data.append('file', fs.createReadStream(Configs.UPLOADED_IMAGE_DIR + fileName), {
+            filename: fileName + "." + (type?.ext ?? "png"),
+            contentType: type?.mime ?? "image/png"
+        });
 
         let config = {
             method: 'post',
