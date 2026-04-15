@@ -46,7 +46,8 @@ export async function GenerateWANAiVideosByApi(requestModel: ExecutionRequestMod
         let videoGenerationResponse: StartVideoGenerationResponse = {} as StartVideoGenerationResponse;
         if (requestModel.startImageName && requestModel.startImageName != null && requestModel.startImageName != "") {
             if (requestModel.audioFileName && requestModel.audioFileName != null && requestModel.audioFileName != "") {
-                let filetype = await fileTypeFromFile(Configs.UPLOADED_IMAGE_DIR + requestModel.startImageName)
+                let filetype = await fileTypeFromFile(Configs.UPLOADED_AUDIO_DIR + requestModel.audioFileName)
+                
                 let policyResponse: GetPolicyApiResponse = await getPolicyForFile(requestModel.audioFileName + "." + (filetype?.ext ?? "mp3"));
                 executionSteps.push("Created policy for uploaded audio.")
                 await sleep(1000);
