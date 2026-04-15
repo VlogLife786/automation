@@ -27,9 +27,25 @@ const upload = multer({
         }
     },
 });
+// Store audio files in a temporary folder inside container
+const uploadAudio = multer({
+    dest: Configs.UPLOADED_AUDIO_DIR, // auto-created, temporary
+    limits: {
+        fileSize: 5 * 1024 * 1024, // 5MB limit
+    },
+    fileFilter: (req, file, cb) => {
+        const allowedTypes = ['audio/mpeg', 'audio/wav'];
+        if (allowedTypes.includes(file.mimetype)) {
+            cb(null, true);
+        }
+        else {
+            cb(new Error('Only image files are allowed'));
+        }
+    },
+});
 app.get('/', (req, res) => res.send('Puppeteer API running!'));
 app.post('/generate/video', async (req, res) => {
-    const { userEmail, userPassword, textPrompt, emailToSendVideo, rowNumber, webhookUrl, videoTitle, startImageName } = req.body;
+    const { userEmail, userPassword, textPrompt, emailToSendVideo, rowNumber, webhookUrl, videoTitle, startImageName, audioFileName } = req.body;
     if (!userEmail || !userPassword || !textPrompt || !emailToSendVideo || !webhookUrl || !videoTitle)
         return res.status(400).send({ error: 'Missing important details.' });
     try {
@@ -42,7 +58,8 @@ app.post('/generate/video', async (req, res) => {
                 prompt: textPrompt,
                 videoTitle: videoTitle,
                 webhookUrl: webhookUrl,
-                startImageName: startImageName
+                startImageName: startImageName,
+                audioFileName: audioFileName
             });
         });
         runNext();
@@ -76,20 +93,48 @@ app.post('/upload-image', upload.single('file'), (req, res) => {
         });
     }
 });
+app.post('/upload-audio', uploadAudio.single('file'), (req, res) => {
+    try {
+        if (!req.file) {
+            return res.status(400).json({
+                status: false,
+                message: 'No file uploaded'
+            });
+        }
+        console.log('Uploaded file:', req.file);
+        res.json({
+            status: true,
+            message: 'Audio uploaded successfully',
+            fileName: req.file.filename,
+        });
+    }
+    catch (error) {
+        return res.status(400).json({
+            status: false,
+            message: 'No file uploaded',
+            error: error
+        });
+    }
+});
 app.delete('/delete-files', async (req, res) => {
     try {
-        if (!fs.existsSync(Configs.UPLOADED_IMAGE_DIR)) {
-            return res.status(404).json({ message: 'Folder not found' });
-        }
-        const files = await fs.promises.readdir(Configs.UPLOADED_IMAGE_DIR);
-        if (files.length === 0) {
-            return res.json({ message: 'No files to delete' });
-        }
-        await Promise.all(files.map((file) => fs.promises.unlink(path.join(Configs.UPLOADED_IMAGE_DIR, file))));
-        res.json({
+        let response = {
             message: 'All files deleted',
-            count: files.length,
-        });
+        };
+        let listOfFilesDirectory = [Configs.UPLOADED_IMAGE_DIR, Configs.UPLOADED_AUDIO_DIR];
+        for (const fileDir of listOfFilesDirectory) {
+            if (!fs.existsSync(fileDir)) {
+                return res.status(404).json({ message: 'Folder not found' });
+            }
+            const files = await fs.promises.readdir(fileDir);
+            if (files.length === 0) {
+                continue;
+            }
+            await Promise.all(files.map((file) => fs.promises.unlink(path.join(fileDir, file))));
+            const parts = fileDir.split('/').filter(Boolean); // remove empty strings
+            response[parts[parts.length - 1]] = files.length;
+        }
+        res.json(response);
     }
     catch (err) {
         console.error(err);

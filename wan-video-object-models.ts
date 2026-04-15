@@ -5,8 +5,9 @@ export interface ExecutionRequestModel {
     emailToSendVideo: string,
     webhookUrl: string,
     videoTitle: string,
-    rowNumber: number | 0
-    startImageName: string | ""
+    rowNumber: number | 0,
+    startImageName: string | "",
+    audioFileName: string | ""
 }
 
 
@@ -138,7 +139,7 @@ export interface GetPolicyData {
     key: string;
 }
 
-export interface UploadedFileOssUrlResponse {
+export interface UploadedImageFileOssUrlResponse {
     success: boolean;
     httpCode: number;
     errorCode: string;
@@ -146,4 +147,21 @@ export interface UploadedFileOssUrlResponse {
     requestId: string;
     failed: boolean;
     traceId: string;
+}
+
+export interface UploadedAudioCdnResponse {
+    success: boolean;
+    httpCode: number;
+    errorCode: string;
+    data: {
+      cdnList: CdnItem[];
+    };
+    requestId: string;
+    failed: boolean;
+    traceId: string;
+  }
+  
+  interface CdnItem {
+    path: string;
+    cdnlink: string;
   }
