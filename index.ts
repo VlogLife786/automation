@@ -11,6 +11,7 @@ import multer from "multer";
 import { Request, Response } from 'express';
 import fs from 'fs';
 import path from 'path';
+import { chatgptPrompt } from "./chatgpt.js";
 
 // const schedularTime: string = process.env.SCHEDULAR_TIME || Configs.SCHEDULAR_CONFIG;
 // let isJobInProgress: boolean = false;
@@ -222,7 +223,11 @@ const runNext = async () => {
 
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+app.listen(PORT, async() => {
+    // await chatgptPrompt();
+    console.log(`Server running on port ${PORT}`)
+}
+);
 
 
 // (async () => { await starterFunction(Constant.WAN_AI_GENERATE_VIDEO); })();
