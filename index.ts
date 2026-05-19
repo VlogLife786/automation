@@ -11,6 +11,7 @@ import multer from "multer";
 import { Request, Response } from 'express';
 import fs from 'fs';
 import path from 'path';
+import { error } from "console";
 import { chatgptPrompt } from "./chatgpt.js";
 
 // const schedularTime: string = process.env.SCHEDULAR_TIME || Configs.SCHEDULAR_CONFIG;
@@ -85,6 +86,20 @@ app.post('/generate/video', async (req, res) => {
     } catch (err) {
         console.error(err);
         res.status(500).send({ success: false, error: 'Failed to schedule task videos' });
+    }
+});
+
+
+app.post('/chatgpt/text-to-text', async (req, res) => {
+    const { textPrompt } = req.body;
+
+    try {
+    
+        let response = await chatgptPrompt(textPrompt);
+        res.json({ success: true, message: response });
+    } catch (err: any) {
+        console.error(err);
+        res.status(500).send({ success: false, error: err?.message });
     }
 });
 
@@ -223,7 +238,7 @@ const runNext = async () => {
 
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, async() => {
+app.listen(PORT, async () => {
     // await chatgptPrompt();
     console.log(`Server running on port ${PORT}`)
 }

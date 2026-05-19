@@ -71,6 +71,17 @@ app.post('/generate/video', async (req, res) => {
         res.status(500).send({ success: false, error: 'Failed to schedule task videos' });
     }
 });
+app.post('/chatgpt/text-to-text', async (req, res) => {
+    const { textPrompt } = req.body;
+    try {
+        let response = await chatgptPrompt(textPrompt);
+        res.json({ success: true, message: response });
+    }
+    catch (err) {
+        console.error(err);
+        res.status(500).send({ success: false, error: err?.message });
+    }
+});
 app.post('/upload-image', upload.single('file'), (req, res) => {
     try {
         if (!req.file) {
@@ -174,7 +185,7 @@ const runNext = async () => {
 };
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
-    await chatgptPrompt();
+    // await chatgptPrompt();
     console.log(`Server running on port ${PORT}`);
 });
 // (async () => { await starterFunction(Constant.WAN_AI_GENERATE_VIDEO); })();
