@@ -1,3 +1,5 @@
+import { ReadStream } from "fs";
+
 export interface ExecutionRequestModel {
     prompt: string,
     loginEmail: string,
@@ -7,7 +9,9 @@ export interface ExecutionRequestModel {
     videoTitle: string,
     rowNumber: number | 0,
     startImageName: string | "",
-    audioFileName: string | ""
+    audioFileName: string | "",
+    refrenceImageList: RefrenceImageDetails[],
+    sendEmail: boolean | false
 }
 
 
@@ -154,14 +158,66 @@ export interface UploadedAudioCdnResponse {
     httpCode: number;
     errorCode: string;
     data: {
-      cdnList: CdnItem[];
+        cdnList: CdnItem[];
     };
     requestId: string;
     failed: boolean;
     traceId: string;
-  }
-  
-  interface CdnItem {
+}
+
+interface CdnItem {
     path: string;
     cdnlink: string;
-  }
+}
+
+export interface RefrenceImageDetails {
+    imageId: string;
+    imageName: string;
+    imageAlias: string;
+    imageUrl: string;
+    imageFile: ReadStream;
+    imageType: string;
+    originalName: string;
+    width: number;
+    height: number;
+}
+
+
+export interface ContinuousCinematicVideoSequence {
+    title: string;
+    characters: {
+        [key: `char_${number}`]: Character;
+    };
+    global_style: GlobalStyle;
+    scene_sequence: Scene[];
+}
+
+export interface Character {
+    name: string;
+    appearance: string;
+}
+
+export interface GlobalStyle {
+    genre: string;
+    camera: string;
+    lighting: string;
+    quality: string;
+    aspect_ratio: `${number}:${number}`;
+    fps: number;
+}
+
+export interface Scene {
+    scene_id: number;
+    duration: `${number}s`;
+    prompt: string;
+    transition_to_next: string;
+    reference_previous_video_last_frame: boolean;
+}
+
+
+export type RefItem = {
+    type: string;
+    payload: {
+        id: string;
+    };
+};

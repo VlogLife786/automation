@@ -61,7 +61,7 @@ export async function registerToDremaniaAi() {
         // Wait for OTP filling page to be appear
         await page.waitForFunction((email) => {
             let headingOptions: HTMLDivElement = document.querySelector(".lv_new_sign_in_panel_wide-code-detail") as HTMLDivElement;
-            if (headingOptions.textContent.includes(email)) {
+            if (headingOptions.textContent?.includes(email)) {
                 return true;
             }
         }, { timeout: 10000 }, tempMail);

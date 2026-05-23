@@ -12,7 +12,6 @@ import { Request, Response } from 'express';
 import fs from 'fs';
 import path from 'path';
 import { error } from "console";
-import { chatgptPrompt } from "./chatgpt.js";
 
 // const schedularTime: string = process.env.SCHEDULAR_TIME || Configs.SCHEDULAR_CONFIG;
 // let isJobInProgress: boolean = false;
@@ -76,7 +75,9 @@ app.post('/generate/video', async (req, res) => {
                 videoTitle: videoTitle,
                 webhookUrl: webhookUrl,
                 startImageName: startImageName,
-                audioFileName: audioFileName
+                audioFileName: audioFileName,
+                refrenceImageList: [],
+                sendEmail: true
             });
         });
 
@@ -90,18 +91,18 @@ app.post('/generate/video', async (req, res) => {
 });
 
 
-app.post('/chatgpt/text-to-text', async (req, res) => {
-    const { textPrompt } = req.body;
+// app.post('/chatgpt/text-to-text', async (req, res) => {
+//     const { textPrompt } = req.body;
 
-    try {
-    
-        let response = await chatgptPrompt(textPrompt);
-        res.json({ success: true, message: response });
-    } catch (err: any) {
-        console.error(err);
-        res.status(500).send({ success: false, error: err?.message });
-    }
-});
+//     try {
+
+//         // let response = await chatgptPrompt(textPrompt);
+//         res.json({ success: true, message: "response" });
+//     } catch (err: any) {
+//         console.error(err);
+//         res.status(500).send({ success: false, error: err?.message });
+//     }
+// });
 
 
 

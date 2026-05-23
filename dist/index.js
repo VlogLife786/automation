@@ -5,7 +5,6 @@ import { GenerateWANAiVideosByApi } from "./generate-wan-videos-api.js";
 import multer from "multer";
 import fs from 'fs';
 import path from 'path';
-import { chatgptPrompt } from "./chatgpt.js";
 // const schedularTime: string = process.env.SCHEDULAR_TIME || Configs.SCHEDULAR_CONFIG;
 // let isJobInProgress: boolean = false;
 const app = express();
@@ -60,7 +59,9 @@ app.post('/generate/video', async (req, res) => {
                 videoTitle: videoTitle,
                 webhookUrl: webhookUrl,
                 startImageName: startImageName,
-                audioFileName: audioFileName
+                audioFileName: audioFileName,
+                refrenceImageList: [],
+                sendEmail: true
             });
         });
         runNext();
@@ -71,17 +72,16 @@ app.post('/generate/video', async (req, res) => {
         res.status(500).send({ success: false, error: 'Failed to schedule task videos' });
     }
 });
-app.post('/chatgpt/text-to-text', async (req, res) => {
-    const { textPrompt } = req.body;
-    try {
-        let response = await chatgptPrompt(textPrompt);
-        res.json({ success: true, message: response });
-    }
-    catch (err) {
-        console.error(err);
-        res.status(500).send({ success: false, error: err?.message });
-    }
-});
+// app.post('/chatgpt/text-to-text', async (req, res) => {
+//     const { textPrompt } = req.body;
+//     try {
+//         // let response = await chatgptPrompt(textPrompt);
+//         res.json({ success: true, message: "response" });
+//     } catch (err: any) {
+//         console.error(err);
+//         res.status(500).send({ success: false, error: err?.message });
+//     }
+// });
 app.post('/upload-image', upload.single('file'), (req, res) => {
     try {
         if (!req.file) {

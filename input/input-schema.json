@@ -1,0 +1,123 @@
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Continuous Cinematic Video Sequence Schema",
+    "type": "object",
+    "required": [
+        "title",
+        "characters",
+        "global_style",
+        "scene_sequence"
+    ],
+    "properties": {
+        "title": {
+            "type": "string",
+            "description": "Title of the cinematic sequence"
+        },
+        "characters": {
+            "type": "object",
+            "description": "Main characters used throughout the sequence",
+            "patternProperties": {
+                "^char_[0-9]+$": {
+                    "type": "object",
+                    "required": [
+                        "name",
+                        "appearance"
+                    ],
+                    "properties": {
+                        "name": {
+                            "type": "string",
+                            "description": "Character display name"
+                        },
+                        "appearance": {
+                            "type": "string",
+                            "description": "Detailed physical appearance, clothing, hairstyle, age, accessories, etc."
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties": false
+        },
+        "global_style": {
+            "type": "object",
+            "required": [
+                "genre",
+                "camera",
+                "lighting",
+                "quality",
+                "aspect_ratio",
+                "fps"
+            ],
+            "properties": {
+                "genre": {
+                    "type": "string",
+                    "description": "Overall cinematic genre and tone"
+                },
+                "camera": {
+                    "type": "string",
+                    "description": "Camera movement and lens style"
+                },
+                "lighting": {
+                    "type": "string",
+                    "description": "Lighting setup and atmosphere"
+                },
+                "quality": {
+                    "type": "string",
+                    "description": "Rendering quality and realism level"
+                },
+                "aspect_ratio": {
+                    "type": "string",
+                    "pattern": "^[0-9]+:[0-9]+$",
+                    "description": "Video aspect ratio"
+                },
+                "fps": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Frames per second"
+                }
+            },
+            "additionalProperties": false
+        },
+        "scene_sequence": {
+            "type": "array",
+            "description": "Ordered sequence of cinematic scenes",
+            "minItems": 1,
+            "items": {
+                "type": "object",
+                "required": [
+                    "scene_id",
+                    "duration",
+                    "prompt",
+                    "transition_to_next",
+                    "reference_previous_video_last_frame"
+                ],
+                "properties": {
+                    "scene_id": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "description": "Unique scene identifier"
+                    },
+                    "duration": {
+                        "type": "string",
+                        "pattern": "^[0-9]+s$",
+                        "description": "Scene duration in seconds (e.g. 5s)"
+                    },
+                    "prompt": {
+                        "type": "string",
+                        "description": "Detailed cinematic prompt for the scene"
+                    },
+                    "transition_to_next": {
+                        "type": "string",
+                        "description": "Narrative or cinematic transition into the next scene"
+                    },
+                    "reference_previous_video_last_frame": {
+                        "type": "boolean",
+                        "description": "Is this scene will be reffrenced to the last frame of previous video"
+                    }
+                },
+                "additionalProperties": false
+            }
+        }
+    },
+    "additionalProperties": false
+}

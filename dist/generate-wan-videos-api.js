@@ -1,11 +1,13 @@
 import axios from "axios";
 import crypto from "crypto";
-import { sleep } from "./utility.js";
-import { postRestResponse } from "./restTemplate.js";
+import { replaceString, sleep } from "./utility.js";
+import { getRestResponse, postRestResponse } from "./restTemplate.js";
 import { fileTypeFromFile } from "file-type";
-import { Configs } from "./constants.js";
+import { ApiURLs, Configs } from "./constants.js";
 import FormData from "form-data";
 import fs from 'fs';
+import { refrenceImageList } from "./generate-scene.js";
+import imageSize from "image-size";
 let authHeaders = "";
 let isUserLoggedIn = false;
 export async function GenerateWANAiVideosByApi(requestModel) {
@@ -33,7 +35,34 @@ export async function GenerateWANAiVideosByApi(requestModel) {
         }
         await sleep(5000);
         let videoGenerationResponse = {};
-        if (requestModel.startImageName && requestModel.startImageName != null && requestModel.startImageName != "") {
+        if (requestModel.refrenceImageList && requestModel.refrenceImageList.length > 0) {
+            console.log("You are in right place...");
+            await uploadRefrenceImageToWanAiServer(requestModel, executionSteps);
+            if (requestModel.startImageName && requestModel.startImageName != null && requestModel.startImageName != "") {
+                //Image upload
+                let ossUploadedImageResponse = await uploadImageToWanAiServer(requestModel, executionSteps);
+                await sleep(1000);
+                let imagePath = Configs.UPLOADED_IMAGE_DIR + requestModel.startImageName;
+                const buffer = fs.readFileSync(imagePath);
+                const dimensions = imageSize(buffer);
+                let startImageDetaiils = {
+                    imageName: requestModel.startImageName,
+                    imageUrl: ossUploadedImageResponse.data,
+                    imageAlias: "Image",
+                    imageId: crypto.randomUUID(),
+                    width: dimensions.width ?? 0,
+                    height: dimensions.height ?? 0,
+                    imageType: "",
+                    imageFile: fs.createReadStream(imagePath),
+                    originalName: "StartFrame"
+                };
+                videoGenerationResponse = await generateRefrenceVideoWithFirstFrame(requestModel, startImageDetaiils);
+            }
+            else {
+                videoGenerationResponse = await generateVideosForRefrenceImage(requestModel);
+            }
+        }
+        else if (requestModel.startImageName && requestModel.startImageName != null && requestModel.startImageName != "") {
             if (requestModel.audioFileName && requestModel.audioFileName != null && requestModel.audioFileName != "") {
                 let filetype = await fileTypeFromFile(Configs.UPLOADED_AUDIO_DIR + requestModel.audioFileName);
                 let policyResponse = await getPolicyForFile(requestModel.audioFileName + "." + (filetype?.ext ?? "mp3"));
@@ -60,6 +89,7 @@ export async function GenerateWANAiVideosByApi(requestModel) {
         }
         executionSteps.push("Video generation started.");
         await sleep(3000);
+        console.log(videoGenerationResponse);
         let videoDownloadUrl = "";
         if (videoGenerationResponse.success && videoGenerationResponse.data) {
             for (let index = 1; index <= 300; index++) {
@@ -70,12 +100,17 @@ export async function GenerateWANAiVideosByApi(requestModel) {
                     // console.log(taskResultResponse.data.taskResult[0].downloadUrl);
                     videoDownloadUrl = taskResultResponse.data.taskResult[0].downloadUrl;
                     executionSteps.push("Video generation is completed, Now sending video link over email.");
-                    await postRestResponse(requestModel.webhookUrl + "/send-video-link", {
-                        "rowNumber": requestModel.rowNumber,
-                        "videoUrlToSend": videoDownloadUrl,
-                        "emailToSendVideo": requestModel.emailToSendVideo,
-                        "videoTitle": requestModel.videoTitle
-                    });
+                    if (requestModel.sendEmail) {
+                        await postRestResponse(requestModel.webhookUrl + "/send-video-link", {
+                            "rowNumber": requestModel.rowNumber,
+                            "videoUrlToSend": videoDownloadUrl,
+                            "emailToSendVideo": requestModel.emailToSendVideo,
+                            "videoTitle": requestModel.videoTitle
+                        });
+                    }
+                    else {
+                        return videoDownloadUrl;
+                    }
                     executionSteps.push("Generated video link is shared over email.");
                     break;
                 }
@@ -95,13 +130,18 @@ export async function GenerateWANAiVideosByApi(requestModel) {
         isUserLoggedIn = false;
         try {
             let availableCredits = await getAvailableCredits();
-            await postRestResponse(requestModel.webhookUrl + "/send/error-email", {
-                "executionSteps": JSON.stringify(executionSteps),
-                "videoTitle": requestModel.videoTitle,
-                "rowNumber": requestModel.rowNumber,
-                "emailToSendVideo": requestModel.emailToSendVideo,
-                "resetUserStatus": availableCredits.data.availableCount < 10 ? false : true
-            });
+            if (requestModel.sendEmail) {
+                await postRestResponse(requestModel.webhookUrl + "/send/error-email", {
+                    "executionSteps": JSON.stringify(executionSteps),
+                    "videoTitle": requestModel.videoTitle,
+                    "rowNumber": requestModel.rowNumber,
+                    "emailToSendVideo": requestModel.emailToSendVideo,
+                    "resetUserStatus": availableCredits.data.availableCount < 10 ? false : true
+                });
+            }
+            else {
+                await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=updateUserStatus&rowNumber=${requestModel.rowNumber}&status=${availableCredits.data.availableCount < 10 ? "Not Available" : "Available"}`);
+            }
             await logoutCurrentUser();
             executionSteps.push("Logout done.");
         }
@@ -185,6 +225,21 @@ async function uploadImageToWanAiServer(requestModel, executionSteps) {
     executionSteps.push("Generated OSS URL for uploaded image.");
     await sleep(1000);
     return ossResponse;
+}
+async function uploadRefrenceImageToWanAiServer(requestModel, executionSteps) {
+    for (const image of requestModel.refrenceImageList) {
+        let filetype = await fileTypeFromFile(Configs.UPLOADED_IMAGE_DIR + image.imageName);
+        let policyResponse = await getPolicyForFile(image.imageName + "." + (filetype?.ext ?? "png"));
+        executionSteps.push("Created policy for uploaded reference image.");
+        await sleep(1000);
+        await uploadFileToServer(Configs.UPLOADED_IMAGE_DIR + image.imageName, policyResponse);
+        executionSteps.push("Created reference image uploaded on server.");
+        await sleep(1000);
+        let ossResponse = await GenerateImageFileOssResponse(policyResponse.data.key);
+        executionSteps.push("Generated OSS URL for uploaded reference image.");
+        await sleep(1000);
+        image.imageUrl = ossResponse.data;
+    }
 }
 async function generateVideoByImage(baseImageUrl, textPrompt) {
     try {
@@ -703,4 +758,209 @@ export async function extractAuthHeader(headers, cookies) {
         }
     }
     return universalHeaders.slice(0, -1);
+}
+export async function generateVideosForRefrenceImage(requestModel) {
+    let requestJson = {
+        "deductMode": "credit_mode",
+        "taskType": "cast_to_video",
+        "taskInput": {
+            "subType": "basic",
+            "modelVersion": "2_7",
+            "prompt": requestModel.prompt,
+            "promptMeta": {
+                "originPrompt": "",
+                "orderedKeys": [],
+                "refs": {}
+            },
+            "generationMode": "imaginative",
+            "selectedResolution": "720P",
+            "ratio": "16:9",
+            "duration": 5,
+            "multiShots": "single",
+            "reference": {
+                "type": "ref-element",
+                "refElementIds": []
+            },
+            "elements": {}
+        }
+    };
+    let originPrompt = requestJson.taskInput.prompt;
+    for (const refImages of refrenceImageList) {
+        originPrompt = await replaceString(originPrompt, refImages.imageAlias, `@{${refImages.imageId}}`);
+        // requestJson.taskInput.prompt.replace(new RegExp(refImages.imageAlias, "g"), `@{${refImages.imageId}}`);
+        requestJson.taskInput.promptMeta.orderedKeys.push(refImages.imageId);
+        requestJson.taskInput.promptMeta.refs[refImages.imageId] = {
+            "type": "ref-element",
+            "payload": {
+                "id": refImages.imageId
+            }
+        };
+        requestJson.taskInput.reference.refElementIds.push(refImages.imageId);
+        requestJson.taskInput.elements[refImages.imageId] = {
+            "type": "image",
+            "payload": {
+                "key": refImages.imageId,
+                "originImage": refImages.imageUrl,
+                "resultImage": refImages.imageUrl,
+                "objOrBg": "obj",
+                "placePoint": {
+                    "top": 0,
+                    "left": 0,
+                    "width": refImages.width,
+                    "height": refImages.height
+                },
+                "name": refImages.imageName,
+                "title": refImages.imageAlias.replace("@", ""),
+                "fieldName": "multipleAssets",
+                "refImageResolution": `${refImages.width}*${refImages.height}`
+            }
+        };
+    }
+    requestJson.taskInput.promptMeta.originPrompt = originPrompt;
+    console.log(JSON.parse(JSON.stringify(requestJson)));
+    let data = JSON.stringify(requestJson);
+    let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://create.wan.video/wanx/api/common/imageGen',
+        headers: {
+            'accept': 'application/json, text/plain, */*',
+            'accept-language': 'en-US,en;q=0.9',
+            'bx-ua': '231!xJR3HkmUt80+j3o4Ok74NEAoUAGvmIUlW2PKK+t1BjPfrHGGugULjx7uafPhUQ/URkw+b1CFsksEtvzKgZfxiCX9Yo2rvNZL/q6VD620bvis1zrAuLZsaS42oTyapmOlNf/VUqwRb/NZY4SIBwrblnZZmBnWnpK6eZbTzyhRkW+TxDjE72XNwQG81iZSge9fEJrRs9b6q6AIrkv3AOiqF3nLfw0yTA1TJp2W+VyBUHyCnsL2CMQDCpwiqYTtQmoXdPW9qcVAlo3zrPGubs0oJk4MpKlxhseQoeWLhPIIXypaMguM3kmr0Q3oyE+jauHhUYuK3IUGHkE+++3+qCS4+ItUVkVPqmtso+ro2PjULfFNI2Ss5iwH+2Q772Yjb+i03O9NjgTcCaIAgmifB4SvsxvUHHrrcRDW2yrynuLuyqSh4qFBSZh1+cyLgJY5uMFyGDoHrUd6w9QFt8BO8iwquaD433j7JtguzRb/n2j5IYNyVd7KOjl9fHrdyr+pbWKLjxDr7ib9b2lGlBcIKfQj8bj56d9itnb/TY8NmCFeOdZ5117VH0y495iaQxMxRia2xQvxr6kAYaX03gUNcoWK3ZffJ5IBY1udEgpSE2jYXgLsVSZaKC/GEM4iU/gtVbTAzVza7fFwFQAgRjKIlRmAdhe7f4vPT1Jq1f8dY6PFwTFhzoAQZsqL5pQPrDoC7kQDoo9mbRdA8dgRf2rx+IhqAO+f45l6z3Wi4tWY4ZAoScTVVPw2poV3rgj8KCe94cHBpvk37h7PZMHosvRoFX3Nv0WboQ0hREpBbGEkULj3CAloW7vPARo9mzMn9rIcwJZbZNN9A8ywM8CskK5zqusN/5tYvCTrOuoYErAktu49u84+KdJGIBYCz7fwA0psKTWCOyNHkGtS3qxoHxnaZ1NRI6qf40Zi+JHKd3UpTP+9f7udoiyMd0tGjhzUPhROmYFPKWZTU7JfwotwWzPt4oSwuri1WW9i6Q+8dP78PR/bGqsZn4zKd24h5f3zFXuEaGXNIVeanxubWl+oT8zSJjE3EulRh0eMhHfAeyyrtUGmvrZc81YjdFz+SJsrCU27uk521PTJLoPTCLAUERh2JxUAhC/8Tg9cqHiiaQ+i35zkw04FCGSTU0SObgD8BqOz3jfWUP1oE7N68mgB4SAEFAEvJPXLLZgiMxoN3s5Eop3APXJUasC+jFROfDrCBS247mtAHimpo34W3k8g+qAFXmHvA6uq7+jBiO4sJnXHX9r1Ftq6ZAcjvFHSmhOzl8LIfDj8D8G6FJy+5qXxPV77R4EOx04CybMpR3FNVOdmw3OC+dI4eOn5CxM1HJUWSzF9onKjSkiFiDwbyFgV5yfDULYR53j6hABs0iliAaomx85OqAO8HLw+t3GglVHdyXw6+m/UF9hIwY7tDm2YUA6+d+G7mvdmNNsNefAT73hQENctp1hhUVL7WFyRKMAW9+MMoKErQ3rHMFtV5oyTmjdoJ/UCjLrfg6vHACQdjuKftbEp60u6SffssL73CzKuADIXkKJWSLiblvfG/ebq8wWHccPIwlyIS3aO3+FlmUJoI4YiUPfPw6SU097eoGGvnc5M/QomLIUxuI6QDyB3JwBAOuR9Pc59MNz3SXfHVLOMxqZyPa9BKnhBsM2ygzNnM41Fmc4wsfw7Dxex8Pe5pdVFNf4feLbHlaJAJ6cZaow2K8KrgT++r/w3L6hhBd4I',
+            'bx-umidtoken': 'T2gAVAqEe6hx6-eQihUKeF11Eif2vK4surlz8LpVue4p28NrVbzXT5wUJY5WJIKQnwc=',
+            'bx-v': '2.5.36',
+            'content-type': 'application/json',
+            'origin': 'https://create.wan.video',
+            'priority': 'u=1, i',
+            'referer': 'https://create.wan.video/generate/video/reference?model=wan2.7',
+            'sec-ch-ua': '"Chromium";v="148", "Google Chrome";v="148", "Not/A)Brand";v="99"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-origin',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36',
+            'x-platform': 'web',
+            'x-wan-uid': '5546448818118663755',
+            'x-xsrf-token': 'ed0c6447-6450-40d2-99d3-3dc1396a0707',
+            'Cookie': '_ga=GA1.1.1888983041.1759128751; cna=shphIWhQYjYCAcqUPRFOtYiF; xlly_s=1; cnaui=5546448818118663755; aui=5546448818118663755; j_s_1239037570=VzJO6sJzoWKcL%2BZEoGR9r7D2f7Q1eORzfCizeGnNjWL1DP4AoGR9RZeLQce4xSrNB0J16WeOose1ROycDALZB0JcjPEZjNR9ROJ36PEC6OrK6PKPvWSnvLmnwxMzG%3DZp7c4er%2BLB7zbcGStRV%2By3G4tv5P6m7P4n7PKAvx4UQ7cbRNnNw%2Bb160R9RXtc6%3DU1fNMlj2UZjNS1oWmEoPglhX4YBX4YwsUtVGKOjPclhsUyBPbnoWTlDXZ1wSbOj%2BZZjAQNIQdd; sca=96ba3dd2; atpsida=c21954a23a2ed6a7a93a307b_1779459019_3; _ga_Z4KVB8RMTT=GS2.1.s1779459002$o68$g1$t1779459035$j27$l0$h0; tfstk=gOkIqvYm-wbBbG-pyw-Nc8XnzD2WRhJ49gZ-m0BF2JeLP73qPTlE29ySNPiqYY-3LV_SuVlU4B4PFVijRYlULJFRFqgb4Xoy-TsnCq6PLeAn2TwzeE823KoHx82JuGJQMdS34u6ReazRXPezVvfEQcnnx8jGbadq6DA7Z42VpuUJfRE84weR9Wn9fuZby8ULwNCT2PU8e4Fd6cE4muU8J6F9fu4Ty8e-yRK_4PU8e83-Xj7X5lAQJDtkwI1rFKXZYP6ReAZ9xriBb9rjLkM8lDHMYH-uAWaxvPTI0O4460VSEgX7MDhmro3dJUaoCcHKMqLNTyhbVmlSvpBTLvmKM7Hvr_3bd4Nxp5sRHD23PRZtH3507AaEyvN90tNzBxPYpfRM87yQc4HnRg6-kcoqK5DWlNUoTo2TVYxANzNR4ZW4lCgGNGNcFla2fh1lZfQaMF3h-HW_9lqZ3ht1R_VLjla2fh1lZWEgbS-6fw1l.; isg=BA4OyoJB6Gl3L16HRHE4AKu-X-TQj9KJoIKv5zhSbpGom6n1oRtamFcd09_3hcqh; ' + authHeaders
+        },
+        data: data
+    };
+    let response = await axios.request(config);
+    return response.data;
+    // return {} as any;
+}
+export async function generateRefrenceVideoWithFirstFrame(requestModel, startImageDetails) {
+    let requestJson = {
+        "deductMode": "credit_mode",
+        "taskType": "cast_to_video",
+        "taskInput": {
+            "subType": "basic",
+            "modelVersion": "2_7",
+            "prompt": requestModel.prompt,
+            "promptMeta": {
+                "originPrompt": "",
+                "orderedKeys": [],
+                "refs": {}
+            },
+            "generationMode": "imaginative",
+            "selectedResolution": "720P",
+            "duration": 5,
+            "multiShots": "single",
+            "reference": {
+                "type": "ref-element",
+                "refElementIds": []
+            },
+            "elements": {},
+            "firstFrame": {
+                "type": "ref-element",
+                "refElementId": startImageDetails.imageId
+            }
+        }
+    };
+    let originPrompt = requestJson.taskInput.prompt;
+    for (const refImages of refrenceImageList) {
+        // requestJson.taskInput.promptMeta.originPrompt = requestJson.taskInput.prompt.replace(new RegExp(refImages.imageAlias, "g"), `@{${refImages.imageId}}`);
+        originPrompt = await replaceString(originPrompt, refImages.imageAlias, `@{${refImages.imageId}}`);
+        requestJson.taskInput.promptMeta.orderedKeys.push(refImages.imageId);
+        requestJson.taskInput.promptMeta.refs[refImages.imageId] = {
+            "type": "ref-element",
+            "payload": {
+                "id": refImages.imageId
+            }
+        };
+        requestJson.taskInput.reference.refElementIds.push(refImages.imageId);
+        requestJson.taskInput.elements[refImages.imageId] = {
+            "type": "image",
+            "payload": {
+                "key": refImages.imageId,
+                "originImage": refImages.imageUrl,
+                "resultImage": refImages.imageUrl,
+                "objOrBg": "obj",
+                "placePoint": {
+                    "top": 0,
+                    "left": 0,
+                    "width": refImages.width,
+                    "height": refImages.height
+                },
+                "name": refImages.imageName,
+                "title": refImages.imageAlias.replace("@", ""),
+                "fieldName": "multipleAssets",
+                "refImageResolution": `${refImages.width}*${refImages.height}`
+            }
+        };
+    }
+    requestJson.taskInput.promptMeta.originPrompt = originPrompt;
+    //Start image details will be added as a separate element in the elements list and also as first frame reference. This is because even if user wants to generate video with first frame only, the image details should be present in the elements list to get the credit deduction and for better tracking of the asset used in generation.
+    requestJson.taskInput.elements[startImageDetails.imageId] = {
+        "type": "image",
+        "payload": {
+            "key": startImageDetails.imageId,
+            "originImage": startImageDetails.imageUrl,
+            "resultImage": startImageDetails.imageUrl,
+            "objOrBg": "obj",
+            "placePoint": {
+                "top": 0,
+                "left": 0,
+                "width": startImageDetails.width,
+                "height": startImageDetails.height
+            },
+            "name": startImageDetails.imageName,
+            "title": "Image",
+            "fieldName": "firstFrameImage",
+            "refImageResolution": `${startImageDetails.width}*${startImageDetails.height}`
+        }
+    };
+    let data = JSON.stringify(requestJson);
+    let config = {
+        method: 'post',
+        maxBodyLength: Infinity,
+        url: 'https://create.wan.video/wanx/api/common/imageGen',
+        headers: {
+            'accept': 'application/json, text/plain, */*',
+            'accept-language': 'en-US,en;q=0.9',
+            'bx-ua': '231!4hB734mUXov+j7rvOk74NEAoUAGvmIUlW2PKK+t1BjPfrHGGugULjx7uafPhUQ/URkw+b1CFsksEtvzKgZfxiCX9Yo2rvNZL/q6VD620bvis1zrAuLZsaS42oTyapmOlNf/VUqwRb/NZY4SIBwrblnZZmBnWnpK6eZbTzyhRkW+TxDjE72XNwQG81iZSge9fEJrRs9b6q6AIrkv3AOiqF3nLfw0yTA1TJp2W+VyBUHyCnsL2CMQDCpwiqYTtQmoXdPW9qcVAlo3zrPGubs0oJk4MpKlxhseQoeWLhPIIXypaMguM3kmr0Q3oyE+jauHhUYuK3IUGHkE+++3+qCS4+ItUf4VbBmVso+ro2PjULfFNI2Ss5iwH+2Q772Yjbjp6bheoxdBE8lzh2W6GBEi0krrpPdXN73jkHWZ+pdhFaoYqL6hqBLMDPmXpnXzgFxeujpB/nFKxcvOO488Jm1luA4k1p81Gkrx5iewwx8XbeIRb2Lx5vpsjVEdvyUNwA4ubY3njNggOZ2LHrKXF7h4rKuXvkKK7ddXSInxrkqH0wv05x/e2iIYB3xCnF1e/SBW02UUbaXDHbYhUk53cXQBN2yKUQVAQ8CdpfSQjHc4UFYX0dow/6Fc7A00joWmdu4vYVr7w8+Y8Cf4KHri65H0WXNxOI/XuJO1Ijl4WDxUmaODIn8gBiOBHfhgN7aR1NV4T5IUmWVzpciUQk3faDuIXY0DhkXdpTzwa5rY7srlLH9Nwnl9yycqjO7Meo+XfXDPA6NDDfBHtfpopi+nTVmr9x6aR3w2hdoA0jyKF00RuxaRjfjEa0QBhNgTDA2QkmGmmsL2SfqHa2bmklv0Xeq+zQ5HMmvmsGNiJCKv2JqfwA/m85ZrMoGjXxOv3XKDo3Sbd6tyVqUviB9KXIBkWGQX9yDS0LKvI7E3Xz3qh3CGPhPZOI8WMSg0B5XmYJYrT1AoNA2pUG58en9Z8bU6EOhtuEvlgqhi9Vq3BhY3d0f1G3K5WHtPaKpzHrY/OBZijppfUECOWtOEHM/BldB++dcAVq7VNRRjaS0jisOWtB95nbJKwcCAi7ZOeSvXAR6epVSS/J1dHrrWAfLil9+VpJSHAegsrFBOhLtOuoGJd4IJimAkobxBNYmOh3Yil7WRCzF4geEL0jToTie0mUWnGLJqIq/VMfsE7iqOmkaOqREixKciUA1NY6D6z+8sCoaWyHFiLNy8MIEe7tT16av3OtRwynAOzT8M3n2akkQlQBTrffdEI/TjftyjqavG9AFt0z1qIz6SajK9cjkRWk2dB4ca4jCzB9KGWei+MLwtwhDTAILpOthtTMvMmKnLOG4alzBtOtSWwkNRvS7JfbgM2KNCtEqYdDBz7Y4z5tEBlF2ey5cXWgBymZ5/T8CqlgH+WiORyfbpBO6WQiVCmPEwCrWAvB/RGbdfe6K76zCEkTjmK+AYiheOf9OK76OOKQ8cIspcd+R8uysaOZwMRi3ly1R4pUKlhBw6dF2eboFnAp2BDb93tnv/lIubW5vyXCPmZBJQjBiNIxzhaZG9g+aT1nJDy9FAJ8UrKlw2nU3O2bkyHyx2xSgx4KkdywRUnRhbLZpxZ0p0B+STN9c18cFAj5Tdv2wFT6j2shPQYDQj/HonvCkYnVHzzh9k64i1BO0vjJ8qBN70hP76PNp26kskaAQGuvvf44I9ze45iYw54oB+F9IAS4WsMquib9gLujYhvR8FEaweukep/5njsy5vnn+==',
+            'bx-umidtoken': 'T2gAVAqEe6hx6-eQihUKeF11Eif2vK4surlz8LpVue4p28NrVbzXT5wUJY5WJIKQnwc=',
+            'bx-v': '2.5.36',
+            'content-type': 'application/json',
+            'origin': 'https://create.wan.video',
+            'priority': 'u=1, i',
+            'referer': 'https://create.wan.video/generate/video/reference?model=wan2.7',
+            'sec-ch-ua': '"Chromium";v="148", "Google Chrome";v="148", "Not/A)Brand";v="99"',
+            'sec-ch-ua-mobile': '?0',
+            'sec-ch-ua-platform': '"Windows"',
+            'sec-fetch-dest': 'empty',
+            'sec-fetch-mode': 'cors',
+            'sec-fetch-site': 'same-origin',
+            'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/148.0.0.0 Safari/537.36',
+            'x-platform': 'web',
+            'x-wan-uid': '5546448818118663755',
+            'x-xsrf-token': 'ed0c6447-6450-40d2-99d3-3dc1396a0707',
+            'Cookie': '_ga=GA1.1.1888983041.1759128751; cna=shphIWhQYjYCAcqUPRFOtYiF; xlly_s=1; cnaui=5546448818118663755; aui=5546448818118663755; j_s_1239037570=VzJO6sJzoWKcL%2BZEoGR9r7D2f7Q1eORzfCizeGnNjWL1DP4AoGR9RZeLQce4xSrNB0J16WeOose1ROycDALZB0JcjPEZjNR9ROJ36PEC6OrK6PKPvWSnvLmnwxMzG%3DZp7c4er%2BLB7zbcGStRV%2By3G4tv5P6m7P4n7PKAvx4UQ7cbRNnNw%2Bb160R9RXtc6%3DU1fNMlj2UZjNS1oWmEoPglhX4YBX4YwsUtVGKOjPclhsUyBPbnoWTlDXZ1wSbOj%2BZZjAQNIQdd; sca=96ba3dd2; atpsida=c21954a23a2ed6a7a93a307b_1779459019_3; _ga_Z4KVB8RMTT=GS2.1.s1779459002$o68$g1$t1779459035$j27$l0$h0; tfstk=gYbo41Yohg-7RvM4Sv87mMSun2EvpUTp8QWpppCeLQvXUaKLNeAFBKH8N6CEYyX1ILpPy7sn-6XnJgLy9yAhBt9y97NI-HWOHaIR-6gHT6WQNpF7D_1WReyTB94ON_GJcCl5-38q0BCq8DJUDEJf6At4BPUOauRWJsyOveD3pBRt8e-yUnk2hQAEY9-EusJXOBkyTLPcgK92aD8eax-2OBGyT98UisJXTeRPL3PcgKOe8pl5ouJ58Z74CavnCGYua6Akqd5yU9BRuR8jVTv0pJ_cVbJGaDgE8ZAkqZ2_hmiJ2M56faCa-qTRsi82twNZxpxGYaLVz-zwcH7V3IW89DOcx676PFcUzsYkEh72VX3RQsfFXnbY_PTkzLSpP6hgesble__c9Xo2rUIDjaYa5YJdD1bHtwwQoOfF1M-c-Yjrzmowaq0BgWQqADtyGIvtZLzRnqFfQqP0icPB4IOWBSVmADtyGIvTiSmaR3RXNdC..; isg=BKCgjKAn3vOx5mA95heOqqmwca5yqYRzYlzx_Rq6crvRFVE_yr3dAqZjraWVojxL; ' + authHeaders
+        },
+        data: data
+    };
+    let response = await axios.request(config);
+    return response.data;
 }

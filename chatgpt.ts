@@ -1,11 +1,9 @@
 import puppeteer, { Page } from "puppeteer-core";
+import { sleep, writeTextInTextbox } from "./utility.js";
+import fs from 'fs/promises';
 
 
-function sleep(ms: number) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-export async function login() {
+export async function searchOnChatGpt(textPrompt: string, retries = 5): Promise<string | undefined> {
     const browser = await puppeteer.launch({
         headless: false,
         executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
@@ -25,64 +23,77 @@ export async function login() {
     // Create incognito context FIRST
     const incognitoContext = await browser.createBrowserContext();
 
-    // Open a new page in the incognito context
-    const page = await incognitoContext.newPage();
+    try {
+        // Open a new page in the incognito context
+        const page = await incognitoContext.newPage();
 
-    // ✅ NOW close default pages AFTER incognito page is ready
-    // for (const p of defaultPages) {
-    //     await p.close();
-    // }
+        // ✅ NOW close default pages AFTER incognito page is ready
+        for (const p of defaultPages) {
+            await p.close();
+        }
 
-    // Set viewport
-    await page.setViewport({ width: 1280, height: 800 });
+        // Set viewport
+        await page.setViewport({ width: 1280, height: 800 });
 
 
-    // ✅ Remove webdriver property
-    await page.evaluateOnNewDocument(() => {
-        Object.defineProperty(navigator, 'webdriver', {
-            get: () => false,
+        // ✅ Remove webdriver property
+        await page.evaluateOnNewDocument(() => {
+            Object.defineProperty(navigator, 'webdriver', {
+                get: () => false,
+            });
         });
-    });
 
-    // ✅ Set realistic user agent
-    await page.setUserAgent(
-        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
-    );
+        // ✅ Set realistic user agent
+        await page.setUserAgent(
+            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
+        );
 
-    // Start your automation
-    await page.goto('https://chatgpt.com/', {
-        waitUntil: 'networkidle2',
-        timeout: 60000
-    });
+        // Start your automation
+        await page.goto('https://chatgpt.com/', {
+            waitUntil: 'networkidle2',
+            timeout: 60000
+        });
 
-    // await page.screenshot({ path: 'incognito-screenshot.png' });
+        // await page.screenshot({ path: 'incognito-screenshot.png' });
 
-    console.log('Running in incognito mode!');
+        console.log('Running in incognito mode!');
 
-    await page.waitForSelector('[id="prompt-textarea"]', { timeout: 60000 });
-    await page.type('[id="prompt-textarea"]',
-        `What is the latest news in currently in maharashtra. Tell me in json format having fields "title", "description", "source" and "url". Give me atleast 5 news.`,
-        { delay: 100 });
-    await page.keyboard.press('Enter');
+        await page.waitForSelector('[id="prompt-textarea"]', { timeout: 60000 });
 
-    await sleep(3000);
-    await checkResponseCompleted(page, 20);
+        await writeTextInTextbox(page, '[id="prompt-textarea"]', textPrompt);
+
+        // await page.locator('[id="prompt-textarea"]').fill(textPrompt);
 
 
-    let ele = await page.$$('[class^="markdown prose"]');
-    if (ele.length > 0) {
-        const textContent = await page.evaluate(el => el.textContent, ele[ele.length - 1]);
-        console.log(textContent);
-    } else {
-        console.log('Element not found');
+        await sleep(3000);
+
+        await page.keyboard.press('Enter');
+
+        await checkResponseCompleted(page, 20);
+
+
+        let ele = await page.$$('[class^="markdown prose"]');
+        if (ele.length > 0) {
+            const textContent = await page.evaluate(el => el.textContent, ele[ele.length - 1]);
+            // console.log(textContent);
+            return textContent ?? undefined;
+        } else {
+            console.log('Element not found');
+            throw new Error('Response element not found');
+        }
+    } catch (error) {
+        console.error('Error occurred:', error);
+        if (retries > 0) {
+            console.log(`Retrying... Attempts left: ${retries}`);
+            return await searchOnChatGpt(textPrompt, retries - 1);
+        } else {
+            console.log('Max retries reached. Unable to fetch response.');
+            return undefined;
+        }
+    } finally {
+        await incognitoContext.close();
+        await browser.close();
     }
-
-
-    // await sleep(10000);
-
-    // Close the incognito context when done
-    await incognitoContext.close();
-    await browser.close();
 }
 
 
@@ -103,6 +114,9 @@ async function checkResponseCompleted(page: Page, retries = 5) {
     // }
 }
 
-(async () => {
-    await login();
-})();
+// (async () => {
+//     await searchOnChatGpt(`What is the latest news 
+// in currently in maharashtra. 
+// Tell me in json format having fields "title",
+// "description", "source" and "url". Give me atleast 5 news.`);
+// })();

@@ -1,0 +1,17 @@
+[
+    {
+        "originalName": "chatrapati shivaji maharaj",
+        "imageName": "shivaji maharaj.png",
+        "imageType": "character"
+    },
+    {
+        "originalName": "elephant",
+        "imageName": "elephant.png",
+        "imageType": "animal character"
+    },
+    {
+        "originalName": "garden",
+        "imageName": "bgimage.png",
+        "imageType": "background"
+    }
+]

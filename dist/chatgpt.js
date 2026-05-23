@@ -1,79 +1,77 @@
 import puppeteer from "puppeteer-core";
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-export async function chatgptPrompt(textPrompt, retryCount = 5) {
-    let browser;
-    // let incognitoContext: BrowserContext | undefined;
+import { sleep, writeTextInTextbox } from "./utility.js";
+export async function searchOnChatGpt(textPrompt, retries = 5) {
+    const browser = await puppeteer.launch({
+        headless: false,
+        executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--no-first-run',
+            '--no-default-browser-check',
+            '--disable-default-apps',
+            '--start-maximized'
+        ]
+    });
+    // ✅ Get default pages but DON'T close them yet
+    const defaultPages = await browser.pages();
+    // Create incognito context FIRST
+    const incognitoContext = await browser.createBrowserContext();
     try {
-        browser = await puppeteer.connect({
-            browserWSEndpoint: `wss://production-sfo.browserless.io?token=2UXmNShc7TaJ724dfc282bbe442bf75f2fcf2d9ef24d4c8ef`,
-        });
-        // ✅ Get default pages but DON'T close them yet
-        // const defaultPages = await browser.pages();
-        // Create incognito context FIRST
-        // incognitoContext = await browser.createBrowserContext();
         // Open a new page in the incognito context
-        const page = await browser.newPage();
+        const page = await incognitoContext.newPage();
         // ✅ NOW close default pages AFTER incognito page is ready
-        // for (const p of defaultPages) {
-        //     await p.close();
-        // }
+        for (const p of defaultPages) {
+            await p.close();
+        }
         // Set viewport
-        // await page.setViewport({ width: 1280, height: 800 });
+        await page.setViewport({ width: 1280, height: 800 });
         // ✅ Remove webdriver property
-        // await page.evaluateOnNewDocument(() => {
-        //     Object.defineProperty(navigator, 'webdriver', {
-        //         get: () => false,
-        //     });
-        // });
+        await page.evaluateOnNewDocument(() => {
+            Object.defineProperty(navigator, 'webdriver', {
+                get: () => false,
+            });
+        });
         // ✅ Set realistic user agent
-        // await page.setUserAgent(
-        //     'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
-        // );
+        await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36');
         // Start your automation
         await page.goto('https://chatgpt.com/', {
             waitUntil: 'networkidle2',
             timeout: 60000
         });
-        await sleep(5000);
-        await page.screenshot({ path: 'incognito-screenshot.png' });
-        console.log('Running!');
-        await page.type('[data-placeholder^="Ask anything"]', textPrompt, { delay: 100 });
-        console.log("Prompt is eneterd.");
-        await page.keyboard.press('Enter');
-        console.log("Enter key is pressed.");
-        await page.screenshot({ path: 'incognito-screenshot1.png' });
+        // await page.screenshot({ path: 'incognito-screenshot.png' });
+        console.log('Running in incognito mode!');
+        await page.waitForSelector('[id="prompt-textarea"]', { timeout: 60000 });
+        await writeTextInTextbox(page, '[id="prompt-textarea"]', textPrompt);
+        // await page.locator('[id="prompt-textarea"]').fill(textPrompt);
         await sleep(3000);
-        // await page.screenshot({ path: 'incognito-screenshot1.png' });
+        await page.keyboard.press('Enter');
         await checkResponseCompleted(page, 20);
-        let ele = await page.$('[class^="markdown prose"]');
-        if (ele) {
-            const textContent = await page.evaluate(el => el.textContent, ele);
-            console.log("Response gathered and returned.");
-            return textContent;
+        let ele = await page.$$('[class^="markdown prose"]');
+        if (ele.length > 0) {
+            const textContent = await page.evaluate(el => el.textContent, ele[ele.length - 1]);
+            // console.log(textContent);
+            return textContent ?? undefined;
         }
         else {
             console.log('Element not found');
-            throw new Error("Unable to get response form chatgpt, Please try again after sometime.");
+            throw new Error('Response element not found');
         }
-        // await sleep(10000);
     }
     catch (error) {
-        console.log(error);
-        if (retryCount > 0) {
-            await chatgptPrompt(textPrompt, retryCount - 1);
+        console.error('Error occurred:', error);
+        if (retries > 0) {
+            console.log(`Retrying... Attempts left: ${retries}`);
+            return await searchOnChatGpt(textPrompt, retries - 1);
         }
-        throw new Error(error?.message);
+        else {
+            console.log('Max retries reached. Unable to fetch response.');
+            return undefined;
+        }
     }
     finally {
-        // Close the incognito context when done
-        // if (incognitoContext) {
-        //     await incognitoContext?.close();
-        // }
-        if (browser) {
-            await browser?.close();
-        }
+        await incognitoContext.close();
+        await browser.close();
     }
 }
 async function checkResponseCompleted(page, retries = 5) {
@@ -92,5 +90,8 @@ async function checkResponseCompleted(page, retries = 5) {
     // }
 }
 // (async () => {
-//     await login();
+//     await searchOnChatGpt(`What is the latest news 
+// in currently in maharashtra. 
+// Tell me in json format having fields "title",
+// "description", "source" and "url". Give me atleast 5 news.`);
 // })();

@@ -5,6 +5,8 @@ import nodeCron from "node-cron";
 import fs from "fs";
 import { getRestResponse } from "./restTemplate.js";
 import path from "path";
+import axios from "axios";
+import Ffmpeg from "fluent-ffmpeg";
 
 var browser: Browser;
 
@@ -339,3 +341,164 @@ export async function saveScreenShotInDockerLocal(page: Page, imageName: string)
 }
 
 
+export async function writeTextInTextbox(page: Page, selector: string, text: string, delay = 0) {
+    await page.click(selector);
+
+    const lines = text.split('\n');
+
+    for (let i = 0; i < lines.length; i++) {
+
+        // type line character by character
+        await page.keyboard.type(lines[i], {
+            delay: delay // typing effect
+        });
+
+        // create new line without submit
+        if (i < lines.length - 1) {
+            await page.keyboard.down('Shift');
+            await page.keyboard.press('Enter');
+            await page.keyboard.up('Shift');
+        }
+    }
+}
+
+
+
+
+export function extractJSON(inputText: string = '') {
+    const match = inputText.match(/(\{[\s\S]*\}|\[[\s\S]*\])/);
+
+    if (!match) return null;
+
+    try {
+        return JSON.parse(match[0]);
+    } catch {
+        return null;
+    }
+}
+
+
+export async function downloadVideoByLink(downloadLink: string, location: string) {
+    const response = await axios({
+        method: 'GET',
+        url: downloadLink,
+        responseType: 'stream'
+    });
+
+    const writer = fs.createWriteStream(location);
+    response.data.pipe(writer);
+
+    return new Promise<void>((resolve, reject) => {
+        writer.on('finish', resolve);
+        writer.on('error', reject);
+    });
+}
+
+
+export async function extractLastFrameOfDownloadedVideo(videoPath: string, outputFileNameWithLocation: string) {
+    // Use FFmpeg to extract the last frame of the video
+    return new Promise<void>((resolve, reject) => {
+
+        Ffmpeg(videoPath)
+            .screenshots({
+                timestamps: ['99%'],
+                filename: outputFileNameWithLocation.split('/').pop(),
+                folder: outputFileNameWithLocation.split('/').slice(0, -1).join('/')
+            })
+            .on('end', () => {
+                console.log('Last frame extracted');
+                resolve();
+            })
+            .on('error', (err) => {
+                reject(err);
+            });
+    });
+}
+
+
+export async function mergeVideos(
+    inputVideos: string[],
+    outputVideoName: string,
+    folderDestination: string
+): Promise<void> {
+
+    return new Promise<void>((resolve, reject) => {
+
+        const command = Ffmpeg();
+
+        inputVideos.forEach((video) => {
+            command.input(video);
+        });
+
+        command
+            .on('end', () => {
+                console.warn('Videos merged, Please check the file named as ' + outputVideoName);
+                resolve();
+            })
+            .on('error', (err) => {
+                reject(err);
+            })
+            .mergeToFile(outputVideoName, folderDestination);
+    });
+}
+
+
+export async function deleteAllFiles(folderPath: string): Promise<void> {
+
+    const files = fs.readdirSync(folderPath);
+
+    for (const file of files) {
+
+        const filePath = path.join(folderPath, file);
+
+        if (fs.statSync(filePath).isFile()) {
+            fs.unlinkSync(filePath);
+        }
+
+    }
+
+    console.log('All files deleted');
+}
+
+export async function deleteFilesEndingWith(
+    folderPath: string,
+    endsWith: string
+): Promise<void> {
+
+    const files = fs.readdirSync(folderPath);
+
+    for (const file of files) {
+
+        if (file.endsWith(endsWith)) {
+
+            const filePath = path.join(folderPath, file);
+
+            if (fs.statSync(filePath).isFile()) {
+                fs.unlinkSync(filePath);
+            }
+
+        }
+
+    }
+
+    console.log('Matching files deleted');
+}
+
+
+export async function replaceString(fullText: string, searchString: string, replaceString: string): Promise<string> {
+
+    let statement = fullText;
+
+    const regex = new RegExp(`(?<!\\w)${searchString}(?!\\w)`, 'g');
+
+    const occurrences = (statement.match(regex) || []).length;
+
+    console.log(`Found ${occurrences} occurrences of "${searchString}" in the text.`);
+
+    for (let i = 0; i < occurrences; i++) {
+        statement = statement.replace(new RegExp(searchString, "g"), replaceString);
+        console.log(`Replaced occurrence ${i + 1} of "${searchString}" with ${replaceString}`);
+    }
+
+    return statement;
+}
