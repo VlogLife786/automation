@@ -128,7 +128,7 @@ export async function generateScene() {
 
 
 async function generatePromptForScene() {
-    let finalPrompt = `I have some images details below: 
+    let finalPrompt = `I have some reference images details below: 
     `;
 
     refrenceImageList = JSON.parse(await fspromise.readFile('input/refrence-details.json', 'utf8'));
