@@ -164,12 +164,12 @@ ${index + 1}. ${image.originalName} has alias of ${image.imageAlias} is a ${imag
         .trim();
 
     finalPrompt += `
-Give me a video generation prompt in json format for below story:
+Give me a video generation prompt in json format for below story for WAN AI:
 
 ${inputPrompt}
 
-Keep the below points in mind while creating the prompt: 
-1. Use the alias name of image in the prompt instead of their original name.
+Keep the below points in mind while creating the prompt json: 
+1. Use the alias name of image in the prompt instead of their original name only for character refrence, But in dialouge use original name.
 2. As my AI video generator generates video for 5 seconds at a time create scenes in such a way so that the final output will be look like a single continuous video without distortion and narrates the full story.
 3. You can add the camera angle and lighting details in the prompt if not already mentioned in the scenes to make the video more cinematic.
 4. Make sure to add the reference of previous video last frame in the prompt for the next scene if needed to make the video more continuous and cinematic.
