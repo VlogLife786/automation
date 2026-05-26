@@ -3,7 +3,7 @@ import fs from 'fs';
 import { ContinuousCinematicVideoSequence, RefrenceImageDetails } from './wan-video-object-models.js';
 import { fileTypeFromFile } from 'file-type';
 import { searchOnChatGpt } from './chatgpt.js';
-import { deleteAllFiles, deleteFilesEndingWith, downloadVideoByLink, extractJSON, extractLastFrameOfDownloadedVideo, mergeVideos } from './utility.js';
+import { deleteAllFiles, deleteFilesEndingWith, downloadVideoByLink, extractJSON, extractLastFrameOfDownloadedVideo, mergeVideos, saveFile } from './utility.js';
 import { imageSize } from 'image-size';
 import { getRestResponse } from './restTemplate.js';
 import { ApiURLs } from './constants.js';
@@ -28,6 +28,8 @@ export async function generateScene() {
         let textPrompt = await generatePromptForScene();
         let chatgptResponse = await searchOnChatGpt(textPrompt);
         let refrenceVideoPromptScenes: ContinuousCinematicVideoSequence = extractJSON(chatgptResponse);
+
+        await saveFile("input/chatgpt-response.json", JSON.stringify(refrenceVideoPromptScenes, null, 2));
 
         // let refrenceVideoPromptScenes = {
         //     "title": "Royal Walk in the Garden",
@@ -164,7 +166,7 @@ ${index + 1}. ${image.originalName} has alias of ${image.imageAlias} is a ${imag
         .trim();
 
     finalPrompt += `
-Give me a video generation prompt in json format for below story for WAN AI:
+Read, Analyze and understand the below context and give me a video generation prompt in json format for below story for WAN AI:
 
 ${inputPrompt}
 

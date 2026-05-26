@@ -8,6 +8,8 @@ import path from "path";
 import axios from "axios";
 import Ffmpeg from "fluent-ffmpeg";
 
+import * as fspromise from 'fs/promises'
+
 var browser: Browser;
 
 export async function startProcessOfAccountCreation() {
@@ -501,4 +503,13 @@ export async function replaceString(fullText: string, searchString: string, repl
     }
 
     return statement;
+}
+
+export async function saveFile(fileNameWithLocation: string, content: string): Promise<void> {
+    try {
+        await fspromise.writeFile(fileNameWithLocation, content);
+        console.log("File written successfully");
+    } catch (error) {
+        console.error("Error writing file:", error);
+    }
 }

@@ -6,6 +6,7 @@ import { getRestResponse } from "./restTemplate.js";
 import path from "path";
 import axios from "axios";
 import Ffmpeg from "fluent-ffmpeg";
+import * as fspromise from 'fs/promises';
 var browser;
 export async function startProcessOfAccountCreation() {
     console.log("Data creation process started.");
@@ -410,4 +411,13 @@ export async function replaceString(fullText, searchString, replaceString) {
         console.log(`Replaced occurrence ${i + 1} of "${searchString}" with ${replaceString}`);
     }
     return statement;
+}
+export async function saveFile(fileNameWithLocation, content) {
+    try {
+        await fspromise.writeFile(fileNameWithLocation, content);
+        console.log("File written successfully");
+    }
+    catch (error) {
+        console.error("Error writing file:", error);
+    }
 }
