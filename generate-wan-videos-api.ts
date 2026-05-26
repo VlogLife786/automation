@@ -871,7 +871,7 @@ export async function generateVideosForRefrenceImage(requestModel: ExecutionRequ
     };
 
     let originPrompt = requestJson.taskInput.prompt;
-    for (const refImages of refrenceImageList) {
+    for (const refImages of refrenceImageList.filter(img => requestJson.taskInput.prompt.includes(img.imageAlias))) {
         originPrompt = await replaceString(originPrompt, refImages.imageAlias, `@{${refImages.imageId}}`);
         // requestJson.taskInput.prompt.replace(new RegExp(refImages.imageAlias, "g"), `@{${refImages.imageId}}`);
         requestJson.taskInput.promptMeta.orderedKeys.push(refImages.imageId);
@@ -979,7 +979,7 @@ export async function generateRefrenceVideoWithFirstFrame(requestModel: Executio
 
     let originPrompt = requestJson.taskInput.prompt;
 
-    for (const refImages of refrenceImageList) {
+    for (const refImages of refrenceImageList.filter(img => requestJson.taskInput.prompt.includes(img.imageAlias))) {
         // requestJson.taskInput.promptMeta.originPrompt = requestJson.taskInput.prompt.replace(new RegExp(refImages.imageAlias, "g"), `@{${refImages.imageId}}`);
         originPrompt = await replaceString(originPrompt, refImages.imageAlias, `@{${refImages.imageId}}`);
         requestJson.taskInput.promptMeta.orderedKeys.push(refImages.imageId);

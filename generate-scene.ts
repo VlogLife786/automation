@@ -121,8 +121,8 @@ export async function generateScene() {
         await deleteAllFiles("input/assets/output-videos");
         await deleteFilesEndingWith("temp/images", "-last-frame.jpg");
 
-    } catch (error) {
-        console.error('Error occurred while generating scene:', error);
+    } catch (error: any) {
+        console.error('Error occurred while generating scene:', error?.message ?? error);
     }
 }
 
@@ -132,6 +132,10 @@ async function generatePromptForScene() {
     `;
 
     refrenceImageList = JSON.parse(await fspromise.readFile('input/refrence-details.json', 'utf8'));
+
+    if (refrenceImageList && refrenceImageList.length > 5) {
+        throw Error("Refrence images are more than allowed, Please keep refrence image upto 5.")
+    }
 
     refrenceImageList.forEach(async (image, index) => {
 
