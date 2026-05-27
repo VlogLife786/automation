@@ -1,9 +1,10 @@
 import puppeteer, { Page } from "puppeteer-core";
 import { sleep, writeTextInTextbox } from "./utility.js";
 import fs from 'fs/promises';
+import path from "path";
 
 
-export async function searchOnChatGpt(textPrompt: string, retries = 5): Promise<string | undefined> {
+export async function searchOnChatGpt(textPrompt: string, imagePaths: string[] = [], retries = 5): Promise<string | undefined> {
     const browser = await puppeteer.launch({
         headless: false,
         executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
@@ -60,6 +61,21 @@ export async function searchOnChatGpt(textPrompt: string, retries = 5): Promise<
 
         await page.waitForSelector('[id="prompt-textarea"]', { timeout: 60000 });
 
+        if (imagePaths.length > 0) {
+            const imagePathsToUpload = imagePaths.map(imagePath => path.resolve((imagePath)));
+
+            // Select file input
+            const input = await page.$('input[type="file"]');
+
+            if (!input) {
+                throw new Error('File input not found');
+            }
+
+            // Upload multiple files
+            await input.uploadFile(...imagePathsToUpload);
+        }
+
+
         await writeTextInTextbox(page, '[id="prompt-textarea"]', textPrompt);
 
         // await page.locator('[id="prompt-textarea"]').fill(textPrompt);
@@ -85,7 +101,7 @@ export async function searchOnChatGpt(textPrompt: string, retries = 5): Promise<
         console.error('Error occurred:', error);
         if (retries > 0) {
             console.log(`Retrying... Attempts left: ${retries}`);
-            return await searchOnChatGpt(textPrompt, retries - 1);
+            return await searchOnChatGpt(textPrompt, imagePaths, retries - 1);
         } else {
             console.log('Max retries reached. Unable to fetch response.');
             return undefined;

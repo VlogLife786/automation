@@ -6,7 +6,7 @@ import { getRestResponse } from "./restTemplate.js";
 import path from "path";
 import axios from "axios";
 import Ffmpeg from "fluent-ffmpeg";
-import * as fspromise from 'fs/promises';
+import * as fspromise from "fs/promises";
 var browser;
 export async function startProcessOfAccountCreation() {
     console.log("Data creation process started.");
@@ -420,4 +420,24 @@ export async function saveFile(fileNameWithLocation, content) {
     catch (error) {
         console.error("Error writing file:", error);
     }
+}
+export async function clickOnElementByText(page, searchText, elementTag = "span") {
+    await page.waitForSelector(elementTag);
+    const elements = await page.$$(elementTag);
+    for (const element of elements) {
+        const text = await page.evaluate(el => el.textContent?.trim(), element);
+        if (text === searchText.trim()) {
+            // Scroll into view first
+            await element.evaluate(el => {
+                el.scrollIntoView({
+                    behavior: "instant",
+                    block: "center",
+                });
+            });
+            // Native puppeteer click
+            await element.click();
+            return true;
+        }
+    }
+    return false;
 }

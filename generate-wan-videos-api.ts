@@ -7,7 +7,7 @@ import { fileTypeFromFile } from "file-type";
 import { ApiURLs, Configs } from "./constants.js";
 import FormData from "form-data";
 import fs from 'fs';
-import { refrenceImageList } from "./generate-scene.js";
+import { refrenceImageList, videoResolution } from "./generate-scene.js";
 import e from "express";
 import imageSize from "image-size";
 
@@ -577,7 +577,7 @@ export async function startVideoGeneration(textPrompt: string): Promise<StartVid
                     "refs": {}
                 },
                 "selectedResolution": "720P",
-                "ratio": "9:16",
+                "ratio": videoResolution,
                 "multiShots": "single",
                 "subType": "basic",
                 "modelIds": []
@@ -859,7 +859,7 @@ export async function generateVideosForRefrenceImage(requestModel: ExecutionRequ
             },
             "generationMode": "imaginative",
             "selectedResolution": "720P",
-            "ratio": "16:9",
+            "ratio": videoResolution,
             "duration": 5,
             "multiShots": "single",
             "reference": {

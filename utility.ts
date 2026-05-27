@@ -7,8 +7,7 @@ import { getRestResponse } from "./restTemplate.js";
 import path from "path";
 import axios from "axios";
 import Ffmpeg from "fluent-ffmpeg";
-
-import * as fspromise from 'fs/promises'
+import * as fspromise from "fs/promises";
 
 var browser: Browser;
 
@@ -505,6 +504,7 @@ export async function replaceString(fullText: string, searchString: string, repl
     return statement;
 }
 
+
 export async function saveFile(fileNameWithLocation: string, content: string): Promise<void> {
     try {
         await fspromise.writeFile(fileNameWithLocation, content);
@@ -512,4 +512,43 @@ export async function saveFile(fileNameWithLocation: string, content: string): P
     } catch (error) {
         console.error("Error writing file:", error);
     }
+}
+
+
+
+export async function clickOnElementByText(
+    page: Page,
+    searchText: string,
+    elementTag: string = "span"
+): Promise<boolean> {
+
+    await page.waitForSelector(elementTag);
+
+    const elements = await page.$$(elementTag);
+
+    for (const element of elements) {
+
+        const text = await page.evaluate(
+            el => el.textContent?.trim(),
+            element
+        );
+
+        if (text === searchText.trim()) {
+
+            // Scroll into view first
+            await element.evaluate(el => {
+                el.scrollIntoView({
+                    behavior: "instant",
+                    block: "center",
+                });
+            });
+
+            // Native puppeteer click
+            await element.click();
+
+            return true;
+        }
+    }
+
+    return false;
 }

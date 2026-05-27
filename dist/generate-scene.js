@@ -13,6 +13,7 @@ ffmpeg.setFfmpegPath(ffmpegPath);
 ffmpeg.setFfprobePath(ffprobe.path);
 export let refrenceImageList = [];
 export let refrenceStartFrame = {};
+export let videoResolution = "16:9";
 let allVideoSequences = [];
 export async function generateScene() {
     // Your scene generation logic here
@@ -92,7 +93,7 @@ export async function generateScene() {
                 webhookUrl: "",
                 startImageName: startImageName,
                 audioFileName: "",
-                refrenceImageList: refrenceImageList,
+                refrenceImageList: scene.prompt.includes('@Image') ? refrenceImageList : [],
                 sendEmail: false
             });
             console.log("Generated video URL:", videoUrl);
@@ -125,7 +126,7 @@ async function generatePromptForScene() {
         image.width = dimensions.width ?? 0;
         image.height = dimensions.height ?? 0;
         finalPrompt += `
-${index + 1}. ${image.originalName} has alias of ${image.imageAlias} is a ${image.imageType}.
+${index + 1}. Image of ${image.originalName} has alias of ${image.imageAlias} is a ${image.imageType}.
 `;
     });
     // console.log(refrenceImageList);
@@ -143,6 +144,7 @@ Keep the below points in mind while creating the prompt json:
 2. As my AI video generator generates video for 5 seconds at a time create scenes in such a way so that the final output will be look like a single continuous video without distortion and narrates the full story.
 3. You can add the camera angle and lighting details in the prompt if not already mentioned in the scenes to make the video more cinematic.
 4. Make sure to add the reference of previous video last frame in the prompt for the next scene if needed to make the video more continuous and cinematic.
+5. Don't add any backgroud music details in the prompt of any scenes as I will be adding it later manually, focus on creating cinematic video with perfect camera angles and lighting to make the video more engaging.
 
 Provide me json output in the below format strictly without any changes:
 
