@@ -552,3 +552,26 @@ export async function clickOnElementByText(
 
     return false;
 }
+
+
+export async function normalizeVideo(
+    input: string,
+    output: string
+): Promise<void> {
+
+    return new Promise((resolve, reject) => {
+
+        Ffmpeg(input)
+            .videoCodec('libx264')
+            .audioCodec('aac')
+            .size('1280x720')
+            .fps(24)
+            .outputOptions([
+                '-pix_fmt yuv420p',
+                '-preset fast'
+            ])
+            .on('end', () => resolve())
+            .on('error', reject)
+            .save(output);
+    });
+}
