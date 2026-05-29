@@ -23,7 +23,7 @@ export class Configs {
 
 export class ApiURLs {
     static readonly USER_DETAILS_API: string = "https://randomuser.me//api?nat=IN";
-    static readonly USER_DETAILS_GOOGLE_SHEET: string = "https://script.google.com/macros/s/AKfycbw1sYo2IhtVSqQ0yt-E6r8MjvfxzoHsiO_pDFNsUYrQbZrKdivnmBGyYMsF2hrpugeY/exec";
+    static readonly USER_DETAILS_GOOGLE_SHEET: string = "https://script.google.com/macros/s/AKfycbzfaA5XSXF70DBwJOh7RLLsXM8NRl2bfv7Rd6NFt_ZPQM4lsZCtgh4kEhmBUuirGyk2/exec";
 }
 
 export class Constant {
