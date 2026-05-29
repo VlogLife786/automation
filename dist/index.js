@@ -188,9 +188,15 @@ const runNext = async () => {
 };
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
+    // console.log(
+    // 'IST:',
+    // new Date().toLocaleString('en-IN', {
+    //   timeZone: 'Asia/Kolkata'
+    // })
+    //   );
     // await startProcessOfAccountCreation();
     // await chatgptPrompt();
-    await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=resetStatusOfClaimedCredit`);
+    // await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=resetStatusOfClaimedCredit`);
     console.log(`Server running on port ${PORT}`);
 });
 // (async () => { await starterFunction(Constant.WAN_AI_GENERATE_VIDEO); })();
@@ -235,10 +241,22 @@ app.listen(PORT, async () => {
 //     }
 // }, { timezone: Constant.ASIA_KOLKATA_TIME_ZONE })
 nodeCron.schedule("*/5 * * * *", async () => {
-    console.log(`Checking for daily credits to claim at: ${new Date().toLocaleString()}`);
+    console.log(`Checking for daily credits to claim at: ${new Intl.DateTimeFormat('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        dateStyle: 'full',
+        timeStyle: 'long'
+    }).format(new Date())}`);
     await claimDailyCredits();
+}, {
+    timezone: 'Asia/Kolkata'
 });
 nodeCron.schedule("0 0 * * *", async () => {
-    console.log(`Reseting status of all users for claiming daily credits at: ${new Date().toLocaleString()}`);
+    console.log(`Reseting status of all users for claiming daily credits at: ${new Intl.DateTimeFormat('en-IN', {
+        timeZone: 'Asia/Kolkata',
+        dateStyle: 'full',
+        timeStyle: 'long'
+    }).format(new Date())}`);
     await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=resetStatusOfClaimedCredit`);
+}, {
+    timezone: 'Asia/Kolkata'
 });
