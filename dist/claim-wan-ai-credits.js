@@ -29,6 +29,7 @@ export async function claimDailyCredits() {
         await sleep(5000);
         let availableCredits = await getAvailableCreditsForDailyCheck();
         await sleep(5000);
+        await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=updateUserStatus&rowNumber=${creds.message.rowNumber}&status=${availableCredits.data.availableCount < 10 ? "Not Available" : "Available"}`);
         await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=updateCredit&email=${creds.message.email}&credit=${availableCredits.data.availableCount}`);
         await sleep(5000);
     }
