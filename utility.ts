@@ -9,35 +9,12 @@ import axios from "axios";
 import Ffmpeg from "fluent-ffmpeg";
 import * as fspromise from "fs/promises";
 
-var browser: Browser;
-
-export async function startProcessOfAccountCreation() {
-    console.log("Data creation process started.");
-    browser = await openNewBrowser(Flags.BROWSER_SERVER);
-    try {
-        let tempMail: string = await getEmailFromTempMailSo(browser);
-        let userDetails = await getRestResponse(ApiURLs.USER_DETAILS_API)
-        let userFullName: string = `${userDetails.results[0].name.first} ${userDetails.results[0].name.last}`
-        let password: string = await generatePassword(12);
-        await wanAIRegistration(tempMail, userFullName, password);
-        await focusOnPage(browser, PageNames.TEMP_EMAIL_SO);
-        let otp: string = await getWanOTPFromTempMailSo();
-        await focusOnPage(browser, PageNames.WAN_AI);
-        let wanPage: Page = await getPageFromOpenedPages(browser, PageNames.WAN_AI);
-        try {
-            await validateWANOtp(wanPage, otp, tempMail);
-            await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=add&email=${tempMail}&fullName=${userFullName}&password=${password}`)
-            console.log(`Data created successfully.`);
-        } catch (error) {
-            await captureScreenShot(wanPage, "wanOTPValidation");
-            console.error("An error occurred while validating OTP: ", error);
-        }
-    } catch (error) {
-        console.error("An error occurred:", error);
-    } finally {
-        console.log("Operation closed.");
-        await browser.close();
-    }
+export const globalVars: {
+    globalBrowser: Browser;
+    chromeVersion: string;
+} = {
+    globalBrowser: null as unknown as Browser,
+    chromeVersion: '148'
 };
 
 /**
@@ -47,12 +24,12 @@ export async function startProcessOfAccountCreation() {
  * @param tempMail email ID 
  */
 export async function validateWANOtp(wanPage: Page, otp: string, tempMail: string) {
-    await wanPage.type('[placeholder="Verification code"]', otp);
+    await wanPage.type('[placeholder="Verification code"]', otp, { delay: 100 });
     await sleep(3000);
     await wanPage.click('[type="submit"]');
-    await wanPage.waitForSelector('[role="dialog"]', { visible: true });
+    // await wanPage.waitForSelector('[role="dialog"]', { visible: true });
     await sleep(3000);
-    await wanPage.click('[class="ant-modal-close-x"]');
+    await wanPage.reload({ waitUntil: "networkidle2" });
 }
 
 /**
@@ -60,7 +37,7 @@ export async function validateWANOtp(wanPage: Page, otp: string, tempMail: strin
  * @param emailId Email ID for which we have to check emails.
  */
 export async function yopmail(emailId: string) {
-    const yopmail: Page = await browser.newPage();
+    const yopmail: Page = await globalVars.globalBrowser.newPage();
     await yopmail.goto("https://yopmail.com/", {
         waitUntil: "load"
     })
@@ -81,7 +58,7 @@ export async function yopmail(emailId: string) {
  * @returns Temporary email
  */
 export async function generateTempMail() {
-    const tempMail: Page = await browser.newPage();
+    const tempMail: Page = await globalVars.globalBrowser.newPage();
     await tempMail.goto("https://tempmailo.com/", {
         waitUntil: "load"
     })
@@ -101,8 +78,15 @@ export async function generateTempMail() {
  */
 export async function wanAIRegistration(emailId: string, name: string, password: string) {
     // Launch browser
-    const page = await browser.newPage();
-    await page.setViewport({ width: 0, height: 0 });
+    const page = await globalVars.globalBrowser.newPage();
+    await page.setUserAgent(
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/' + globalVars.chromeVersion + '.0.0.0 Safari/537.36'
+    );
+    await page.evaluateOnNewDocument(() => {
+        Object.defineProperty(navigator, 'webdriver', {
+            get: () => false,
+        });
+    });
     // Go to a website
     await page.goto("https://create.wan.video/generate/video/image-to-video?model=wan2.5", {
         waitUntil: "load"
@@ -111,14 +95,14 @@ export async function wanAIRegistration(emailId: string, name: string, password:
     // Extract the title
     const title = await page.title();
 
-    await page.waitForSelector('.sc-cokDIm');
-    await page.click(".sc-cokDIm");
+    await page.waitForSelector('[class^="Signup-"]');
+    await page.click('[class^="Signup-"]');
 
     await page.waitForSelector('[placeholder="Confirm password"]', { visible: true });
-    await page.type('[placeholder="Email address"]', emailId);
-    await page.type('[placeholder="Password (8-20 characters)"]', password);
-    await page.type('[placeholder="Confirm password"]', password);
-    await page.type('[placeholder="Your name"]', name);
+    await page.type('[placeholder="Email address"]', emailId, { delay: 100 });
+    await page.type('[placeholder="Password (8-20 characters)"]', password, { delay: 100 });
+    await page.type('[placeholder="Confirm password"]', password, { delay: 100 });
+    await page.type('[placeholder="Your name"]', name, { delay: 100 });
 
     await Promise.all([
         page.click('[type="submit"]'),
@@ -161,7 +145,7 @@ export async function getPageFromOpenedPages(browserObject: Browser, pageName: s
  * @returns OTP
  */
 export async function getWanOTPFromYopmail(): Promise<string> {
-    let yopmail: Page = await getPageFromOpenedPages(browser, PageNames.INBOX);
+    let yopmail: Page = await getPageFromOpenedPages(globalVars.globalBrowser, PageNames.INBOX);
     try {
         const iframeHandle = await yopmail.$('iframe#ifmail'); // Replace with your iframe selector
         if (!iframeHandle) throw new Error("Iframe not found");
@@ -190,19 +174,32 @@ export async function getWanOTPFromYopmail(): Promise<string> {
  * @returns New generated email Id.
  */
 export async function getEmailFromTempMailSo(browserInstannce: Browser): Promise<string> {
-    browser = browserInstannce;
-    let tempMailSo: Page = await browser.newPage();
+    globalVars.globalBrowser = browserInstannce;
+    let tempMailSo: Page = await globalVars.globalBrowser.newPage();
+    await tempMailSo.setUserAgent(
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/' + globalVars.chromeVersion + '.0.0.0 Safari/537.36'
+    );
+    await tempMailSo.evaluateOnNewDocument(() => {
+        Object.defineProperty(navigator, 'webdriver', {
+            get: () => false,
+        });
+    });
+    // await tempMailSo.setViewport({ width: 1280, height: 720 });
     try {
         await tempMailSo.goto("https://tempmail.so/", { waitUntil: "load" });
         const title = await tempMailSo.title();
 
-        await tempMailSo.click('temp-mail-inbox .h-8');
         await tempMailSo.waitForFunction(() => {
-            let modelPopUp: HTMLDivElement = document.querySelector('#home-guide-modal') as HTMLDivElement;
-            return (modelPopUp && !modelPopUp.classList.contains("hidden"));
+            let emailId: NodeListOf<HTMLSpanElement> = document.querySelectorAll('[class="text-base truncate"]');
+            return (emailId.length > 0 && emailId[0].textContent && emailId[0].textContent.trim() != '---- @ ---.---');
         });
+        // await tempMailSo.click('temp-mail-inbox .h-8');
+        // await tempMailSo.waitForFunction(() => {
+        //     let modelPopUp: HTMLDivElement = document.querySelector('#home-guide-modal') as HTMLDivElement;
+        //     return (modelPopUp && !modelPopUp.classList.contains("hidden"));
+        // });
 
-        await tempMailSo.click("#home-guide-modal button");
+        // await tempMailSo.click("#home-guide-modal button");
         await tempMailSo.waitForFunction(() => {
             let latestEmailId = document.querySelector('[class="text-base truncate"]')?.textContent?.trim();
             return (latestEmailId && latestEmailId != "");
@@ -220,7 +217,7 @@ export async function getEmailFromTempMailSo(browserInstannce: Browser): Promise
  * @returns OTP
  */
 export async function getWanOTPFromTempMailSo(): Promise<string> {
-    let tempMailSo: Page = await getPageFromOpenedPages(browser, PageNames.TEMP_EMAIL_SO);
+    let tempMailSo: Page = await getPageFromOpenedPages(globalVars.globalBrowser, PageNames.TEMP_EMAIL_SO);
     await tempMailSo.waitForFunction(() => {
         let modelPopUp: HTMLDivElement = document.querySelector('#home-guide-modal') as HTMLDivElement;
         return (modelPopUp && !modelPopUp.classList.contains("hidden"));
@@ -256,8 +253,16 @@ export async function openNewBrowser(instanceType: Flags): Promise<Browser> {
     return instanceType == Flags.BROWSER_LOCAL ?
         await puppeteer.launch({
             headless: false,
-            defaultViewport: null,
-            args: ['--start-maximized']
+            defaultViewport: null,         // optional: to see full page
+            executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--no-first-run',
+                '--no-default-browser-check',
+                '--disable-default-apps',
+                '--start-maximized'
+            ]
         })
         :
         await puppeteer.launch({
@@ -265,8 +270,9 @@ export async function openNewBrowser(instanceType: Flags): Promise<Browser> {
             defaultViewport: {
                 width: 1920,
                 height: 1080
-            },         // optional: to see full page
+            },   // optional: to see full page
             executablePath: await Chromium.executablePath(),
+            // executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
             headless: true,
         }); // headless:false shows the browser
 }
@@ -574,4 +580,13 @@ export async function normalizeVideo(
             .on('error', reject)
             .save(output);
     });
+}
+
+export async function createFolderIfNotExist(folderPath: string): Promise<void> {
+    if (!fs.existsSync(folderPath)) {
+        await fspromise.mkdir(folderPath, { recursive: true });
+        console.log(`Folder created at: ${folderPath}`);
+    } else {
+        console.log(`Folder already exists at: ${folderPath}`);
+    }
 }

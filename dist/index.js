@@ -1,10 +1,13 @@
+import nodeCron from "node-cron";
 import express from 'express';
 import { sleep } from "./utility.js";
-import { Configs } from "./constants.js";
+import { ApiURLs, Configs } from "./constants.js";
 import { GenerateWANAiVideosByApi } from "./generate-wan-videos-api.js";
 import multer from "multer";
 import fs from 'fs';
 import path from 'path';
+import { claimDailyCredits } from "./claim-wan-ai-credits.js";
+import { getRestResponse } from "./restTemplate.js";
 // const schedularTime: string = process.env.SCHEDULAR_TIME || Configs.SCHEDULAR_CONFIG;
 // let isJobInProgress: boolean = false;
 const app = express();
@@ -185,7 +188,9 @@ const runNext = async () => {
 };
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
+    // await startProcessOfAccountCreation();
     // await chatgptPrompt();
+    await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=resetStatusOfClaimedCredit`);
     console.log(`Server running on port ${PORT}`);
 });
 // (async () => { await starterFunction(Constant.WAN_AI_GENERATE_VIDEO); })();
@@ -229,3 +234,11 @@ app.listen(PORT, async () => {
 //         isJobInProgress = false;
 //     }
 // }, { timezone: Constant.ASIA_KOLKATA_TIME_ZONE })
+nodeCron.schedule("*/5 * * * *", async () => {
+    console.log(`Checking for daily credits to claim at: ${new Date().toLocaleString()}`);
+    await claimDailyCredits();
+});
+nodeCron.schedule("0 0 * * *", async () => {
+    console.log(`Reseting status of all users for claiming daily credits at: ${new Date().toLocaleString()}`);
+    await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=resetStatusOfClaimedCredit`);
+});

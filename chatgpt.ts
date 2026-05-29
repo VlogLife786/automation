@@ -1,22 +1,12 @@
 import puppeteer, { Page } from "puppeteer-core";
-import { sleep, writeTextInTextbox } from "./utility.js";
+import { openNewBrowser, sleep, writeTextInTextbox } from "./utility.js";
 import fs from 'fs/promises';
 import path from "path";
+import { Flags } from "./constants.js";
 
 
 export async function searchOnChatGpt(textPrompt: string, imagePaths: string[] = [], retries = 5): Promise<string | undefined> {
-    const browser = await puppeteer.launch({
-        headless: false,
-        executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
-        args: [
-            '--no-sandbox',
-            '--disable-setuid-sandbox',
-            '--no-first-run',
-            '--no-default-browser-check',
-            '--disable-default-apps',
-            '--start-maximized'
-        ]
-    });
+    const browser = await openNewBrowser(Flags.BROWSER_LOCAL)
 
     // ✅ Get default pages but DON'T close them yet
     const defaultPages = await browser.pages();

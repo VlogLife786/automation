@@ -1,7 +1,7 @@
 import fspromise from 'fs/promises';
 import fs from 'fs';
 import { searchOnChatGpt } from './chatgpt.js';
-import { deleteAllFiles, deleteFilesEndingWith, downloadVideoByLink, extractJSON, extractLastFrameOfDownloadedVideo, mergeVideos, saveFile } from './utility.js';
+import { createFolderIfNotExist, deleteAllFiles, deleteFilesEndingWith, downloadVideoByLink, extractJSON, extractLastFrameOfDownloadedVideo, mergeVideos, normalizeVideo, saveFile } from './utility.js';
 import { imageSize } from 'image-size';
 import { getRestResponse } from './restTemplate.js';
 import { ApiURLs } from './constants.js';
@@ -97,10 +97,15 @@ export async function generateScene() {
                 sendEmail: false
             });
             console.log("Generated video URL:", videoUrl);
+            await createFolderIfNotExist("input/assets/output-videos");
             await downloadVideoByLink(videoUrl, `input/assets/output-videos/${scene.scene_id}.mp4`);
             allVideoSequences.push(`input/assets/output-videos/${scene.scene_id}.mp4`);
         }
         console.log("All video sequences generated, Now merging the videos");
+        allVideoSequences.forEach(async (element, index) => {
+            await normalizeVideo(element, `input/assets/output-videos/${index + 1}-normalized.mp4`);
+            allVideoSequences[index] = `input/assets/output-videos/${index + 1}-normalized.mp4`;
+        });
         await mergeVideos(allVideoSequences, "merged-video.mp4", "input/assets/output-videos");
         await deleteAllFiles("input/assets/output-videos");
         await deleteFilesEndingWith("temp/images", "-last-frame.jpg");
@@ -153,6 +158,6 @@ ${JSON.stringify(JSON.parse(schemaJson), null, 2)}
     // console.log(finalPrompt);
     return finalPrompt;
 }
-(async () => {
-    await generateScene();
-})();
+// (async () => {
+//     await generateScene();
+// })();

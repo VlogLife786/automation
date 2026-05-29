@@ -3,7 +3,7 @@ import fs from 'fs';
 import { ContinuousCinematicVideoSequence, RefrenceImageDetails } from './wan-video-object-models.js';
 import { fileTypeFromFile } from 'file-type';
 import { searchOnChatGpt } from './chatgpt.js';
-import { deleteAllFiles, deleteFilesEndingWith, downloadVideoByLink, extractJSON, extractLastFrameOfDownloadedVideo, mergeVideos, normalizeVideo, saveFile } from './utility.js';
+import { createFolderIfNotExist, deleteAllFiles, deleteFilesEndingWith, downloadVideoByLink, extractJSON, extractLastFrameOfDownloadedVideo, mergeVideos, normalizeVideo, saveFile } from './utility.js';
 import { imageSize } from 'image-size';
 import { getRestResponse } from './restTemplate.js';
 import { ApiURLs } from './constants.js';
@@ -113,7 +113,7 @@ export async function generateScene() {
             });
 
             console.log("Generated video URL:", videoUrl);
-
+            await createFolderIfNotExist("input/assets/output-videos");
             await downloadVideoByLink(videoUrl as string, `input/assets/output-videos/${scene.scene_id}.mp4`);
             allVideoSequences.push(`input/assets/output-videos/${scene.scene_id}.mp4`);
 
@@ -194,6 +194,6 @@ ${JSON.stringify(JSON.parse(schemaJson), null, 2)}
 
 
 
-(async () => {
-    await generateScene();
-})();
+// (async () => {
+//     await generateScene();
+// })();

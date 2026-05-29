@@ -1,7 +1,7 @@
 import nodeCron from "node-cron";
 import express from 'express';
-import { sleep, startProcessOfAccountCreation } from "./utility.js";
-import { Configs, Constant, EnvConstants } from "./constants.js";
+import { sleep } from "./utility.js";
+import { ApiURLs, Configs, Constant, EnvConstants } from "./constants.js";
 import { startProcessOfAccountLogin } from "./login.js";
 import { constants } from "buffer";
 import { registerToDremaniaAi } from "./dremaniaRegister.js";
@@ -12,6 +12,9 @@ import { Request, Response } from 'express';
 import fs from 'fs';
 import path from 'path';
 import { error } from "console";
+import { startProcessOfAccountCreation } from "./wan-ai-registration.js";
+import { claimDailyCredits } from "./claim-wan-ai-credits.js";
+import { getRestResponse } from "./restTemplate.js";
 
 // const schedularTime: string = process.env.SCHEDULAR_TIME || Configs.SCHEDULAR_CONFIG;
 // let isJobInProgress: boolean = false;
@@ -240,7 +243,9 @@ const runNext = async () => {
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, async () => {
+    // await startProcessOfAccountCreation();
     // await chatgptPrompt();
+    // await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=resetStatusOfClaimedCredit`);
     console.log(`Server running on port ${PORT}`)
 }
 );
@@ -297,3 +302,13 @@ app.listen(PORT, async () => {
 //     }
 // }, { timezone: Constant.ASIA_KOLKATA_TIME_ZONE })
 
+
+nodeCron.schedule("*/5 * * * *", async () => {
+    console.log(`Checking for daily credits to claim at: ${new Date().toLocaleString()}`);
+    await claimDailyCredits();
+});
+
+nodeCron.schedule("0 0 * * *", async () => {
+    console.log(`Reseting status of all users for claiming daily credits at: ${new Date().toLocaleString()}`);
+    await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=resetStatusOfClaimedCredit`);
+});
