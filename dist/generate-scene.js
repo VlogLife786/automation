@@ -1,7 +1,7 @@
 import fspromise from 'fs/promises';
 import fs from 'fs';
 import { searchOnChatGpt } from './chatgpt.js';
-import { createFolderIfNotExist, deleteAllFiles, deleteFilesEndingWith, downloadVideoByLink, extractJSON, extractLastFrameOfDownloadedVideo, globalVars, mergeVideos, normalizeVideo, saveFile } from './utility.js';
+import { createFolderIfNotExist, deleteAllFiles, deleteFilesEndingWith, downloadVideoByLink, extractJSON, extractLastFrameOfDownloadedVideo, globalVars, mergeVideos, normalizeVideo, saveFile, sleep } from './utility.js';
 import { imageSize } from 'image-size';
 import { getRestResponse } from './restTemplate.js';
 import { ApiURLs } from './constants.js';
@@ -26,6 +26,7 @@ export async function generateScene() {
             await generateScenesFromChatGpt();
         await saveFile("input/chatgpt-response.json", JSON.stringify(refrenceVideoPromptScenes, null, 2));
         for (const scene of refrenceVideoPromptScenes.scene_sequence) {
+            await sleep(5000);
             console.log(`Generating video for scene ${scene.scene_id} with prompt: ${scene.prompt}`);
             let startImageName = "";
             let creds = await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=getAvailableUserByCreds&credit=${globalVars.videoDuration * 2}`);

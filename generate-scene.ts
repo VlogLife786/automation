@@ -36,6 +36,7 @@ export async function generateScene() {
         await saveFile("input/chatgpt-response.json", JSON.stringify(refrenceVideoPromptScenes, null, 2));
 
         for (const scene of refrenceVideoPromptScenes.scene_sequence) {
+            await sleep(5000);
             console.log(`Generating video for scene ${scene.scene_id} with prompt: ${scene.prompt}`);
 
             let startImageName = "";
