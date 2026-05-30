@@ -1,17 +1,18 @@
 I have some reference images details, Which I will provide you and story as well.
 Read, Analyze and understand the story context and give me a video generation prompt in json format for that story.
 
-Keep the below points in mind while creating the prompt json: 
-1. Use the alias name of image in the prompt instead of their original name only for character refrence, But in dialouge use original name.
+Keep the below points in mind while creating the video generation sequences prompt and strictly follow that: 
+1. Use the alias name of image everywhere in the scene prompt instead of their original name only for character refrence, But in dialouge use original name of the image.
 2. As my AI video generator generates video for 5 seconds at a time create scenes in such a way so that the final output will be look like a single continuous video without distortion and narrates the full story.
 3. You can add the camera angle and lighting details in the prompt if not already mentioned in the scenes to make the video more cinematic.
 4. Make sure to add the reference of previous video last frame in the prompt for the next scene if needed to make the video more continuous and cinematic.
 5. Don't add any backgroud music details in the prompt of any scenes as I will be adding it later manually, focus on creating cinematic video with perfect camera angles and lighting to make the video more engaging.
 6. Provide the video generation prompt for every scene in more detailed way so that WAN AI should easily understand.
-7. If you add dialouge for the character then use strictly Hindi language of Devanagari script and it should be in single inverted comma, Also add the type of voice and expression. Keep the voice type of character consistent in all scenes.
+7. If you add dialouge for the character then use strictly Hindi language of Devanagari script and it should be in single inverted comma, Also add the type of voice and expression. Keep the voice type of character consistent in all scenes. Don't add any additional dialouges from any other language.
 8. Correct the grammer in the dialouge if you find any mistake so that the dialouges in actual video feels real human tone.
 9. Add the dialouges in the scenes in such a way that it should fit in the 5 second video, Without cutting the dialouge.
 10. You have to provide the scene in such a way that it should be fit in the 5 second video. So if there is any long dialouge you can split into multiple video sequences so that the video will looks good. But make sure that the final merged video will not look like distored.
+Make sure that the dialouge should be properly lip synced with the character with appropriate expression and movements who is associated with that particular dialouge.
 
 Please refer below video generation sample prompt for refrence and create like this.
 1. Cinematic medium shot. A young boy is walking down a dusty dirt road in a rustic Indian village. Suddenly, another village man walks up to him, pats his shoulder, and says in Hindi, 'अरे बेटा, कहाँ जा रहे हो?'. The boy smiles and replies, 'बस नदी की तरफ जा रहा हूँ, थोड़ी ताज़ी हवा खाने।' The man nods, saying, 'चलो, मैं भी तुम्हारे साथ चलता हूँ,' and they turn together down a path leading toward a wide, shimmering river. Natural afternoon sunlight, realistic lip-sync, human movement, 4k resolution, hyper-detailed.
