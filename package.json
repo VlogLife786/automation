@@ -36,6 +36,7 @@
     "start": "npm run build && npm run run",
     "docker": "docker system prune && docker build -t automation . &&  docker run -p 3000:3000 automation",
     "docker-push": "npm run build && docker system prune -f && docker build -t automation:${npm_config_tag} . && docker tag automation:${npm_config_tag} vloglife643/automation:${npm_config_tag} && docker push vloglife643/automation:${npm_config_tag}",
-    "generate-video": "npm run build && node dist/generate-scene.js"
+    "generate-video": "npm run build && node dist/generate-scene.js",
+    "resolve-permission": "ls -l node_modules/.bin/tsc && chmod +x node_modules/.bin/tsc && npm run build"
   }
 }

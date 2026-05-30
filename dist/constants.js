@@ -25,7 +25,7 @@ Configs.UPLOADED_AUDIO_DIR = 'temp/audio/';
 export class ApiURLs {
 }
 ApiURLs.USER_DETAILS_API = "https://randomuser.me//api?nat=IN";
-ApiURLs.USER_DETAILS_GOOGLE_SHEET = "https://script.google.com/macros/s/AKfycbztU16I-v4h8PYKkErRymDmb9TLfNYdGOAOwjMENk6HAhwdTjHXjRqvWGVWq5rksQPJ/exec";
+ApiURLs.USER_DETAILS_GOOGLE_SHEET = "https://script.google.com/macros/s/AKfycbwecuQ2CA4bn6L56qImwiVBmKESlfW0K-25Wgv8XHrm48DvFH03gmqOfz3lusQ1m-W2/exec";
 export class Constant {
 }
 Constant.CHECK_IN_TO = "Check in to";

@@ -105,7 +105,5 @@ ${inputPrompt}
     return finalPrompt;
 }
 (async () => {
-    if (globalVars.executeWanVideoGeneration) {
-        await generateScene();
-    }
+    await generateScene();
 })();
