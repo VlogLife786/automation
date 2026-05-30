@@ -93,13 +93,10 @@ ${index + 1}. Image of ${image.originalName} has alias of ${image.imageAlias} is
 `;
     });
     // console.log(refrenceImageList);
-    const inputPrompt = (await fspromise.readFile('input/text-prompt.txt', 'utf8')).replace(/\r?\n|\r/g, ' ') // replace line breaks with space
-        .replace(/\s+/g, ' ') // collapse multiple spaces/tabs
-        .trim();
     finalPrompt += `
 Below are the story details:.
 
-${inputPrompt}
+${await fspromise.readFile('input/text-prompt.txt', 'utf8')}
 `;
     // console.log(finalPrompt);
     return finalPrompt;
