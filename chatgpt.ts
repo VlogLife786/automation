@@ -1,49 +1,61 @@
-import puppeteer, { Page } from "puppeteer-core";
+import puppeteer, { Browser, BrowserContext, Page } from "puppeteer-core";
 import { openNewBrowser, sleep, writeTextInTextbox } from "./utility.js";
 import fs from 'fs/promises';
 import path from "path";
 import { Flags } from "./constants.js";
 
+let browser: Browser;
+let incognitoContext: BrowserContext;
+let page: Page;
 
-export async function searchOnChatGpt(textPrompt: string, imagePaths: string[] = [], retries = 5): Promise<string | undefined> {
-    const browser = await openNewBrowser(Flags.BROWSER_LOCAL)
-
-    // ✅ Get default pages but DON'T close them yet
-    const defaultPages = await browser.pages();
-
-    // Create incognito context FIRST
-    const incognitoContext = await browser.createBrowserContext();
+export async function searchOnChatGpt(textPrompt: string, imagePaths: string[] = [], retries = 5, closeBrowserAfterDone: boolean = true): Promise<string | undefined> {
 
     try {
-        // Open a new page in the incognito context
-        const page = await incognitoContext.newPage();
 
-        // ✅ NOW close default pages AFTER incognito page is ready
-        for (const p of defaultPages) {
-            await p.close();
-        }
+        if (browser && incognitoContext) {
+            console.log('Reusing existing browser and incognito context');
+        } else {
+            console.log('Launching new browser and creating incognito context');
 
-        // Set viewport
-        await page.setViewport({ width: 1280, height: 800 });
+            browser = await openNewBrowser(Flags.BROWSER_LOCAL)
+
+            // ✅ Get default pages but DON'T close them yet
+            const defaultPages = await browser.pages();
+
+            // Create incognito context FIRST
+            incognitoContext = await browser.createBrowserContext();
+
+            // Open a new page in the incognito context
+            page = await incognitoContext.newPage();
+
+            // ✅ NOW close default pages AFTER incognito page is ready
+            for (const p of defaultPages) {
+                await p.close();
+            }
+
+            // Set viewport
+            await page.setViewport({ width: 1280, height: 800 });
 
 
-        // ✅ Remove webdriver property
-        await page.evaluateOnNewDocument(() => {
-            Object.defineProperty(navigator, 'webdriver', {
-                get: () => false,
+            // ✅ Remove webdriver property
+            await page.evaluateOnNewDocument(() => {
+                Object.defineProperty(navigator, 'webdriver', {
+                    get: () => false,
+                });
             });
-        });
 
-        // ✅ Set realistic user agent
-        await page.setUserAgent(
-            'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
-        );
+            // ✅ Set realistic user agent
+            await page.setUserAgent(
+                'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/131.0.0.0 Safari/537.36'
+            );
 
-        // Start your automation
-        await page.goto('https://chatgpt.com/', {
-            waitUntil: 'networkidle2',
-            timeout: 60000
-        });
+            // Start your automation
+            await page.goto('https://chatgpt.com/', {
+                waitUntil: 'networkidle2',
+                timeout: 60000
+            });
+
+        }
 
         // await page.screenshot({ path: 'incognito-screenshot.png' });
 
@@ -91,14 +103,19 @@ export async function searchOnChatGpt(textPrompt: string, imagePaths: string[] =
         console.error('Error occurred:', error);
         if (retries > 0) {
             console.log(`Retrying... Attempts left: ${retries}`);
-            return await searchOnChatGpt(textPrompt, imagePaths, retries - 1);
+            return await searchOnChatGpt(textPrompt, imagePaths, retries - 1, closeBrowserAfterDone);
         } else {
             console.log('Max retries reached. Unable to fetch response.');
             return undefined;
         }
     } finally {
-        await incognitoContext.close();
-        await browser.close();
+        if (incognitoContext && closeBrowserAfterDone) {
+            await incognitoContext.close();
+        }
+
+        if (browser && closeBrowserAfterDone) {
+            await browser.close();
+        }
     }
 }
 

@@ -1,4 +1,6 @@
 import { ReadStream } from "fs";
+import { Browser } from "puppeteer-core";
+import { VideoDuration } from "./constants.js";
 
 export interface ExecutionRequestModel {
     prompt: string,
@@ -14,7 +16,11 @@ export interface ExecutionRequestModel {
     sendEmail: boolean | false
 }
 
-
+export interface GlobalVariables {
+    globalBrowser: Browser;
+    chromeVersion: string;
+    videoDuration: VideoDuration;
+}
 
 export interface LoginRequestModel {
     username: string,

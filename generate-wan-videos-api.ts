@@ -171,6 +171,7 @@ export async function GenerateWANAiVideosByApi(requestModel: ExecutionRequestMod
                 });
             } else {
                 await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=updateUserStatus&rowNumber=${requestModel.rowNumber}&status=${availableCredits.data.availableCount < 10 ? "Not Available" : "Available"}`);
+                await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=updateCredit&email=${requestModel.loginEmail}&credit=${availableCredits.data.availableCount}`);
             }
 
             await logoutCurrentUser();
@@ -191,7 +192,7 @@ async function generateVideoForImageAndAudio(textPrompt: string, uploadedImageUr
             "taskType": "image_to_video",
             "taskInput": {
                 "modelVersion": "2_7",
-                "duration": 5,
+                "duration": globalVars.videoDuration,
                 "assistInfo": "{}",
                 "prompt": textPrompt,
                 "promptMeta": {
@@ -290,7 +291,7 @@ async function generateVideoByImage(baseImageUrl: string, textPrompt: string) {
             "taskType": "image_to_video",
             "taskInput": {
                 "modelVersion": "2_7",
-                "duration": 5,
+                "duration": globalVars.videoDuration,
                 "assistInfo": "{}",
                 "prompt": textPrompt,
                 "promptMeta": {
@@ -568,7 +569,7 @@ export async function startVideoGeneration(textPrompt: string): Promise<StartVid
             "taskType": "text_to_video",
             "taskInput": {
                 "modelVersion": "2_7",
-                "duration": 5,
+                "duration": globalVars.videoDuration,
                 "generationMode": "imaginative",
                 "prompt": textPrompt,
                 "promptMeta": {
@@ -860,7 +861,7 @@ export async function generateVideosForRefrenceImage(requestModel: ExecutionRequ
             "generationMode": "imaginative",
             "selectedResolution": "720P",
             "ratio": videoResolution,
-            "duration": 5,
+            "duration": globalVars.videoDuration,
             "multiShots": "single",
             "reference": {
                 "type": "ref-element",
@@ -963,7 +964,7 @@ export async function generateRefrenceVideoWithFirstFrame(requestModel: Executio
             },
             "generationMode": "imaginative",
             "selectedResolution": "720P",
-            "duration": 5,
+            "duration": globalVars.videoDuration,
             "multiShots": "single",
             "reference": {
                 "type": "ref-element",

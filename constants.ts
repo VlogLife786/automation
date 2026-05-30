@@ -10,6 +10,11 @@ export enum PageNames {
     DREMANIA_AI = "Dreamina"
 }
 
+export enum VideoDuration {
+    TEN_SECONDS = 10,
+    FIVE_SECONDS = 5,
+}
+
 export class Flags {
     static readonly BROWSER_LOCAL: boolean = true;
     static readonly BROWSER_SERVER: boolean = false;
@@ -23,7 +28,7 @@ export class Configs {
 
 export class ApiURLs {
     static readonly USER_DETAILS_API: string = "https://randomuser.me//api?nat=IN";
-    static readonly USER_DETAILS_GOOGLE_SHEET: string = "https://script.google.com/macros/s/AKfycbzfaA5XSXF70DBwJOh7RLLsXM8NRl2bfv7Rd6NFt_ZPQM4lsZCtgh4kEhmBUuirGyk2/exec";
+    static readonly USER_DETAILS_GOOGLE_SHEET: string = "https://script.google.com/macros/s/AKfycbztU16I-v4h8PYKkErRymDmb9TLfNYdGOAOwjMENk6HAhwdTjHXjRqvWGVWq5rksQPJ/exec";
 }
 
 export class Constant {

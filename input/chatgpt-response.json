@@ -1,21 +1,21 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Shivaji Maharaj Walking with Elephant in the Garden",
+  "title": "Shivaji Maharaj and Elephant Walking in the Garden",
   "characters": {
     "char_1": {
       "name": "Chatrapati Shivaji Maharaj",
-      "appearance": "Royal Maratha king wearing traditional saffron and cream royal attire with golden embroidery, pearl necklace, royal turban with feather ornament, trimmed beard and mustache, dignified expression, carrying a ceremonial sword at the waist"
+      "appearance": "Use exact appearance from @Image1. Regal Maratha king with royal attire, dignified posture, confident expression, realistic facial features, authentic historical look."
     },
     "char_2": {
       "name": "Elephant",
-      "appearance": "Large majestic Indian elephant with decorative royal cloth draped over its back, calm eyes, slightly swinging trunk, realistic skin texture, graceful walking posture"
+      "appearance": "Use exact appearance from @Image2. Large majestic elephant with realistic skin texture, expressive eyes, natural walking motion, calm and intelligent demeanor."
     }
   },
   "global_style": {
-    "genre": "Historical cinematic drama with emotional and majestic atmosphere",
-    "camera": "Smooth cinematic tracking shots, slow dolly movement, wide-angle establishing shots, medium close-ups with shallow depth of field",
-    "lighting": "Golden hour natural sunlight with soft shadows, warm cinematic tones, volumetric light through trees",
-    "quality": "Ultra realistic, highly detailed cinematic rendering, natural motion blur, realistic textures and facial details",
+    "genre": "Historical cinematic realism",
+    "camera": "Smooth cinematic tracking shots, gimbal stabilized movement, shallow depth of field, natural character focus",
+    "lighting": "Warm golden daylight, soft natural sunlight filtering through garden foliage, realistic shadows",
+    "quality": "Ultra realistic, 4K, hyper-detailed, cinematic, realistic lip sync, natural human and animal movement",
     "aspect_ratio": "16:9",
     "fps": 24
   },
@@ -23,22 +23,15 @@
     {
       "scene_id": 1,
       "duration": "5s",
-      "prompt": "Wide cinematic establishing shot of @Image1 walking slowly beside @Image2 in @Image3 during golden hour. The garden is lush with green grass, flowering plants, stone pathways, and soft sunlight filtering through tall trees. @Image1 walks gracefully with royal posture while @Image2 calmly moves beside him swinging its trunk naturally. Camera starts with a low-angle dolly tracking shot from the front-left side, capturing both characters moving toward the camera. Warm sunlight creates cinematic rim lighting and soft shadows. Ultra realistic historical cinematic style with smooth natural motion and detailed environment.",
-      "transition_to_next": "Camera smoothly tracks alongside the characters as they continue walking deeper into the garden.",
+      "prompt": "Cinematic wide tracking shot in @Image3 garden. @Image1 and @Image2 are walking side by side along a beautiful garden pathway surrounded by lush greenery, colorful flowers, and soft sunlight filtering through the trees. Camera slowly tracks backward in front of them while maintaining eye-level perspective. @Image1 walks with a calm royal demeanor, occasionally glancing toward @Image2. Natural breeze gently moves leaves and vegetation. During the walk, @Image1 speaks in a deep, wise, authoritative male voice with realistic lip-sync: 'कई बार ज़िंदगी या काम में ऐसी उलझनें आ जाती हैं।' The elephant listens attentively while continuing to walk. Cinematic depth of field, realistic shadows, highly detailed environment, smooth character animation, ultra realistic historical atmosphere.",
+      "transition_to_next": "The camera continues the same tracking movement as the elephant begins to respond, maintaining identical walking direction and composition for seamless continuity.",
       "reference_previous_video_last_frame": false
     },
     {
       "scene_id": 2,
       "duration": "5s",
-      "prompt": "Continue seamlessly from the previous scene last frame. Medium side tracking shot of @Image1 and @Image2 walking together through @Image3. @Image1 gently places his hand on the elephant while calmly observing the surroundings. The elephant walks peacefully beside him with realistic movement. The camera moves parallel to them with steady cinematic motion, capturing flowing royal garments and subtle environmental movement from the breeze. Warm golden sunlight filters through leaves creating dynamic light patterns on the pathway. Highly detailed cinematic realism with smooth continuity from previous frame.",
-      "transition_to_next": "The camera slowly moves behind the characters as they continue toward the brighter part of the garden.",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 3,
-      "duration": "5s",
-      "prompt": "Continue seamlessly from the previous scene last frame. Rear cinematic tracking shot of @Image1 and @Image2 walking away through @Image3 toward a glowing sunset at the far end of the garden. The pathway is lined with flowers and softly moving trees. @Image1 maintains a proud royal posture while @Image2 walks calmly beside him. Camera slowly cranes upward revealing the full beauty of the garden landscape with warm cinematic sunset lighting and soft atmospheric haze. Ultra realistic cinematic ending shot with emotional and majestic tone.",
-      "transition_to_next": "Fade out naturally with the characters disappearing into the glowing sunset garden path.",
+      "prompt": "Continue directly from the last frame of the previous scene. Same garden pathway from @Image3, same character positions and walking speed. Cinematic medium tracking shot from a slightly lower angle. @Image1 and @Image2 continue walking naturally without interruption. The camera gently moves closer toward @Image2. The elephant raises its head slightly and responds with expressive natural elephant behavior. In a deep resonant voice accompanied by a realistic elephant trumpet-roar sound, @Image2 says: 'जो सच में बहुत विकट लगती हैं।' Realistic mouth and trunk movement synchronized with dialogue and elephant vocalization. @Image1 nods thoughtfully while continuing to walk. Warm sunlight highlights both characters, cinematic focus pull between the elephant and Shivaji Maharaj, ultra realistic details, smooth motion, seamless continuation from previous scene.",
+      "transition_to_next": "End with both characters continuing their walk together into the garden path, maintaining forward movement.",
       "reference_previous_video_last_frame": true
     }
   ]

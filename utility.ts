@@ -1,5 +1,5 @@
 import puppeteer, { Browser, Page } from "puppeteer-core";   // If "type": "module" in package.json
-import { ApiURLs, Configs, EnvConstants, Flags, PageNames } from "./constants.js";
+import { ApiURLs, Configs, EnvConstants, Flags, PageNames, VideoDuration } from "./constants.js";
 import Chromium from "@sparticuz/chromium";
 import nodeCron from "node-cron";
 import fs from "fs";
@@ -8,13 +8,12 @@ import path from "path";
 import axios from "axios";
 import Ffmpeg from "fluent-ffmpeg";
 import * as fspromise from "fs/promises";
+import { GlobalVariables } from "./wan-video-object-models.js";
 
-export const globalVars: {
-    globalBrowser: Browser;
-    chromeVersion: string;
-} = {
+export const globalVars: GlobalVariables = {
     globalBrowser: null as unknown as Browser,
-    chromeVersion: '148'
+    chromeVersion: '148',
+    videoDuration: VideoDuration.FIVE_SECONDS,
 };
 
 /**
@@ -351,7 +350,7 @@ export async function saveScreenShotInDockerLocal(page: Page, imageName: string)
 export async function writeTextInTextbox(page: Page, selector: string, text: string, delay = 0) {
     await page.click(selector);
 
-    const lines = text.split('\n');
+    const lines = text.split(/\r?\n/); // split text into lines
 
     for (let i = 0; i < lines.length; i++) {
 

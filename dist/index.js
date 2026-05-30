@@ -1,13 +1,10 @@
-import nodeCron from "node-cron";
 import express from 'express';
 import { sleep } from "./utility.js";
-import { ApiURLs, Configs } from "./constants.js";
+import { Configs } from "./constants.js";
 import { GenerateWANAiVideosByApi } from "./generate-wan-videos-api.js";
 import multer from "multer";
 import fs from 'fs';
 import path from 'path';
-import { claimDailyCredits } from "./claim-wan-ai-credits.js";
-import { getRestResponse } from "./restTemplate.js";
 // const schedularTime: string = process.env.SCHEDULAR_TIME || Configs.SCHEDULAR_CONFIG;
 // let isJobInProgress: boolean = false;
 const app = express();
@@ -240,23 +237,23 @@ app.listen(PORT, async () => {
 //         isJobInProgress = false;
 //     }
 // }, { timezone: Constant.ASIA_KOLKATA_TIME_ZONE })
-nodeCron.schedule("*/5 * * * *", async () => {
-    console.log(`Checking for daily credits to claim at: ${new Intl.DateTimeFormat('en-IN', {
-        timeZone: 'Asia/Kolkata',
-        dateStyle: 'full',
-        timeStyle: 'long'
-    }).format(new Date())}`);
-    await claimDailyCredits();
-}, {
-    timezone: 'Asia/Kolkata'
-});
-nodeCron.schedule("0 0 * * *", async () => {
-    console.log(`Reseting status of all users for claiming daily credits at: ${new Intl.DateTimeFormat('en-IN', {
-        timeZone: 'Asia/Kolkata',
-        dateStyle: 'full',
-        timeStyle: 'long'
-    }).format(new Date())}`);
-    await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=resetStatusOfClaimedCredit`);
-}, {
-    timezone: 'Asia/Kolkata'
-});
+// nodeCron.schedule("*/5 * * * *", async () => {
+//     console.log(`Checking for daily credits to claim at: ${new Intl.DateTimeFormat('en-IN', {
+//         timeZone: 'Asia/Kolkata',
+//         dateStyle: 'full',
+//         timeStyle: 'long'
+//     }).format(new Date())}`);
+//     await claimDailyCredits();
+// }, {
+//     timezone: Constant.ASIA_KOLKATA_TIME_ZONE
+// });
+// nodeCron.schedule("0 0 * * *", async () => {
+//     console.log(`Reseting status of all users for claiming daily credits at: ${new Intl.DateTimeFormat('en-IN', {
+//         timeZone: Constant.ASIA_KOLKATA_TIME_ZONE,
+//         dateStyle: 'full',
+//         timeStyle: 'long'
+//     }).format(new Date())}`);
+//     await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=resetStatusOfClaimedCredit`);
+// }, {
+//     timezone: Constant.ASIA_KOLKATA_TIME_ZONE
+// });

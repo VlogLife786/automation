@@ -1,5 +1,5 @@
 import puppeteer from "puppeteer-core"; // If "type": "module" in package.json
-import { EnvConstants, Flags, PageNames } from "./constants.js";
+import { EnvConstants, Flags, PageNames, VideoDuration } from "./constants.js";
 import Chromium from "@sparticuz/chromium";
 import fs from "fs";
 import path from "path";
@@ -8,7 +8,9 @@ import Ffmpeg from "fluent-ffmpeg";
 import * as fspromise from "fs/promises";
 export const globalVars = {
     globalBrowser: null,
-    chromeVersion: '148'
+    chromeVersion: '148',
+    videoDuration: VideoDuration.FIVE_SECONDS,
+    executeWanVideoGeneration: true
 };
 /**
  * Validate OTP in WAN
@@ -301,7 +303,7 @@ export async function saveScreenShotInDockerLocal(page, imageName) {
 }
 export async function writeTextInTextbox(page, selector, text, delay = 0) {
     await page.click(selector);
-    const lines = text.split('\n');
+    const lines = text.split(/\r?\n/); // split text into lines
     for (let i = 0; i < lines.length; i++) {
         // type line character by character
         await page.keyboard.type(lines[i], {

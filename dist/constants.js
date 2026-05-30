@@ -8,6 +8,11 @@ export var PageNames;
     PageNames["TEMP_EMAIL_SO"] = "Your Temporary Email Address";
     PageNames["DREMANIA_AI"] = "Dreamina";
 })(PageNames || (PageNames = {}));
+export var VideoDuration;
+(function (VideoDuration) {
+    VideoDuration[VideoDuration["TEN_SECONDS"] = 10] = "TEN_SECONDS";
+    VideoDuration[VideoDuration["FIVE_SECONDS"] = 5] = "FIVE_SECONDS";
+})(VideoDuration || (VideoDuration = {}));
 export class Flags {
 }
 Flags.BROWSER_LOCAL = true;
@@ -20,7 +25,7 @@ Configs.UPLOADED_AUDIO_DIR = 'temp/audio/';
 export class ApiURLs {
 }
 ApiURLs.USER_DETAILS_API = "https://randomuser.me//api?nat=IN";
-ApiURLs.USER_DETAILS_GOOGLE_SHEET = "https://script.google.com/macros/s/AKfycbzfaA5XSXF70DBwJOh7RLLsXM8NRl2bfv7Rd6NFt_ZPQM4lsZCtgh4kEhmBUuirGyk2/exec";
+ApiURLs.USER_DETAILS_GOOGLE_SHEET = "https://script.google.com/macros/s/AKfycbztU16I-v4h8PYKkErRymDmb9TLfNYdGOAOwjMENk6HAhwdTjHXjRqvWGVWq5rksQPJ/exec";
 export class Constant {
 }
 Constant.CHECK_IN_TO = "Check in to";

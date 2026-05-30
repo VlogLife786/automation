@@ -1,6 +1,6 @@
 import nodeCron from "node-cron";
 import express from 'express';
-import { sleep } from "./utility.js";
+import { globalVars, sleep } from "./utility.js";
 import { ApiURLs, Configs, Constant, EnvConstants } from "./constants.js";
 import { startProcessOfAccountLogin } from "./login.js";
 import { constants } from "buffer";
@@ -249,7 +249,7 @@ app.listen(PORT, async () => {
     // new Date().toLocaleString('en-IN', {
     //   timeZone: 'Asia/Kolkata'
     // })
-//   );
+    //   );
     // await startProcessOfAccountCreation();
     // await chatgptPrompt();
     // await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=resetStatusOfClaimedCredit`);
@@ -312,24 +312,27 @@ app.listen(PORT, async () => {
 // }, { timezone: Constant.ASIA_KOLKATA_TIME_ZONE })
 
 
-nodeCron.schedule("*/5 * * * *", async () => {
-    console.log(`Checking for daily credits to claim at: ${new Intl.DateTimeFormat('en-IN', {
-        timeZone: 'Asia/Kolkata',
-        dateStyle: 'full',
-        timeStyle: 'long'
-    }).format(new Date())}`);
-    await claimDailyCredits();
-}, {
-    timezone: 'Asia/Kolkata'
-});
 
-nodeCron.schedule("0 0 * * *", async () => {
-    console.log(`Reseting status of all users for claiming daily credits at: ${new Intl.DateTimeFormat('en-IN', {
-        timeZone: 'Asia/Kolkata',
-        dateStyle: 'full',
-        timeStyle: 'long'
-    }).format(new Date())}`);
-    await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=resetStatusOfClaimedCredit`);
-}, {
-    timezone: 'Asia/Kolkata'
-});
+
+
+// nodeCron.schedule("*/5 * * * *", async () => {
+//     console.log(`Checking for daily credits to claim at: ${new Intl.DateTimeFormat('en-IN', {
+//         timeZone: 'Asia/Kolkata',
+//         dateStyle: 'full',
+//         timeStyle: 'long'
+//     }).format(new Date())}`);
+//     await claimDailyCredits();
+// }, {
+//     timezone: Constant.ASIA_KOLKATA_TIME_ZONE
+// });
+
+// nodeCron.schedule("0 0 * * *", async () => {
+//     console.log(`Reseting status of all users for claiming daily credits at: ${new Intl.DateTimeFormat('en-IN', {
+//         timeZone: Constant.ASIA_KOLKATA_TIME_ZONE,
+//         dateStyle: 'full',
+//         timeStyle: 'long'
+//     }).format(new Date())}`);
+//     await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=resetStatusOfClaimedCredit`);
+// }, {
+//     timezone: Constant.ASIA_KOLKATA_TIME_ZONE
+// });
