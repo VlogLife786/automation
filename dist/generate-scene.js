@@ -18,15 +18,12 @@ let allVideoSequences = [];
 export async function generateScene() {
     // Your scene generation logic here
     try {
-        let videoGenerationStory = await generatePromptForScene();
-        const instructionPrompt = `${await fspromise.readFile('input/scene-generation-instructions.txt', 'utf8')}
-
-${await fspromise.readFile('input/input-schema.json', 'utf8')}`;
-        await searchOnChatGpt(instructionPrompt, [], 5, false);
-        let chatgptResponse = await searchOnChatGpt(videoGenerationStory, [], 5, true);
-        // await sleep(10000);
-        // return;
-        let refrenceVideoPromptScenes = extractJSON(chatgptResponse);
+        let refrenceVideoPromptScenes = globalVars.useExistingResponse ?
+            await (async () => {
+                await generatePromptForScene();
+                return JSON.parse(await fspromise.readFile('input/chatgpt-response.json', 'utf8'));
+            })() :
+            await generateScenesFromChatGpt();
         await saveFile("input/chatgpt-response.json", JSON.stringify(refrenceVideoPromptScenes, null, 2));
         for (const scene of refrenceVideoPromptScenes.scene_sequence) {
             console.log(`Generating video for scene ${scene.scene_id} with prompt: ${scene.prompt}`);
@@ -89,8 +86,7 @@ async function generatePromptForScene() {
         image.width = dimensions.width ?? 0;
         image.height = dimensions.height ?? 0;
         finalPrompt += `
-${index + 1}. Image of ${image.originalName} has alias of ${image.imageAlias} is a ${image.imageType}.
-`;
+${index + 1}. Image of ${image.originalName} has alias of ${image.imageAlias} is a ${image.imageType}.`;
     });
     // console.log(refrenceImageList);
     finalPrompt += `
@@ -100,6 +96,15 @@ ${await fspromise.readFile('input/text-prompt.txt', 'utf8')}
 `;
     // console.log(finalPrompt);
     return finalPrompt;
+}
+async function generateScenesFromChatGpt() {
+    let videoGenerationStory = await generatePromptForScene();
+    const instructionPrompt = `${await fspromise.readFile('input/scene-generation-instructions.txt', 'utf8')}
+
+${await fspromise.readFile('input/input-schema.json', 'utf8')}`;
+    await searchOnChatGpt(instructionPrompt, [], 5, false);
+    let chatgptResponse = await searchOnChatGpt(videoGenerationStory, [], 5, true);
+    return extractJSON(chatgptResponse);
 }
 (async () => {
     await generateScene();

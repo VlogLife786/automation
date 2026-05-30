@@ -20,6 +20,7 @@ export interface GlobalVariables {
     globalBrowser: Browser;
     chromeVersion: string;
     videoDuration: VideoDuration;
+    useExistingResponse: boolean;
 }
 
 export interface LoginRequestModel {

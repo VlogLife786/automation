@@ -10,6 +10,7 @@ export const globalVars = {
     globalBrowser: null,
     chromeVersion: '148',
     videoDuration: VideoDuration.FIVE_SECONDS,
+    useExistingResponse: false
 };
 /**
  * Validate OTP in WAN

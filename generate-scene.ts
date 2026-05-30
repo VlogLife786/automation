@@ -26,17 +26,12 @@ let allVideoSequences: string[] = [];
 export async function generateScene() {
     // Your scene generation logic here
     try {
-        let videoGenerationStory = await generatePromptForScene();
-        const instructionPrompt = `${await fspromise.readFile('input/scene-generation-instructions.txt', 'utf8')}
-
-${await fspromise.readFile('input/input-schema.json', 'utf8')}`
-
-        await searchOnChatGpt(instructionPrompt, [], 5, false);
-        let chatgptResponse = await searchOnChatGpt(videoGenerationStory, [], 5, true);
-
-        // await sleep(10000);
-        // return;
-        let refrenceVideoPromptScenes: ContinuousCinematicVideoSequence = extractJSON(chatgptResponse);
+        let refrenceVideoPromptScenes: ContinuousCinematicVideoSequence = globalVars.useExistingResponse ?
+            await (async () => {
+                await generatePromptForScene();
+                return JSON.parse(await fspromise.readFile('input/chatgpt-response.json', 'utf8')) as ContinuousCinematicVideoSequence;
+            })() :
+            await generateScenesFromChatGpt();
 
         await saveFile("input/chatgpt-response.json", JSON.stringify(refrenceVideoPromptScenes, null, 2));
 
@@ -119,8 +114,7 @@ async function generatePromptForScene() {
         image.height = dimensions.height ?? 0;
 
         finalPrompt += `
-${index + 1}. Image of ${image.originalName} has alias of ${image.imageAlias} is a ${image.imageType}.
-`;
+${index + 1}. Image of ${image.originalName} has alias of ${image.imageAlias} is a ${image.imageType}.`;
     });
 
     // console.log(refrenceImageList);
@@ -137,6 +131,18 @@ ${await fspromise.readFile('input/text-prompt.txt', 'utf8')}
     return finalPrompt;
 }
 
+
+async function generateScenesFromChatGpt() {
+    let videoGenerationStory = await generatePromptForScene();
+    const instructionPrompt = `${await fspromise.readFile('input/scene-generation-instructions.txt', 'utf8')}
+
+${await fspromise.readFile('input/input-schema.json', 'utf8')}`
+
+    await searchOnChatGpt(instructionPrompt, [], 5, false);
+    let chatgptResponse = await searchOnChatGpt(videoGenerationStory, [], 5, true);
+
+    return extractJSON(chatgptResponse);
+}
 
 
 (async () => {

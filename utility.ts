@@ -14,6 +14,7 @@ export const globalVars: GlobalVariables = {
     globalBrowser: null as unknown as Browser,
     chromeVersion: '148',
     videoDuration: VideoDuration.FIVE_SECONDS,
+    useExistingResponse: false
 };
 
 /**
