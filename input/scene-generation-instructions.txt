@@ -13,6 +13,7 @@ Keep the below points in mind while creating the video generation sequences prom
 9. Add the dialouges in the scenes in such a way that it should fit in the 5 second video, Without cutting the dialouge.
 10. You have to provide the scene in such a way that it should be fit in the 5 second video. So if there is any long dialouge you can split into multiple video sequences so that the video will looks good. But make sure that the final merged video will not look like distored.
 Make sure that the dialouge should be properly lip synced with the character with appropriate expression and movements who is associated with that particular dialouge.
+11. Avoid using he/she for denoting or pointing any character from the refrence images, Use their alias name instead.
 
 Please refer below video generation sample prompt for refrence and create like this.
 1. Cinematic medium shot. A young boy is walking down a dusty dirt road in a rustic Indian village. Suddenly, another village man walks up to him, pats his shoulder, and says in Hindi, 'अरे बेटा, कहाँ जा रहे हो?'. The boy smiles and replies, 'बस नदी की तरफ जा रहा हूँ, थोड़ी ताज़ी हवा खाने।' The man nods, saying, 'चलो, मैं भी तुम्हारे साथ चलता हूँ,' and they turn together down a path leading toward a wide, shimmering river. Natural afternoon sunlight, realistic lip-sync, human movement, 4k resolution, hyper-detailed.
