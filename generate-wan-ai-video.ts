@@ -1,5 +1,5 @@
 import { Browser, BrowserContext, Page } from "puppeteer-core";
-import { clickOnElementByText, openNewBrowser, sleep } from "./utility.js";
+import { clickOnElementByText, globalVars, openNewBrowser, sleep } from "./utility.js";
 import { ApiURLs, Flags } from "./constants.js";
 import { getRestResponse } from "./restTemplate.js";
 import { ExecutionRequestModel, RefrenceImageDetails, StartVideoGenerationResponse, TaskResultByIdResponse } from "./wan-video-object-models.js";
@@ -31,6 +31,18 @@ export async function GenerateWANAiVideos(requestModel: ExecutionRequestModel, r
     for (const p of defaultPages) {
         await p.close();
     }
+
+    // ✅ Remove webdriver property
+    await page.evaluateOnNewDocument(() => {
+        Object.defineProperty(navigator, 'webdriver', {
+            get: () => false,
+        });
+    });
+
+    // ✅ Set realistic user agent
+    await page.setUserAgent(
+        'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/' + globalVars.chromeVersion + '.0.0.0 Safari/537.36'
+    );
     console.log("Received the request of execution...");
 
     try {
