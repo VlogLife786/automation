@@ -5,10 +5,10 @@ import { createFolderIfNotExist, deleteAllFiles, deleteFilesEndingWith, download
 import { imageSize } from 'image-size';
 import { getRestResponse } from './restTemplate.js';
 import { ApiURLs } from './constants.js';
-import { GenerateWANAiVideosByApi } from './generate-wan-videos-api.js';
 import ffmpeg from 'fluent-ffmpeg';
 import ffmpegPath from 'ffmpeg-static';
 import ffprobe from 'ffprobe-static';
+import { GenerateWANAiVideos } from './generate-wan-ai-video.js';
 ffmpeg.setFfmpegPath(ffmpegPath);
 ffmpeg.setFfprobePath(ffprobe.path);
 export let refrenceImageList = [];
@@ -39,7 +39,7 @@ export async function generateScene() {
                 startImageName = `scene-${scene.scene_id - 1}-last-frame.jpg`;
             }
             console.log(creds);
-            const videoUrl = await GenerateWANAiVideosByApi({
+            const videoUrl = await GenerateWANAiVideos({
                 rowNumber: creds.message.rowNumber,
                 emailToSendVideo: creds.message.email,
                 loginEmail: creds.message.email,

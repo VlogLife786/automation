@@ -1,6 +1,6 @@
-import { configDotenv } from "dotenv";
+import { config } from "dotenv";
 
-configDotenv();
+config();
 
 export enum PageNames {
     WAN_AI = "Wan AI",
@@ -28,7 +28,7 @@ export class Configs {
 
 export class ApiURLs {
     static readonly USER_DETAILS_API: string = "https://randomuser.me//api?nat=IN";
-    static readonly USER_DETAILS_GOOGLE_SHEET: string = "https://script.google.com/macros/s/AKfycbwecuQ2CA4bn6L56qImwiVBmKESlfW0K-25Wgv8XHrm48DvFH03gmqOfz3lusQ1m-W2/exec";
+    static readonly USER_DETAILS_GOOGLE_SHEET: string = "https://script.google.com/macros/s/AKfycbxn6KPKEZIIGvFYF32KPZ_I9cx_OoMu_TYRNQ8JUUwJpw-pUd4w9F1WMtvGUyF5UQBJ/exec";
 }
 
 export class Constant {

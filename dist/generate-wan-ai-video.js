@@ -1,157 +1,106 @@
-import { getTextOfElement, openNewBrowser, sleep } from "./utility.js";
-import { Flags } from "./constants.js";
-import { postRestFormResponse, postRestResponse } from "./restTemplate.js";
+import { clickOnElementByText, openNewBrowser, sleep } from "./utility.js";
+import { ApiURLs, Flags } from "./constants.js";
+import { getRestResponse } from "./restTemplate.js";
+import { refrenceImageList } from "./generate-scene.js";
 var browser;
-export async function GenerateWANAiVideos(prompt, loginEmail, loginPassword, emailToSendVideo, webhookUrl, videoTitle, rowNumber = 0) {
-    let executionSteps = [];
+let incognitoContext;
+let page;
+let taskResultResponse;
+let videoGenerationResponse;
+export async function GenerateWANAiVideos(requestModel, retries = 10) {
+    console.log('Launching new browser and creating incognito context');
+    browser = await openNewBrowser(Flags.BROWSER_LOCAL);
+    // ✅ Get default pages but DON'T close them yet
+    const defaultPages = await browser.pages();
+    // Create incognito context FIRST
+    incognitoContext = await browser.createBrowserContext();
+    // Open a new page in the incognito context
+    page = await incognitoContext.newPage();
+    // ✅ NOW close default pages AFTER incognito page is ready
+    for (const p of defaultPages) {
+        await p.close();
+    }
     console.log("Received the request of execution...");
-    browser = await openNewBrowser(Flags.BROWSER_SERVER);
-    let page = await browser.newPage();
     try {
         //Navigate to wan ai
-        await page.goto("https://create.wan.video/generate", { waitUntil: "load" });
-        await sleep(3000);
-        executionSteps.push("Navigated to WAN AI Site.");
+        await page.goto("https://create.wan.video/generate/video/reference?model=wan2.7", { waitUntil: "load" });
+        await sleep(5000);
+        console.log("Navigated to WAN AI Site.");
+        page.on('response', async (response) => {
+            if (response.url().includes('wanx/api/common/v2/taskResult')) {
+                console.log("Received response for task result.");
+                taskResultResponse = await response.json();
+            }
+            if (response.url().includes('wanx/api/common/imageGen')) {
+                console.log("Received response for video generation request.");
+                videoGenerationResponse = await response.json();
+            }
+        });
         //Navigate to login page
         // await clickBySelector(page, "[class*=HeaderContainer] [class*=RightContent] button");
         // await sleep(2000);
         //Login with user credentials
-        await page.type('[data-test-id="login-form-box-address"]', loginEmail, { delay: 120 });
+        await page.type('[data-test-id="login-form-box-address"]', requestModel.loginEmail, { delay: 120 });
         await sleep(1000);
-        executionSteps.push("Email ID is entered: " + loginEmail);
-        await page.type('[data-test-id="login-form-box-password"]', loginPassword, { delay: 120 });
+        // executionSteps.push("Email ID is entered: " + requestModel.loginEmail);
+        await page.type('[data-test-id="login-form-box-password"]', requestModel.loginPassword, { delay: 120 });
         await sleep(1000);
-        executionSteps.push("Password is eneterd.");
+        console.log("Password is entered.");
         await Promise.all([
             page.waitForNavigation({ waitUntil: "networkidle2" }),
             page.click('[data-test-id="login-form-button-submit"]')
         ]);
-        executionSteps.push("Clicked on login button.");
-        // //Reload page once
-        // await page.reload({ waitUntil: "networkidle2" });
-        //Navigate to generated videos
-        await page.goto("https://create.wan.video/generate", { waitUntil: "load" });
-        await sleep(5000);
-        executionSteps.push("Navigated to generate video section.");
-        //Claim credits
-        await page.reload({ waitUntil: "networkidle2" }); //For faaltu popup
-        await sleep(3000);
-        executionSteps.push("Page reloaded to avoid additional pop-up ads..");
-        await page.click('[data-test-id="header-popover-button-credit"] [class*=CreditText]');
-        await sleep(500);
-        await page.click('[class*=BtnContainer] button:last-of-type');
-        await sleep(2000);
-        executionSteps.push("Credits are claimed.");
-        // await captureScreenShot(page, "credits")
+        console.log("Clicked on login button.");
+        //Reload page once
         await page.reload({ waitUntil: "networkidle2" });
         await sleep(5000);
-        executionSteps.push("Page reloaded to avoid additional pop-up ads.");
+        if (requestModel.startImageName && requestModel.startImageName != "") {
+            await uploadStartImage(requestModel.startImageName);
+        }
+        await uploadReferenceImages(requestModel.refrenceImageList, requestModel.prompt);
         //Enter the prompt
         await page.click('[data-slate-node="element"]');
         await sleep(1000);
-        executionSteps.push("Clicked on textbox where prompt will be written.");
-        await page.type('[data-slate-node="element"]', prompt);
+        console.log("Clicked on textbox where prompt will be written.");
+        refrenceImageList.forEach(async () => { await page.keyboard.press('Backspace'); });
+        // await page.type('[data-slate-node="element"]', requestModel.prompt);
+        await typePromptWithImageTags(page, requestModel.prompt);
         console.log("Prompt added successfully.");
-        executionSteps.push("Prompt added to textbox.");
-        //Check existing created videos
-        const alreadyCreatedVideoCount = await page.$$eval('[data-test-id="dragable-content"]', els => els.length);
-        console.log(alreadyCreatedVideoCount);
-        //Change the ai model
-        //Chanage the resolution
-        await page.click('[class*=SettingWrapper] div:last-of-type');
-        await sleep(500);
-        await page.click('[data-test-id="creation-form-box-Setting"] [class*=SettingContentWrapper] > [class*=Container] div:nth-of-type(2) label:last-of-type');
-        await sleep(1000);
-        await page.click('[class*=SettingWrapper] div:last-of-type');
-        await sleep(500);
-        executionSteps.push("Changed the resolution according to mobile devices");
-        //Click on generate video
+        await sleep(2000);
         await page.click('[data-test-id="creation-form-button-submit"]');
-        await sleep(5000);
-        executionSteps.push("Generate button is clicked.");
-        //Check video generation is added in queue
-        await page.reload({ waitUntil: "networkidle2" });
-        await sleep(4000);
-        let text = await getTextOfElement(page, '[class*=VideoLoadingContainer]');
-        console.log(text);
         let videoUrl = "";
-        //Check generation process is started
-        if (text.includes("Generating")) {
-            console.log("Video generation is on queue");
-            executionSteps.push("Check that video generation is started and wait until video generation done.");
-            //Wait until generation process not ends
-            outerLoop: for (let index = 0; index < 100; index++) {
-                let newlyCreatedVideoCount = await page.$$eval('[data-test-id="dragable-content"]', els => els.length);
-                executionSteps.push("Check that video is generated or not.");
-                //get the video url of latest video
-                if (newlyCreatedVideoCount > alreadyCreatedVideoCount) {
-                    await page.reload({ waitUntil: "load" });
-                    await sleep(5000);
-                    executionSteps.push("Video is generated, Now grabbing the video url.");
-                    for (let index = 0; index < 100; index++) {
-                        const src = await page.$eval('[data-test-id="dragable-content"] video', el => el.src);
-                        if (src && src != "") {
-                            videoUrl = src;
-                            console.log(videoUrl);
-                            executionSteps.push("Video URL is also generated, Now sending it to the requested user.");
-                            //Send video to user
-                            await postRestResponse(webhookUrl + "/send-video-link", {
-                                "rowNumber": rowNumber,
-                                "videoUrlToSend": videoUrl,
-                                "emailToSendVideo": emailToSendVideo,
-                                "videoTitle": videoTitle
-                            });
-                            break outerLoop;
-                        }
-                        await sleep(2000);
-                        if (index % 20 == 0) {
-                            await page.reload({ waitUntil: "load" });
-                            await sleep(5000);
-                        }
-                    }
+        // await sleep(10000);
+        await page.waitForFunction(() => {
+            return [...document.querySelectorAll('div')]
+                .some(div => div.textContent?.includes('Submitted'));
+        });
+        await sleep(10000);
+        if (videoGenerationResponse && videoGenerationResponse.success && videoGenerationResponse.data) {
+            for (let i = 0; i <= 300; i++) {
+                if (taskResultResponse?.data?.taskResult && taskResultResponse.data.taskResult.length > 0
+                    && taskResultResponse.data.taskResult[0].downloadUrl) {
+                    videoUrl = taskResultResponse.data.taskResult[0].downloadUrl;
+                    console.log("Video generated successfully. Video URL: " + videoUrl);
+                    break;
                 }
                 else {
-                    // await captureScreenShot(page, "testing" + index);
-                    await sleep(7000);
-                    if (index % 20 == 0) {
-                        await page.reload({ waitUntil: "load" });
-                        await sleep(5000);
-                    }
+                    console.log("Video is still processing... Checking again in 3 seconds.");
+                    await sleep(3000);
                 }
             }
         }
-        //Video is blank throw exception
         if (videoUrl == "") {
-            executionSteps.push("Error: Video URL is not generated or found.");
-            throw new Error(`Video is not generated for user: ${loginEmail}`);
+            throw new Error("Video URL not found after waiting for 15 minutes.");
         }
-        //Logout current user
-        await page.click('[data-test-id="header-popover-button-user"]');
-        await sleep(500);
-        executionSteps.push("Clicked on profile icon.");
-        await page.click('[class*=PopoverContent] > div:last-of-type');
-        await sleep(1000);
-        executionSteps.push("Clicked on logout option.");
-        const buttons = await page.$$('button');
-        for (const button of buttons) {
-            const text = await page.evaluate(el => el.textContent, button);
-            if (text.trim() === 'Confirm') {
-                await button.click();
-                break;
-            }
-        }
-        executionSteps.push("clicked on confirm logout option.");
-        await page.reload({ waitUntil: "networkidle2" });
+        return videoUrl;
     }
     catch (error) {
+        if (retries > 0) {
+            console.log(`Retrying... Attempts left: ${retries}`);
+            await page.reload({ waitUntil: "networkidle2" });
+            return await GenerateWANAiVideos(requestModel, retries - 1);
+        }
         try {
-            executionSteps.push("Error: " + error?.message);
-            let formData = new FormData();
-            const screenshot = await page.screenshot({ fullPage: true, type: "png" });
-            formData.append("image", new Blob([Buffer.from(screenshot)], { type: "image/png" }), "error-screenshot.png");
-            formData.append("executionSteps", JSON.stringify(executionSteps));
-            formData.append("videoTitle", videoTitle);
-            await postRestFormResponse(webhookUrl + "/send/error-email", formData);
         }
         catch (error) {
             console.log("Internal error while sending mail of image");
@@ -162,8 +111,83 @@ export async function GenerateWANAiVideos(prompt, loginEmail, loginPassword, ema
         throw error;
     }
     finally {
+        await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=changeIsClaimedStatus&email=${requestModel.loginEmail}&status=No`);
         console.log("Execution completed.");
-        await browser.close();
-        // await captureScreenShot(page, "testing");
+        if (incognitoContext)
+            await incognitoContext.close();
+        if (browser)
+            await browser.close();
+    }
+}
+async function readAllPendingMessages() {
+    await page.click('[data-test-id="header-message-button"]');
+    await sleep(2000);
+    const messagesCount = (await page.$$('[class*=MessageDrawerContainer] [class^=MessageContainer] [class^=ItemContainer]')).length;
+    if (messagesCount > 0) {
+        const buttons = await page.$$('[class*=MessageDrawerContainer] [class^=ButtonContainer] button');
+        console.log(await page.$$eval('[class*=MessageDrawerContainer] [class^=ButtonContainer] button', buttons => buttons.map(btn => btn.textContent)));
+        for (let i = buttons.length; i > 1; i--) {
+            buttons[i].click();
+            await sleep(2000);
+            await clickOnElementByText(page, "Confirm", 'button');
+            await sleep(2000);
+        }
+    }
+}
+async function uploadReferenceImages(refrenceImageList, prompt) {
+    if (refrenceImageList.length > 0) {
+        for (let image of refrenceImageList.filter(refrenceImages => prompt.includes(refrenceImages.imageAlias))) {
+            let imageUploadOptions = await page.$$('[data-test-id="creation-form-box-undefined"]');
+            await sleep(2000);
+            imageUploadOptions[imageUploadOptions.length - 2].click();
+            await sleep(2000);
+            const [fileChooser] = await Promise.all([
+                page.waitForFileChooser(),
+                clickOnElementByText(page, "Upload from device", 'span')
+            ]);
+            await fileChooser.accept([
+                'temp/images/' + image.imageName,
+            ]);
+            await sleep(5000);
+        }
+    }
+}
+async function uploadStartImage(imageName) {
+    let imageUploadOptions = await page.$$('[data-test-id="creation-form-box-undefined"]');
+    await sleep(2000);
+    imageUploadOptions[imageUploadOptions.length - 1].click();
+    await sleep(2000);
+    const [fileChooser] = await Promise.all([
+        page.waitForFileChooser(),
+        clickOnElementByText(page, "Upload from device", 'span')
+    ]);
+    await fileChooser.accept([
+        'temp/images/' + imageName,
+    ]);
+    await sleep(5000);
+}
+async function typePromptWithImageTags(page, prompt) {
+    const regex = /@Image\d+/g;
+    let lastIndex = 0;
+    let match;
+    while ((match = regex.exec(prompt)) !== null) {
+        // Type text before the image tag
+        const beforeText = prompt.slice(lastIndex, match.index);
+        if (beforeText) {
+            await page.keyboard.type(beforeText, { delay: 20 });
+        }
+        // Type the image tag
+        const imageTag = match[0];
+        await page.keyboard.type(imageTag, { delay: 20 });
+        // Wait for dropdown/suggestions
+        await sleep(3000);
+        // Select image
+        await page.keyboard.press('Enter');
+        lastIndex = match.index + imageTag.length;
+    }
+    // Type remaining text
+    const remaining = prompt.slice(lastIndex);
+    if (remaining) {
+        await page.keyboard.type(remaining, { delay: 20 });
     }
 }

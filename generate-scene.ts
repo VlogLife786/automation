@@ -12,6 +12,7 @@ import { GenerateWANAiVideosByApi } from './generate-wan-videos-api.js';
 import ffmpeg from 'fluent-ffmpeg';
 import ffmpegPath from 'ffmpeg-static';
 import ffprobe from 'ffprobe-static';
+import { GenerateWANAiVideos } from './generate-wan-ai-video.js';
 
 
 ffmpeg.setFfmpegPath(ffmpegPath!);
@@ -56,7 +57,7 @@ export async function generateScene() {
 
             console.log(creds);
 
-            const videoUrl = await GenerateWANAiVideosByApi({
+            const videoUrl = await GenerateWANAiVideos({
                 rowNumber: creds.message.rowNumber,
                 emailToSendVideo: creds.message.email,
                 loginEmail: creds.message.email,
