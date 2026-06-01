@@ -1,6 +1,6 @@
 import fspromise from 'fs/promises';
 import fs from 'fs';
-import { ContinuousCinematicVideoSequence, RefrenceImageDetails } from './wan-video-object-models.js';
+import { ContinuousCinematicVideoSequence, RefrenceImageDetails, Scene } from './wan-video-object-models.js';
 import { fileTypeFromFile } from 'file-type';
 import { searchOnChatGpt } from './chatgpt.js';
 import { createFolderIfNotExist, deleteAllFiles, deleteFilesEndingWith, downloadVideoByLink, extractJSON, extractLastFrameOfDownloadedVideo, globalVars, mergeVideos, normalizeVideo, saveFile, sleep } from './utility.js';
@@ -37,45 +37,17 @@ export async function generateScene() {
         await saveFile("input/chatgpt-response.json", JSON.stringify(refrenceVideoPromptScenes, null, 2));
 
         for (const scene of refrenceVideoPromptScenes.scene_sequence) {
-            await sleep(5000);
-            console.log(`Generating video for scene ${scene.scene_id} with prompt: ${scene.prompt}`);
-
-            let startImageName = "";
-
-            let creds: any = await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=getAvailableUserByCreds&credit=${globalVars.videoDuration * 2}`);
-
-            if (creds && creds.status == 'failure') {
-                throw Error("No available user found with sufficient credits to generate video.");
+            let retryCount = 5;
+            try {
+                await generateSceneSequence(scene);
+            } catch (error) {
+                if (retryCount > 0) {
+                    console.error(`Error generating video for scene ${scene.scene_id}. Retries left: ${retryCount}. Error:`, error);
+                    retryCount--;
+                    await generateSceneSequence(scene);
+                }
+                throw error; // Rethrow the error if all retries are exhausted
             }
-
-            await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=updateUserStatus&rowNumber=${creds.message.rowNumber}&status=${encodeURIComponent("Not Available")}`);
-
-            if (scene.reference_previous_video_last_frame) {
-                await extractLastFrameOfDownloadedVideo(`input/assets/output-videos/${scene.scene_id - 1}.mp4`, `temp/images/scene-${scene.scene_id - 1}-last-frame.jpg`);
-                startImageName = `scene-${scene.scene_id - 1}-last-frame.jpg`;
-            }
-
-            console.log(creds);
-
-            const videoUrl = await GenerateWANAiVideos({
-                rowNumber: creds.message.rowNumber,
-                emailToSendVideo: creds.message.email,
-                loginEmail: creds.message.email,
-                loginPassword: creds.message.password,
-                prompt: scene.prompt,
-                videoTitle: "This is the GPT video",
-                webhookUrl: "",
-                startImageName: startImageName,
-                audioFileName: "",
-                refrenceImageList: scene.prompt.includes('@Image') ? refrenceImageList : [],
-                sendEmail: false
-            });
-
-            console.log("Generated video URL:", videoUrl);
-            await createFolderIfNotExist("input/assets/output-videos");
-            await downloadVideoByLink(videoUrl as string, `input/assets/output-videos/${scene.scene_id}.mp4`);
-            allVideoSequences.push(`input/assets/output-videos/${scene.scene_id}.mp4`);
-
         }
 
         console.log("All video sequences generated, Now merging the videos");
@@ -144,6 +116,49 @@ ${await fspromise.readFile('input/input-schema.json', 'utf8')}`
     let chatgptResponse = await searchOnChatGpt(videoGenerationStory, [], 5, true);
 
     return extractJSON(chatgptResponse);
+}
+
+
+async function generateSceneSequence(scene: Scene) {
+    await sleep(5000);
+
+    console.log(`Generating video for scene ${scene.scene_id} with prompt: ${scene.prompt}`);
+
+    let startImageName = "";
+
+    let creds: any = await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=getAvailableUserByCreds&credit=${globalVars.videoDuration * 2}`);
+
+    if (creds && creds.status == 'failure') {
+        throw Error("No available user found with sufficient credits to generate video.");
+    }
+
+    await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=updateUserStatus&rowNumber=${creds.message.rowNumber}&status=${encodeURIComponent("Not Available")}`);
+
+    if (scene.reference_previous_video_last_frame) {
+        await extractLastFrameOfDownloadedVideo(`input/assets/output-videos/${scene.scene_id - 1}.mp4`, `temp/images/scene-${scene.scene_id - 1}-last-frame.jpg`);
+        startImageName = `scene-${scene.scene_id - 1}-last-frame.jpg`;
+    }
+
+    console.log(creds);
+
+    const videoUrl = await GenerateWANAiVideos({
+        rowNumber: creds.message.rowNumber,
+        emailToSendVideo: creds.message.email,
+        loginEmail: creds.message.email,
+        loginPassword: creds.message.password,
+        prompt: scene.prompt,
+        videoTitle: "This is the GPT video",
+        webhookUrl: "",
+        startImageName: startImageName,
+        audioFileName: "",
+        refrenceImageList: scene.prompt.includes('@Image') ? refrenceImageList : [],
+        sendEmail: false
+    });
+
+    console.log("Generated video URL:", videoUrl);
+    await createFolderIfNotExist("input/assets/output-videos");
+    await downloadVideoByLink(videoUrl as string, `input/assets/output-videos/${scene.scene_id}.mp4`);
+    allVideoSequences.push(`input/assets/output-videos/${scene.scene_id}.mp4`);
 }
 
 

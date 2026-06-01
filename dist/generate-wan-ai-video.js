@@ -1,34 +1,51 @@
-import { clickOnElementByText, openNewBrowser, sleep } from "./utility.js";
+import { clickOnElementByText, globalVars, openNewBrowser, sleep } from "./utility.js";
 import { ApiURLs, Flags } from "./constants.js";
 import { getRestResponse } from "./restTemplate.js";
 import { refrenceImageList } from "./generate-scene.js";
-var browser;
-let incognitoContext;
-let page;
-let taskResultResponse;
-let videoGenerationResponse;
+import axios from "axios";
+let config = {};
 export async function GenerateWANAiVideos(requestModel, retries = 10) {
+    let taskResultResponse = {};
+    let videoGenerationResponse = {};
     console.log('Launching new browser and creating incognito context');
-    browser = await openNewBrowser(Flags.BROWSER_LOCAL);
+    let browser = await openNewBrowser(Flags.BROWSER_LOCAL);
     // ✅ Get default pages but DON'T close them yet
     const defaultPages = await browser.pages();
     // Create incognito context FIRST
-    incognitoContext = await browser.createBrowserContext();
+    let incognitoContext = await browser.createBrowserContext();
     // Open a new page in the incognito context
-    page = await incognitoContext.newPage();
+    let page = await incognitoContext.newPage();
     // ✅ NOW close default pages AFTER incognito page is ready
     for (const p of defaultPages) {
         await p.close();
     }
+    // ✅ Remove webdriver property
+    await page.evaluateOnNewDocument(() => {
+        Object.defineProperty(navigator, 'webdriver', {
+            get: () => false,
+        });
+    });
+    // ✅ Set realistic user agent
+    await page.setUserAgent({
+        userAgent: 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/' + globalVars.chromeVersion + '.0.0.0 Safari/537.36'
+    });
     console.log("Received the request of execution...");
     try {
         //Navigate to wan ai
-        await page.goto("https://create.wan.video/generate/video/reference?model=wan2.7", { waitUntil: "load" });
+        await page.goto("https://create.wan.video/generate/video/reference?model=wan2.7", { waitUntil: "load", timeout: 120000 });
         await sleep(5000);
         console.log("Navigated to WAN AI Site.");
         page.on('response', async (response) => {
+            const request = response.request();
             if (response.url().includes('wanx/api/common/v2/taskResult')) {
                 console.log("Received response for task result.");
+                config = {
+                    method: request.method(),
+                    maxBodyLength: Infinity,
+                    url: request.url(),
+                    headers: request.headers(),
+                    data: await request.fetchPostData()
+                };
                 taskResultResponse = await response.json();
             }
             if (response.url().includes('wanx/api/common/imageGen')) {
@@ -39,12 +56,17 @@ export async function GenerateWANAiVideos(requestModel, retries = 10) {
         //Navigate to login page
         // await clickBySelector(page, "[class*=HeaderContainer] [class*=RightContent] button");
         // await sleep(2000);
+        await page.waitForSelector('[data-test-id="login-form-box-address"]', { timeout: 60000 });
+        await page.click('[data-test-id="login-form-box-address"]');
+        await sleep(2000);
         //Login with user credentials
         await page.type('[data-test-id="login-form-box-address"]', requestModel.loginEmail, { delay: 120 });
-        await sleep(1000);
+        await sleep(3000);
         // executionSteps.push("Email ID is entered: " + requestModel.loginEmail);
+        await page.click('[data-test-id="login-form-box-password"]');
+        await sleep(2000);
         await page.type('[data-test-id="login-form-box-password"]', requestModel.loginPassword, { delay: 120 });
-        await sleep(1000);
+        await sleep(3000);
         console.log("Password is entered.");
         await Promise.all([
             page.waitForNavigation({ waitUntil: "networkidle2" }),
@@ -55,9 +77,9 @@ export async function GenerateWANAiVideos(requestModel, retries = 10) {
         await page.reload({ waitUntil: "networkidle2" });
         await sleep(5000);
         if (requestModel.startImageName && requestModel.startImageName != "") {
-            await uploadStartImage(requestModel.startImageName);
+            await uploadStartImage(page, requestModel.startImageName);
         }
-        await uploadReferenceImages(requestModel.refrenceImageList, requestModel.prompt);
+        await uploadReferenceImages(page, requestModel.refrenceImageList, requestModel.prompt);
         //Enter the prompt
         await page.click('[data-slate-node="element"]');
         await sleep(1000);
@@ -75,8 +97,28 @@ export async function GenerateWANAiVideos(requestModel, retries = 10) {
                 .some(div => div.textContent?.includes('Submitted'));
         });
         await sleep(10000);
+        let nextExecutionTime = new Date((new Date()).getTime() + 20 * 1000);
         if (videoGenerationResponse && videoGenerationResponse.success && videoGenerationResponse.data) {
             for (let i = 0; i <= 300; i++) {
+                let currentDate = new Date();
+                if (config && config?.url && currentDate >= nextExecutionTime) {
+                    console.log("Getting response from API...");
+                    try {
+                        nextExecutionTime = new Date(currentDate.getTime() + 20 * 1000);
+                        let headers = config.headers;
+                        for (const key of Object.keys(headers)) {
+                            if (key.startsWith(':')) {
+                                delete headers[key];
+                            }
+                        }
+                        config.headers = headers;
+                        let response = await axios.request(config);
+                        taskResultResponse = response.data;
+                    }
+                    catch (error) {
+                        console.log("Error while fetching task result: ", error);
+                    }
+                }
                 if (taskResultResponse?.data?.taskResult && taskResultResponse.data.taskResult.length > 0
                     && taskResultResponse.data.taskResult[0].downloadUrl) {
                     videoUrl = taskResultResponse.data.taskResult[0].downloadUrl;
@@ -84,7 +126,7 @@ export async function GenerateWANAiVideos(requestModel, retries = 10) {
                     break;
                 }
                 else {
-                    console.log("Video is still processing... Checking again in 3 seconds.");
+                    console.log("Video is still processing for tries " + (i + 1) + "... Checking again in 3 seconds.");
                     await sleep(3000);
                 }
             }
@@ -97,7 +139,6 @@ export async function GenerateWANAiVideos(requestModel, retries = 10) {
     catch (error) {
         if (retries > 0) {
             console.log(`Retrying... Attempts left: ${retries}`);
-            await page.reload({ waitUntil: "networkidle2" });
             return await GenerateWANAiVideos(requestModel, retries - 1);
         }
         try {
@@ -111,30 +152,44 @@ export async function GenerateWANAiVideos(requestModel, retries = 10) {
         throw error;
     }
     finally {
+        // page.off('response');
+        config = {};
         await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=changeIsClaimedStatus&email=${requestModel.loginEmail}&status=No`);
         console.log("Execution completed.");
-        if (incognitoContext)
-            await incognitoContext.close();
-        if (browser)
-            await browser.close();
-    }
-}
-async function readAllPendingMessages() {
-    await page.click('[data-test-id="header-message-button"]');
-    await sleep(2000);
-    const messagesCount = (await page.$$('[class*=MessageDrawerContainer] [class^=MessageContainer] [class^=ItemContainer]')).length;
-    if (messagesCount > 0) {
-        const buttons = await page.$$('[class*=MessageDrawerContainer] [class^=ButtonContainer] button');
-        console.log(await page.$$eval('[class*=MessageDrawerContainer] [class^=ButtonContainer] button', buttons => buttons.map(btn => btn.textContent)));
-        for (let i = buttons.length; i > 1; i--) {
-            buttons[i].click();
-            await sleep(2000);
-            await clickOnElementByText(page, "Confirm", 'button');
-            await sleep(2000);
+        try {
+            if (incognitoContext && browser?.connected) {
+                await incognitoContext.close();
+            }
+        }
+        catch (e) {
+            console.log("Ignoring context close error:", e.message);
+        }
+        try {
+            if (browser?.connected) {
+                await browser.close();
+            }
+        }
+        catch (e) {
+            console.log("Ignoring browser close error:", e.message);
         }
     }
 }
-async function uploadReferenceImages(refrenceImageList, prompt) {
+// async function readAllPendingMessages() {
+//     await page.click('[data-test-id="header-message-button"]');
+//     await sleep(2000);
+//     const messagesCount = (await page.$$('[class*=MessageDrawerContainer] [class^=MessageContainer] [class^=ItemContainer]')).length;
+//     if (messagesCount > 0) {
+//         const buttons = await page.$$('[class*=MessageDrawerContainer] [class^=ButtonContainer] button');
+//         console.log(await page.$$eval('[class*=MessageDrawerContainer] [class^=ButtonContainer] button', buttons => buttons.map(btn => btn.textContent)));
+//         for (let i = buttons.length; i > 1; i--) {
+//             buttons[i].click();
+//             await sleep(2000);
+//             await clickOnElementByText(page, "Confirm", 'button');
+//             await sleep(2000);
+//         }
+//     }
+// }
+async function uploadReferenceImages(page, refrenceImageList, prompt) {
     if (refrenceImageList.length > 0) {
         for (let image of refrenceImageList.filter(refrenceImages => prompt.includes(refrenceImages.imageAlias))) {
             let imageUploadOptions = await page.$$('[data-test-id="creation-form-box-undefined"]');
@@ -152,7 +207,7 @@ async function uploadReferenceImages(refrenceImageList, prompt) {
         }
     }
 }
-async function uploadStartImage(imageName) {
+async function uploadStartImage(page, imageName) {
     let imageUploadOptions = await page.$$('[data-test-id="creation-form-box-undefined"]');
     await sleep(2000);
     imageUploadOptions[imageUploadOptions.length - 1].click();
