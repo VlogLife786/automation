@@ -34,7 +34,7 @@ export async function searchOnChatGpt(textPrompt: string, imagePaths: string[] =
             }
 
             // Set viewport
-            await page.setViewport({ width: 1280, height: 800 });
+            // await page.setViewport({ width: 1280, height: 800 });
 
 
             // ✅ Remove webdriver property

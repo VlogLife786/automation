@@ -1,12 +1,37 @@
 [
     {
-        "originalName": "Peturam",
-        "imageName": "Peturam.png",
-        "imageType": "character"
+        "originalName": "Billu",
+        "imageName": "bear.png",
+        "imageType": "bear animal character"
     },
     {
-        "originalName": "Shyamlaal",
-        "imageName": "Bawarchi.png",
-        "imageType": "character"
+        "originalName": "Shersingh",
+        "imageName": "lion.png",
+        "imageType": "lion animal character"
+    },
+    {
+        "originalName": "fox",
+        "imageName": "lomdi.png",
+        "imageType": "fox animal character"
+    },
+    {
+        "originalName": "mirror",
+        "imageName": "mirror.png",
+        "imageType": "magical mirror object"
+    },
+    {
+        "originalName": "monkey",
+        "imageName": "monkey.png",
+        "imageType": "monkey animal character"
+    },
+    {
+        "originalName": "parrot",
+        "imageName": "parrot.png",
+        "imageType": "parrot bird character"
+    },
+    {
+        "originalName": "Cheeku",
+        "imageName": "rabbit.png",
+        "imageType": "rabbit animal character"
     }
 ]

@@ -1,38 +1,42 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "Shivaji Maharaj and Elephant Walking in the Garden",
+  "title": "Jadui Sheesha (The Magical Mirror)",
   "characters": {
     "char_1": {
-      "name": "Chatrapati Shivaji Maharaj",
-      "appearance": "Use exact appearance from @Image1. Regal Maratha king with royal attire, dignified posture, confident expression, realistic facial features, authentic historical look."
+      "name": "rabbit.png",
+      "appearance": "Small intelligent rabbit, soft white fur, bright expressive eyes, long upright ears, energetic body language, simple forest adventurer look, highly curious and clever personality."
     },
     "char_2": {
-      "name": "Elephant",
-      "appearance": "Use exact appearance from @Image2. Large majestic elephant with realistic skin texture, expressive eyes, natural walking motion, calm and intelligent demeanor."
+      "name": "bear.png",
+      "appearance": "Large brown bear, heavy build, round face, expressive eyes, gentle but nervous demeanor, thick fur, strong paws."
+    },
+    "char_3": {
+      "name": "lion.png",
+      "appearance": "Majestic lion king, golden mane, muscular body, regal posture, commanding presence, expressive royal face."
+    },
+    "char_4": {
+      "name": "lomdi.png",
+      "appearance": "Slim orange fox, sharp eyes, bushy tail, alert posture, curious forest resident."
+    },
+    "char_5": {
+      "name": "monkey.png",
+      "appearance": "Playful brown monkey, agile body, lively facial expressions, energetic movements."
+    },
+    "char_6": {
+      "name": "parrot.png",
+      "appearance": "Colorful green parrot with red beak, bright feathers, animated movements and expressive eyes."
+    },
+    "char_7": {
+      "name": "mirror.png",
+      "appearance": "Large magical handheld mirror with polished reflective silver surface, ornate frame, mysterious glow when highlighted."
     }
   },
   "global_style": {
-    "genre": "Historical cinematic realism",
-    "camera": "Smooth cinematic tracking shots, gimbal stabilized movement, shallow depth of field, natural character focus",
-    "lighting": "Warm golden daylight, soft natural sunlight filtering through garden foliage, realistic shadows",
-    "quality": "Ultra realistic, 4K, hyper-detailed, cinematic, realistic lip sync, natural human and animal movement",
+    "genre": "Family fantasy animation, cinematic comedy, magical forest adventure",
+    "camera": "Smooth cinematic tracking shots, slow dolly movements, natural continuity between scenes, realistic animation camera language",
+    "lighting": "Consistent soft daylight in forest scenes, warm royal cave lighting in palace scenes, realistic shadows and atmospheric depth",
+    "quality": "Ultra detailed cinematic animation, highly expressive characters, realistic fur simulation, film-quality rendering",
     "aspect_ratio": "16:9",
     "fps": 24
   },
-  "scene_sequence": [
-    {
-      "scene_id": 1,
-      "duration": "5s",
-      "prompt": "Cinematic wide tracking shot in @Image3 garden. @Image1 and @Image2 are walking side by side along a beautiful garden pathway surrounded by lush greenery, colorful flowers, and soft sunlight filtering through the trees. Camera slowly tracks backward in front of them while maintaining eye-level perspective. @Image1 walks with a calm royal demeanor, occasionally glancing toward @Image2. Natural breeze gently moves leaves and vegetation. During the walk, @Image1 speaks in a deep, wise, authoritative male voice with realistic lip-sync: 'कई बार ज़िंदगी या काम में ऐसी उलझनें आ जाती हैं।' The elephant listens attentively while continuing to walk. Cinematic depth of field, realistic shadows, highly detailed environment, smooth character animation, ultra realistic historical atmosphere.",
-      "transition_to_next": "The camera continues the same tracking movement as the elephant begins to respond, maintaining identical walking direction and composition for seamless continuity.",
-      "reference_previous_video_last_frame": false
-    },
-    {
-      "scene_id": 2,
-      "duration": "5s",
-      "prompt": "Continue directly from the last frame of the previous scene. Same garden pathway from @Image3, same character positions and walking speed. Cinematic medium tracking shot from a slightly lower angle. @Image1 and @Image2 continue walking naturally without interruption. The camera gently moves closer toward @Image2. The elephant raises its head slightly and responds with expressive natural elephant behavior. In a deep resonant voice accompanied by a realistic elephant trumpet-roar sound, @Image2 says: 'जो सच में बहुत विकट लगती हैं।' Realistic mouth and trunk movement synchronized with dialogue and elephant vocalization. @Image1 nods thoughtfully while continuing to walk. Warm sunlight highlights both characters, cinematic focus pull between the elephant and Shivaji Maharaj, ultra realistic details, smooth motion, seamless continuation from previous scene.",
-      "transition_to_next": "End with both characters continuing their walk together into the garden path, maintaining forward movement.",
-      "reference_previous_video_last_frame": true
-    }
-  ]
+  "scene_sequence": []
 }

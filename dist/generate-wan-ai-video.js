@@ -1,4 +1,4 @@
-import { clickOnElementByText, globalVars, openNewBrowser, sleep } from "./utility.js";
+import { clickOnElementByText, globalVars, openNewBrowser, replaceString, sleep } from "./utility.js";
 import { ApiURLs, Flags } from "./constants.js";
 import { getRestResponse } from "./restTemplate.js";
 import { refrenceImageList } from "./generate-scene.js";
@@ -58,15 +58,15 @@ export async function GenerateWANAiVideos(requestModel, retries = 10) {
         // await sleep(2000);
         await page.waitForSelector('[data-test-id="login-form-box-address"]', { timeout: 60000 });
         await page.click('[data-test-id="login-form-box-address"]');
-        await sleep(2000);
+        await sleep(5000);
         //Login with user credentials
         await page.type('[data-test-id="login-form-box-address"]', requestModel.loginEmail, { delay: 120 });
-        await sleep(3000);
+        await sleep(5000);
         // executionSteps.push("Email ID is entered: " + requestModel.loginEmail);
         await page.click('[data-test-id="login-form-box-password"]');
-        await sleep(2000);
+        await sleep(5000);
         await page.type('[data-test-id="login-form-box-password"]', requestModel.loginPassword, { delay: 120 });
-        await sleep(3000);
+        await sleep(5000);
         console.log("Password is entered.");
         await Promise.all([
             page.waitForNavigation({ waitUntil: "networkidle2" }),
@@ -79,16 +79,26 @@ export async function GenerateWANAiVideos(requestModel, retries = 10) {
         if (requestModel.startImageName && requestModel.startImageName != "") {
             await uploadStartImage(page, requestModel.startImageName);
         }
-        await uploadReferenceImages(page, requestModel.refrenceImageList, requestModel.prompt);
+        let filteredRefImages = refrenceImageList.filter(image => requestModel.prompt.includes(image.imageName));
+        await uploadReferenceImages(page, filteredRefImages, requestModel.prompt);
+        await sleep(5000);
+        let updatedPrompt = requestModel.prompt;
+        for (let i = 0; i < filteredRefImages.length; i++) {
+            updatedPrompt = await replaceString(updatedPrompt, filteredRefImages[i].imageName, `@Image${i + 1}`);
+        }
         //Enter the prompt
         await page.click('[data-slate-node="element"]');
-        await sleep(1000);
+        await sleep(3000);
         console.log("Clicked on textbox where prompt will be written.");
-        refrenceImageList.forEach(async () => { await page.keyboard.press('Backspace'); });
+        refrenceImageList.forEach(async () => {
+            await page.keyboard.press('Backspace');
+            await sleep(2000);
+        });
+        await page.keyboard.press('Delete');
         // await page.type('[data-slate-node="element"]', requestModel.prompt);
-        await typePromptWithImageTags(page, requestModel.prompt);
+        await typePromptWithImageTags(page, updatedPrompt);
         console.log("Prompt added successfully.");
-        await sleep(2000);
+        await sleep(5000);
         await page.click('[data-test-id="creation-form-button-submit"]');
         let videoUrl = "";
         // await sleep(10000);
@@ -98,8 +108,17 @@ export async function GenerateWANAiVideos(requestModel, retries = 10) {
         });
         await sleep(10000);
         let nextExecutionTime = new Date((new Date()).getTime() + 20 * 1000);
+        let videoGenerationIteration = 300; // 300 iterations with 20 seconds wait time will give us around 100 minutes of wait time which is more than enough for video generation
         if (videoGenerationResponse && videoGenerationResponse.success && videoGenerationResponse.data) {
-            for (let i = 0; i <= 300; i++) {
+            for (let i = 0; i <= videoGenerationIteration; i++) {
+                if (taskResultResponse && taskResultResponse.data && taskResultResponse.data.errorMsg &&
+                    taskResultResponse.data.errorMsg.trim().length > 2) {
+                    throw new Error("Error in video generation task: " + taskResultResponse.data.errorMsg);
+                }
+                else if (i == (videoGenerationIteration - 5)) {
+                    console.log("Adding additional wait time of 5 minutes as video is still not generated...");
+                    videoGenerationIteration += 300;
+                }
                 let currentDate = new Date();
                 if (config && config?.url && currentDate >= nextExecutionTime) {
                     console.log("Getting response from API...");
@@ -154,7 +173,13 @@ export async function GenerateWANAiVideos(requestModel, retries = 10) {
     finally {
         // page.off('response');
         config = {};
-        await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=changeIsClaimedStatus&email=${requestModel.loginEmail}&status=No`);
+        try {
+            await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=changeIsClaimedStatus&email=${requestModel.loginEmail}&status=No`);
+        }
+        catch (error) {
+            console.log("Error while updating user status:", error);
+        }
+        await sleep(10000);
         console.log("Execution completed.");
         try {
             if (incognitoContext && browser?.connected) {
@@ -191,7 +216,7 @@ export async function GenerateWANAiVideos(requestModel, retries = 10) {
 // }
 async function uploadReferenceImages(page, refrenceImageList, prompt) {
     if (refrenceImageList.length > 0) {
-        for (let image of refrenceImageList.filter(refrenceImages => prompt.includes(refrenceImages.imageAlias))) {
+        for (let image of refrenceImageList) {
             let imageUploadOptions = await page.$$('[data-test-id="creation-form-box-undefined"]');
             await sleep(2000);
             imageUploadOptions[imageUploadOptions.length - 2].click();

@@ -54,6 +54,7 @@ export interface TaskData {
     taskInput: TaskInput;
     taskType: string;
     taskResult: TaskResult[];
+    errorMsg: string;
     taskRate: number;
     memberLevelList: unknown[]; // can refine if structure is known
     groupKey: string;

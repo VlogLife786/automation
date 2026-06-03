@@ -1,0 +1,394 @@
+You will be provided with:
+
+1. Reference image details (including Original Name and Alias Name).
+2. A story/script.
+
+Your task is to analyze the complete story and generate a detailed video generation prompt in JSON format.
+
+IMPORTANT OBJECTIVE:
+My AI video generator creates only 5-second videos per generation. Therefore, you must divide the story into multiple scenes where each scene represents approximately 5 seconds of screen time. The generated scenes must be designed so that when all generated videos are merged together, they appear as one continuous cinematic film without visual jumps, continuity errors, character position changes, lighting inconsistencies, or camera discontinuity.
+Add only 5 or less than 5 alias refrence characters in single scene prompt, Because my AI tool supports max 5 refrence characters.
+
+STRICT RULES:
+
+1. Character Naming Rules
+   * Use ONLY the Alias Name of the reference image in all scene prompts and visual descriptions.
+   * NEVER use the Original Name in scene descriptions.
+   * Use the Original Name ONLY inside dialogues.
+
+2. Scene Duration Rule
+   * Every scene must be designed for approximately 5 seconds of video generation.
+   * Do not overload a scene with too many actions.
+   * Ensure all actions and dialogues comfortably fit within 5 seconds.
+
+3. Video Continuity Rule (VERY IMPORTANT)
+   * Treat all scenes as parts of one continuous movie.
+   * The ending frame of a scene must naturally connect to the starting frame of the next scene.
+   * Preserve:
+     * Character position
+     * Character orientation
+     * Walking direction
+     * Body posture
+     * Facial expression progression
+     * Hand positions when appropriate
+     * Environment layout
+     * Object placement
+     * Weather conditions
+     * Time of day
+     * Lighting direction and intensity
+     * Camera movement direction
+   * Never suddenly reset character positions or camera angles unless the story explicitly requires a scene transition.
+   * Each scene should mention how it continues from the previous scene's final frame.
+
+4. Previous Scene Reference Rule
+   * Starting from Scene 2, include a continuity instruction such as:
+     "Continue seamlessly from the last frame of the previous scene."
+   * Mention the exact character position, movement state, emotion, and camera state inherited from the previous scene.
+
+5. Camera Continuity Rule
+   * Camera motion must flow naturally between scenes.
+   * If Scene 1 ends with a slow dolly-in, Scene 2 should begin with the same dolly-in motion.
+   * If Scene 1 ends with a tracking shot, Scene 2 should continue the tracking movement.
+   * Avoid random camera changes that create visible cuts after merging.
+
+6. Cinematic Enhancement Rule
+   * Add cinematic camera details when not provided:
+     * Wide shot
+     * Medium shot
+     * Close-up
+     * Over-the-shoulder
+     * Tracking shot
+     * Dolly shot
+     * Crane shot
+     * Handheld shot
+     * Static shot
+   * Add realistic lighting details:
+     * Golden hour
+     * Soft daylight
+     * Dramatic sunset
+     * Indoor warm lighting
+     * Moonlight
+     * Practical lighting
+   * Make every scene visually cinematic and realistic.
+
+7. Dialogue Rules
+   * Dialogues must be ONLY in Hindi using Devanagari script.
+   * Every dialogue must be enclosed in single quotes.
+   * Correct any grammar issues.
+   * Dialogues should sound natural and human.
+   * Dialogue length must fit comfortably within a 5-second video.
+   * If dialogue is too long, split it into multiple consecutive scenes.
+   * If a dialogue cannot be spoken naturally within 5 seconds, split it across multiple consecutive scenes while maintaining conversational continuity.
+
+   Ex: "Continue seamlessly. Dramatic medium shot. rabbit.png pulls red cloth from mirror.png. Bright reflection flashes toward gathered animals. Dialogue by Cheeku: 'इस जादुई शीशे के सामने जो भी आएगा, यह उसके मन का सच बता देगा! झूठे का चेहरा इसमें डरावना दिखेगा!' Bold theatrical voice."
+   In the above prompt the dialouge is too long to be added in single 5 second video, So split it across multiple consecutive scenes while maintaining conversational continuity.
+
+8. Voice Consistency Rule
+   * For every speaking character include:
+     * Voice type
+     * Emotion
+     * Facial expression
+     * Lip-sync instructions
+   * Maintain the same voice style throughout all scenes for the same character.
+
+9. Character Reference Rule
+   * Never use:
+     * he
+     * she
+     * him
+     * her
+     * they
+   * Always use the Alias Name. 
+
+10. Motion Consistency Rule
+    * Character movement must be continuous.
+    * Example:
+      * If Alias_A starts walking in Scene 1,
+      * Scene 2 should continue the same walk cycle from the previous frame.
+      * Scene 3 should continue naturally unless the character stops.
+
+11. Environmental Consistency Rule
+    * Maintain consistency in:
+      * Background elements
+      * Props
+      * Vehicles
+      * Crowd placement
+      * Building positions
+      * Weather
+      * Shadows
+      * Lighting
+      * Time of day
+
+12. Scene Transition Rule
+    * Avoid hard cuts whenever possible.
+    * Use natural transitions:
+      * Continued tracking
+      * Continued walking
+      * Continued conversation
+      * Continued camera motion
+      * Matched framing
+
+13. Output Structure Rule
+    * Return ONLY valid JSON.
+    * Each scene must contain:
+      * scene_number
+      * duration
+      * continuity_reference
+      * visual_prompt
+      * camera_details
+      * lighting_details
+      * character_actions
+      * dialogue
+      * voice_details
+      * transition_to_next_scene
+
+14. WAN AI Optimization Rule
+    * Prompts must be extremely descriptive and unambiguous.
+    * Explicitly describe:
+      * Character appearance using Alias Name
+      * Body movement
+      * Facial expression
+      * Eye direction
+      * Camera movement
+      * Environment
+      * Lighting
+      * Emotion
+      * Scene continuity
+    * Assume the model knows nothing outside the provided prompt.
+    * Generate detailed prompt for every scenes, With detailed expression, motionsa and other things.
+
+15. Final Objective
+    * The generated JSON should produce multiple 5-second clips that can be stitched together sequentially.
+    * After merging, the final result should appear as one uninterrupted cinematic video with smooth visual continuity, realistic motion progression, consistent character behavior, consistent camera movement, accurate lip-sync, and natural storytelling flow.
+
+Provide me json output in the below format strictly without any changes:
+
+
+{
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "Continuous Cinematic Video Sequence Schema",
+    "type": "object",
+    "required": [
+        "title",
+        "characters",
+        "global_style",
+        "scene_sequence"
+    ],
+    "properties": {
+        "title": {
+            "type": "string",
+            "description": "Title of the cinematic sequence"
+        },
+        "characters": {
+            "type": "object",
+            "description": "Main characters used throughout the sequence",
+            "patternProperties": {
+                "^char_[0-9]+$": {
+                    "type": "object",
+                    "required": [
+                        "name",
+                        "appearance"
+                    ],
+                    "properties": {
+                        "name": {
+                            "type": "string",
+                            "description": "Character display name"
+                        },
+                        "appearance": {
+                            "type": "string",
+                            "description": "Detailed physical appearance, clothing, hairstyle, age, accessories, etc."
+                        }
+                    },
+                    "additionalProperties": false
+                }
+            },
+            "additionalProperties": false
+        },
+        "global_style": {
+            "type": "object",
+            "required": [
+                "genre",
+                "camera",
+                "lighting",
+                "quality",
+                "aspect_ratio",
+                "fps"
+            ],
+            "properties": {
+                "genre": {
+                    "type": "string",
+                    "description": "Overall cinematic genre and tone"
+                },
+                "camera": {
+                    "type": "string",
+                    "description": "Camera movement and lens style"
+                },
+                "lighting": {
+                    "type": "string",
+                    "description": "Lighting setup and atmosphere"
+                },
+                "quality": {
+                    "type": "string",
+                    "description": "Rendering quality and realism level"
+                },
+                "aspect_ratio": {
+                    "type": "string",
+                    "pattern": "^[0-9]+:[0-9]+$",
+                    "description": "Video aspect ratio"
+                },
+                "fps": {
+                    "type": "integer",
+                    "minimum": 1,
+                    "description": "Frames per second"
+                }
+            },
+            "additionalProperties": false
+        },
+        "scene_sequence": {
+            "type": "array",
+            "description": "Ordered sequence of cinematic scenes",
+            "minItems": 1,
+            "items": {
+                "type": "object",
+                "required": [
+                    "scene_id",
+                    "duration",
+                    "prompt",
+                    "transition_to_next",
+                    "reference_previous_video_last_frame"
+                ],
+                "properties": {
+                    "scene_id": {
+                        "type": "integer",
+                        "minimum": 1,
+                        "description": "Unique scene identifier"
+                    },
+                    "duration": {
+                        "type": "string",
+                        "pattern": "^[0-9]+s$",
+                        "description": "Scene duration in seconds (e.g. 5s)"
+                    },
+                    "prompt": {
+                        "type": "string",
+                        "description": "Detailed cinematic prompt for the scene"
+                    },
+                    "transition_to_next": {
+                        "type": "string",
+                        "description": "Narrative or cinematic transition into the next scene"
+                    },
+                    "reference_previous_video_last_frame": {
+                        "type": "boolean",
+                        "description": "Is this scene will be reffrenced to the last frame of previous video"
+                    }
+                },
+                "additionalProperties": false
+            }
+        }
+    },
+    "additionalProperties": false
+}
+
+-----------------------------------------------------------------------------------------------------------------
+
+Please find the list of reference images details below: 
+    
+1. Image of Billu has alias of bear.png is a bear animal character.
+2. Image of Shersingh has alias of lion.png is a lion animal character.
+3. Image of fox has alias of lomdi.png is a fox animal character.
+4. Image of mirror has alias of mirror.png is a magical mirror object.
+5. Image of monkey has alias of monkey.png is a monkey animal character.
+6. Image of parrot has alias of parrot.png is a parrot bird character.
+7. Image of Cheeku has alias of rabbit.png is a rabbit animal character.
+Below are the story details:.
+
+"Jadui Sheesha" (The Magical mirror)
+Format: 5-Second Shot Breakdown for Animation
+Language: English (Technical/Directions) | Hindi (Dialogues & Narration)
+Scene 1: Cheeku Finds the mirror
+Shot 1 (00:00 - 00:05)
+Camera & Background: Slow pan across a lush green Champakvan forest. A pile of human trash is visible near the forest edge, with a shiny surface peeking out.
+BGM: Light, curious, and mysterious instrumental music.
+Narrator (Hindi): "चंपकवन जंगल में चीकू नाम का एक बहुत ही चतुर खरगोश रहता था।"
+Shot 2 (00:05 - 00:10)
+Camera & Background: Medium shot. Cheeku the rabbit hops into the frame, stops suddenly, and points his ears up as he spots the shiny object.
+SFX: "Ting!" magic twinkle sound effect.
+Narrator (Hindi): "एक दिन जंगल के किनारे घूमते हुए, चीकू को झाड़ियों में एक अजीब चीज़ दिखाई दी।"
+Shot 3 (00:10 - 00:15)
+Camera & Background: Close-up on Cheeku's hands as he pulls a large, clean, handheld mirror out of the dirt.
+SFX: Rustling leaves and dirt sliding sound.
+Narrator (Hindi): "वह एक बड़ा और साफ़ शीशा था। चीकू ने इससे पहले कभी ऐसा शीशा नहीं देखा था।"
+Shot 4 (00:15 - 00:20)
+Camera & Background: Cheeku looks directly into the mirror. He flinches back in shock first, then makes a funny face, realizing it is his own reflection.
+Cheeku Dialogue (Hindi): "अरे! यह तो हुबहू मेरे जैसा ही कोई अंदर बैठा है... अच्छा! यह तो मेरा ही चेहरा है!"
+Scene 2: The Clever Plan
+Shot 5 (00:20 - 00:25)
+Camera & Background: Close-up on Cheeku’s face. A mischievous smirk grows on him. An animated lightbulb pops up above his head.
+BGM: Playful, sneaky cartoon music.
+Narrator (Hindi): "शीशे का सच समझते ही, चीकू के दिमाग में जंगल के जानवरों से मज़ाक करने की एक तरकीब सूझी।"
+Shot 6 (00:25 - 00:30)
+Camera & Background: Wide shot of a forest clearing. Cheeku stands on top of a high rock, waving his hands to gather characters like a monkey, a parrot, and a fox.
+SFX: Murmuring and chattering of various forest animals.
+Cheeku Dialogue (Hindi): "सुनो! सुनो! चंपकवन के निवासियों! मुझे वनदेवी ने एक जादुई शीशा दिया है!"
+Shot 7 (00:30 - 00:35)
+Camera & Background: Medium shot of the animals whispering to each other, looking confused. Cheeku stands proudly next to the mirror, which is covered with a red cloth.
+Narrator (Hindi): "जादुई शीशे की बात सुनकर सभी जानवर हैरान रह गए और वहाँ भीड़ जमा हो गई।"
+Scene 3: Billu the Bear's Guilt (Part 1)
+Shot 8 (00:35 - 00:40)
+Camera & Background: Cheeku dramatically pulls the cloth off the mirror. The surface reflects light into the crowd.
+Cheeku Dialogue (Hindi): "इस जादुई शीशे के सामने जो भी आएगा, यह उसके मन का सच बता देगा! झूठे का चेहरा इसमें डरावना दिखेगा!"
+Shot 9 (00:40 - 00:45)
+Camera & Background: Camera zooms in on Billu the Bear standing at the back of the crowd. He starts sweating. A quick semi-transparent thought bubble shows him stealing carrots from Cheeku's field.
+BGM: Low-key suspenseful or nervous beat.
+Narrator (Hindi): "तभी वहाँ बिल्लू भालू आया, जिसने कल ही चीकू के खेत से गाजरें चुराई थीं।"
+Shot 10 (00:45 - 00:50)
+Camera & Background: Cheeku spots Billu from the rock and points at him with a sly grin. The crowd turns to look at the Bear.
+Cheeku Dialogue (Hindi): "आओ बिल्लू भाई! ज़रा तुम ही पहले आकर देखो, तुमने तो कोई चोरी नहीं की ना?"
+Scene 4: Billu the Bear's Guilt (Part 2)
+Shot 11 (00:50 - 00:55)
+Camera & Background: Billu the Bear takes slow, shaky steps toward the rock. His knees are literally knocking together.
+SFX: Cartoonish heavy heartbeat sound ("Thump-thump").
+Narrator (Hindi): "बिल्लू भालू डर के मारे कांपने लगा। उसे लगा कि उसका काला सच सबके सामने आ जाएगा।"
+Shot 12 (00:55 - 01:00)
+Camera & Background: Close-up on Billu as he arrives right in front of the mirror. Instead of looking, he violently covers his eyes with both paws and drops to his knees.
+Billu Bear Dialogue (Hindi): "नहीं-नहीं चीकू! मुझे शीशा मत दिखाओ! मैं सच बताता हूँ, गाजरें मैंने ही चुराई थीं!"
+Shot 13 (01:00 - 01:05)
+Camera & Background: Medium shot of the crowd. A monkey laughs holding his stomach; a parrot dances on a branch. Cheeku looks satisfied.
+SFX: Group laughing sound effects.
+Narrator (Hindi): "भालू का सच बाहर आते ही सब हँस पड़े। चीकू की चतुराई से चोर पकड़ा गया था।"
+Scene 5: Summons to the Royal Cave
+Shot 14 (01:05 - 01:10)
+Camera & Background: Interior of King Shersingh's royal cave. The lion king sits majestically on a stone throne. Cheeku enters holding the mirror carefully.
+BGM: Grand, royal, heavy drum beats.
+Narrator (Hindi): "जादुई शीशे की चर्चा राजा शेरसिंह के कानों तक भी पहुँची। उन्होंने चीकू को दरबार में हाज़िर होने का हुक्म दिया।"
+Shot 15 (01:10 - 01:15)
+Camera & Background: Medium shot of Shersingh twirling his mustache and roaring mildly with pride. Cheeku bows low in front of the throne.
+Shersingh Dialogue (Hindi): "चीकू! सुना है तुम्हारे पास कोई ऐसा शीशा है जो मन का हाल बताता है? हम भी अपनी परीक्षा लेना चाहते हैं!"
+Shot 16 (01:15 - 01:20)
+Camera & Background: Close-up on Cheeku's face. A single sweat drop falls from his forehead, but he quickly replaces his fear with a confident smile.
+Narrator (Hindi): "राजा के सामने चीकू थोड़ा घबराया, लेकिन उसने अपनी बुद्धिमानी का साथ नहीं छोड़ा।"
+Scene 6: The King's Reflection
+Shot 17 (01:20 - 01:25)
+Camera & Background: Cheeku lifts the mirror and tilts its face directly toward King Shersingh. The king leans forward to look.
+BGM: High suspense, ticking clock or rising pitch.
+Narrator (Hindi): "चीकू ने धीरे से शीशा महाराज के सामने रख दिया।"
+Shot 18 (01:25 - 01:30)
+Camera & Background: POV from inside the mirror. It shows Shersingh's sharp teeth, angry eyes, and fierce wild mane. It looks very aggressive.
+SFX: Shersingh lets out a sharp, scared gasp.
+Narrator (Hindi): "शीशे में अपना डरावना और खूंखार रूप देखकर राजा शेरसिंह खुद डर गए।"
+Shot 19 (01:30 - 01:35)
+Camera & Background: Shersingh physically recoils back onto his throne, his proud posture melting into sudden insecurity. He looks at Cheeku with wide eyes.
+Shersingh Dialogue (Hindi): "चीकू... मेरा चेहरा इतना खूंखार और भयानक क्यों दिख रहा है? क्या हमारे मन में कोई पाप है?"
+Scene 7: Cheeku's Clever Reply & Happy Ending
+Shot 20 (01:35 - 01:40)
+Camera & Background: Medium close-up on Cheeku. He folds his hands respectfully and speaks with absolute calmness and grace.
+Cheeku Dialogue (Hindi): "नहीं महाराज! यह शीशा आपके मन का पाप नहीं, बल्कि आपकी ज़िम्मेदारी दिखा रहा है! आप राजा हैं!"
+Shot 21 (01:40 - 01:45)
+Camera & Background: Shersingh listens intently, his expression softening. Cheeku gestures politely toward the king.
+Cheeku Dialogue (Hindi): "अपराधियों और दुष्टों के लिए राजा का चेहरा डरावना होना ही चाहिए, तभी तो जंगल में न्याय रहेगा! आप तो नेक हैं।"
+Shot 22 (01:45 - 01:50)
+Camera & Background: Shersingh breaks into a massive, booming laugh. He reaches to his side and hands Cheeku a large basket of fresh fruits or a pouch of gold coins.
+BGM: Uplifting, happy, and triumphant resolution music.
+Narrator (Hindi): "चीकू की बात सुनकर राजा बेहद खुश हुए और उन्होंने उसे बड़ा इनाम दिया।"
+Shot 23 (01:50 - 01:55)
+Camera & Background: Cheeku looks directly into the camera (breaking the fourth wall), holding his mirror up. The words "शीख: बुद्धिमानी से हर मुश्किल हल हो सकती है" fade onto the screen.
+Narrator (Hindi): "तो दोस्तों, चीकू ने अपनी अक्ल से एक साधारण शीशे को जादुई बना दिया। कहानी अच्छी लगी तो चैनल को Subscribe ज़रूर करें!"

@@ -1,21 +1,170 @@
-I have some reference images details, Which I will provide you and story as well.
-Read, Analyze and understand the story context and give me a video generation prompt in json format for that story.
+You will be provided with:
 
-Keep the below points in mind while creating the video generation sequences prompt and strictly follow that: 
-1. Use the alias name of image everywhere in the scene prompt instead of their original name only for character refrence, But in dialouge use original name of the image.
-2. As my AI video generator generates video for 5 seconds at a time create scenes in such a way so that the final output will be look like a single continuous video without distortion and narrates the full story.
-3. You can add the camera angle and lighting details in the prompt if not already mentioned in the scenes to make the video more cinematic.
-4. Make sure to add the reference of previous video last frame in the prompt for the next scene if needed to make the video more continuous and cinematic.
-5. Don't add any backgroud music details in the prompt of any scenes as I will be adding it later manually, focus on creating cinematic video with perfect camera angles and lighting to make the video more engaging.
-6. Provide the video generation prompt for every scene in more detailed way so that WAN AI should easily understand.
-7. If you add dialouge for the character then use strictly Hindi language of Devanagari script and it should be in single inverted comma, Also add the type of voice and expression. Keep the voice type of character consistent in all scenes. Don't add any additional dialouges from any other language.
-8. Correct the grammer in the dialouge if you find any mistake so that the dialouges in actual video feels real human tone.
-9. Add the dialouges in the scenes in such a way that it should fit in the 5 second video, Without cutting the dialouge.
-10. You have to provide the scene in such a way that it should be fit in the 5 second video. So if there is any long dialouge you can split into multiple video sequences so that the video will looks good. But make sure that the final merged video will not look like distored.
-Make sure that the dialouge should be properly lip synced with the character with appropriate expression and movements who is associated with that particular dialouge.
-11. Avoid using he/she for denoting or pointing any character from the refrence images, Use their alias name instead.
+1. Reference image details (including Original Name and Alias Name).
+2. A story/script.
 
-Please refer below video generation sample prompt for refrence and create like this.
-1. Cinematic medium shot. A young boy is walking down a dusty dirt road in a rustic Indian village. Suddenly, another village man walks up to him, pats his shoulder, and says in Hindi, 'अरे बेटा, कहाँ जा रहे हो?'. The boy smiles and replies, 'बस नदी की तरफ जा रहा हूँ, थोड़ी ताज़ी हवा खाने।' The man nods, saying, 'चलो, मैं भी तुम्हारे साथ चलता हूँ,' and they turn together down a path leading toward a wide, shimmering river. Natural afternoon sunlight, realistic lip-sync, human movement, 4k resolution, hyper-detailed.
+Your task is to analyze the complete story and generate a detailed video generation prompt in JSON format.
+
+IMPORTANT OBJECTIVE:
+My AI video generator creates only 5-second videos per generation. Therefore, you must divide the story into multiple scenes where each scene represents approximately 5 seconds of screen time. The generated scenes must be designed so that when all generated videos are merged together, they appear as one continuous cinematic film without visual jumps, continuity errors, character position changes, lighting inconsistencies, or camera discontinuity.
+Add only 5 or less than 5 alias refrence characters in single scene prompt, Because my AI tool supports max 5 refrence characters.
+
+STRICT RULES:
+
+1. Character Naming Rules
+   * Use ONLY the Alias Name of the reference image in all scene prompts and visual descriptions.
+   * NEVER use the Original Name in scene descriptions.
+   * Use the Original Name ONLY inside dialogues.
+
+2. Scene Duration Rule
+   * Every scene must be designed for approximately 5 seconds of video generation.
+   * Do not overload a scene with too many actions.
+   * Ensure all actions and dialogues comfortably fit within 5 seconds.
+
+3. Video Continuity Rule (VERY IMPORTANT)
+   * Treat all scenes as parts of one continuous movie.
+   * The ending frame of a scene must naturally connect to the starting frame of the next scene.
+   * Preserve:
+     * Character position
+     * Character orientation
+     * Walking direction
+     * Body posture
+     * Facial expression progression
+     * Hand positions when appropriate
+     * Environment layout
+     * Object placement
+     * Weather conditions
+     * Time of day
+     * Lighting direction and intensity
+     * Camera movement direction
+   * Never suddenly reset character positions or camera angles unless the story explicitly requires a scene transition.
+   * Each scene should mention how it continues from the previous scene's final frame.
+
+4. Previous Scene Reference Rule
+   * Starting from Scene 2, include a continuity instruction such as:
+     "Continue seamlessly from the last frame of the previous scene."
+   * Mention the exact character position, movement state, emotion, and camera state inherited from the previous scene.
+
+5. Camera Continuity Rule
+   * Camera motion must flow naturally between scenes.
+   * If Scene 1 ends with a slow dolly-in, Scene 2 should begin with the same dolly-in motion.
+   * If Scene 1 ends with a tracking shot, Scene 2 should continue the tracking movement.
+   * Avoid random camera changes that create visible cuts after merging.
+
+6. Cinematic Enhancement Rule
+   * Add cinematic camera details when not provided:
+     * Wide shot
+     * Medium shot
+     * Close-up
+     * Over-the-shoulder
+     * Tracking shot
+     * Dolly shot
+     * Crane shot
+     * Handheld shot
+     * Static shot
+   * Add realistic lighting details:
+     * Golden hour
+     * Soft daylight
+     * Dramatic sunset
+     * Indoor warm lighting
+     * Moonlight
+     * Practical lighting
+   * Make every scene visually cinematic and realistic.
+
+7. Dialogue Rules
+   * Dialogues must be ONLY in Hindi using Devanagari script.
+   * Every dialogue must be enclosed in single quotes.
+   * Correct any grammar issues.
+   * Dialogues should sound natural and human.
+   * Dialogue length must fit comfortably within a 5-second video.
+   * If dialogue is too long, split it into multiple consecutive scenes.
+   * If a dialogue cannot be spoken naturally within 5 seconds because of multiple statement in single dialouge, split it across multiple consecutive scenes while maintaining conversational continuity.
+
+  For ex, refer the example below: 
+  If the scene is "Chiku pulls red cloth from mirror. Bright reflection flashes toward gathered animals. Dialogue by Cheeku: 'इस जादुई शीशे के सामने जो भी आएगा, यह उसके मन का सच बता देगा! झूठे का चेहरा इसमें डरावना दिखेगा!' Bold theatrical voice."
+  Then in the above prompt the dialouge is too long to be added in single 5 second video, So split it across multiple consecutive scenes while maintaining conversational continuity.
+  So create first secene for dialouge "इस जादुई शीशे के सामने जो भी आएगा, यह उसके मन का सच बता देगा!", and then continuous second scene for "झूठे का चेहरा इसमें डरावना दिखेगा!" dialouge.
+
+8. Voice Consistency Rule
+   * For every speaking character include:
+     * Voice type
+     * Emotion
+     * Facial expression
+     * Lip-sync instructions
+   * Maintain the same voice style throughout all scenes for the same character.
+
+9. Character Reference Rule
+   * Never use:
+     * he
+     * she
+     * him
+     * her
+     * they
+   * Always use the Alias Name. 
+
+10. Motion Consistency Rule
+    * Character movement must be continuous.
+    * Example:
+      * If Alias_A starts walking in Scene 1,
+      * Scene 2 should continue the same walk cycle from the previous frame.
+      * Scene 3 should continue naturally unless the character stops.
+
+11. Environmental Consistency Rule
+    * Maintain consistency in:
+      * Background elements
+      * Props
+      * Vehicles
+      * Crowd placement
+      * Building positions
+      * Weather
+      * Shadows
+      * Lighting
+      * Time of day
+
+12. Scene Transition Rule
+    * Avoid hard cuts whenever possible.
+    * Use natural transitions:
+      * Continued tracking
+      * Continued walking
+      * Continued conversation
+      * Continued camera motion
+      * Matched framing
+
+13. Output Structure Rule
+    * Return ONLY valid JSON.
+    * Each scene must contain:
+      * scene_number
+      * duration
+      * continuity_reference
+      * visual_prompt
+      * camera_details
+      * lighting_details
+      * character_actions
+      * dialogue
+      * voice_details
+      * transition_to_next_scene
+
+14. WAN AI Optimization Rule
+    * Prompts must be extremely descriptive and unambiguous.
+    * Explicitly describe:
+      * Character appearance using Alias Name
+      * Body movement
+      * Facial expression
+      * Eye direction
+      * Camera movement
+      * Environment
+      * Lighting
+      * Emotion
+      * Scene continuity
+    * Assume the model knows nothing outside the provided prompt.
+    * Generate detailed prompt for every scenes, With detailed expression, motions and other things.
+
+15. Final Objective
+    * The generated JSON should produce multiple 5-second clips that can be stitched together sequentially.
+    * After merging, the final result should appear as one uninterrupted cinematic video with smooth visual continuity, realistic motion progression, consistent character behavior, consistent camera movement, accurate lip-sync, and natural storytelling flow.
+
+Please refer below sample prompt:
+1. A cinematic medium shot of a handsome 30-year-old Indian man walking down a lively Delhi street at dusk. Cinematic lighting, soft background blur of city lights. He looks directly into the camera, talking naturally with realistic lip-sync, expressive eyes, and subtle hand gestures. His lips accurately form the words: "जिंदगी में हर मोड़ पर एक नया मौका मिलता है, बस पहचानना सीखो।" Ultra-realistic skin texture, 4K resolution, smooth camera stabilization tracking his walk, 24fps.
+2. Cinematic medium shot. A young boy is walking down a dusty dirt road in a rustic Indian village. Suddenly, another village man walks up to him, pats his shoulder, and says in Hindi, 'अरे बेटा, कहाँ जा रहे हो?'. The boy smiles and replies, 'बस नदी की तरफ जा रहा हूँ, थोड़ी ताज़ी हवा खाने।' The man nods, saying, 'चलो, मैं भी तुम्हारे साथ चलता हूँ,' and they turn together down a path leading toward a wide, shimmering river. Natural afternoon sunlight, realistic lip-sync, human movement, 4k resolution, hyper-detailed.
 
 Provide me json output in the below format strictly without any changes:

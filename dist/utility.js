@@ -10,7 +10,7 @@ export const globalVars = {
     globalBrowser: null,
     chromeVersion: '148',
     videoDuration: VideoDuration.FIVE_SECONDS,
-    useExistingResponse: false
+    useExistingResponse: true, // Set to true to use existing response for testing, false to make actual API calls
 };
 /**
  * Validate OTP in WAN
