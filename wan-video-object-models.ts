@@ -21,6 +21,7 @@ export interface GlobalVariables {
     chromeVersion: string;
     videoDuration: VideoDuration;
     useExistingResponse: boolean;
+    searchOnModel: "chatgpt" | "gemini";
 }
 
 export interface LoginRequestModel {
@@ -188,6 +189,7 @@ export interface RefrenceImageDetails {
     originalName: string;
     width: number;
     height: number;
+    voiceFileName?: string;
 }
 
 

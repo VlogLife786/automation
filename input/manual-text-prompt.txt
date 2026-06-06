@@ -78,10 +78,12 @@ STRICT RULES:
    * Dialogues should sound natural and human.
    * Dialogue length must fit comfortably within a 5-second video.
    * If dialogue is too long, split it into multiple consecutive scenes.
-   * If a dialogue cannot be spoken naturally within 5 seconds, split it across multiple consecutive scenes while maintaining conversational continuity.
+   * If a dialogue cannot be spoken naturally within 5 seconds because of multiple statement in single dialouge, split it across multiple consecutive scenes while maintaining conversational continuity.
 
-   Ex: "Continue seamlessly. Dramatic medium shot. rabbit.png pulls red cloth from mirror.png. Bright reflection flashes toward gathered animals. Dialogue by Cheeku: 'इस जादुई शीशे के सामने जो भी आएगा, यह उसके मन का सच बता देगा! झूठे का चेहरा इसमें डरावना दिखेगा!' Bold theatrical voice."
-   In the above prompt the dialouge is too long to be added in single 5 second video, So split it across multiple consecutive scenes while maintaining conversational continuity.
+  For ex, refer the example below: 
+  If the scene is "Chiku pulls red cloth from mirror. Bright reflection flashes toward gathered animals. Dialogue by Cheeku: 'इस जादुई शीशे के सामने जो भी आएगा, यह उसके मन का सच बता देगा! झूठे का चेहरा इसमें डरावना दिखेगा!' Bold theatrical voice."
+  Then in the above prompt the dialouge is too long to be added in single 5 second video, So split it across multiple consecutive scenes while maintaining conversational continuity.
+  So create first secene for dialouge "इस जादुई शीशे के सामने जो भी आएगा, यह उसके मन का सच बता देगा!", and then continuous second scene for "झूठे का चेहरा इसमें डरावना दिखेगा!" dialouge.
 
 8. Voice Consistency Rule
    * For every speaking character include:
@@ -155,11 +157,15 @@ STRICT RULES:
       * Emotion
       * Scene continuity
     * Assume the model knows nothing outside the provided prompt.
-    * Generate detailed prompt for every scenes, With detailed expression, motionsa and other things.
+    * Generate detailed prompt for every scenes, With detailed expression, motions and other things.
 
 15. Final Objective
     * The generated JSON should produce multiple 5-second clips that can be stitched together sequentially.
     * After merging, the final result should appear as one uninterrupted cinematic video with smooth visual continuity, realistic motion progression, consistent character behavior, consistent camera movement, accurate lip-sync, and natural storytelling flow.
+
+Please refer below sample prompt:
+1. A cinematic medium shot of a handsome 30-year-old Indian man walking down a lively Delhi street at dusk. Cinematic lighting, soft background blur of city lights. He looks directly into the camera, talking naturally with realistic lip-sync, expressive eyes, and subtle hand gestures. His lips accurately form the words: "जिंदगी में हर मोड़ पर एक नया मौका मिलता है, बस पहचानना सीखो।" Ultra-realistic skin texture, 4K resolution, smooth camera stabilization tracking his walk, 24fps.
+2. Cinematic medium shot. A young boy is walking down a dusty dirt road in a rustic Indian village. Suddenly, another village man walks up to him, pats his shoulder, and says in Hindi, 'अरे बेटा, कहाँ जा रहे हो?'. The boy smiles and replies, 'बस नदी की तरफ जा रहा हूँ, थोड़ी ताज़ी हवा खाने।' The man nods, saying, 'चलो, मैं भी तुम्हारे साथ चलता हूँ,' and they turn together down a path leading toward a wide, shimmering river. Natural afternoon sunlight, realistic lip-sync, human movement, 4k resolution, hyper-detailed.
 
 Provide me json output in the below format strictly without any changes:
 

@@ -216,7 +216,7 @@ export async function GenerateWANAiVideos(requestModel, retries = 10) {
 // }
 async function uploadReferenceImages(page, refrenceImageList, prompt) {
     if (refrenceImageList.length > 0) {
-        for (let image of refrenceImageList) {
+        for (let refrence of refrenceImageList) {
             let imageUploadOptions = await page.$$('[data-test-id="creation-form-box-undefined"]');
             await sleep(2000);
             imageUploadOptions[imageUploadOptions.length - 2].click();
@@ -226,11 +226,32 @@ async function uploadReferenceImages(page, refrenceImageList, prompt) {
                 clickOnElementByText(page, "Upload from device", 'span')
             ]);
             await fileChooser.accept([
-                'temp/images/' + image.imageName,
+                'temp/images/' + refrence.imageName,
             ]);
-            await sleep(5000);
+            await sleep(7000);
+            if (refrence.voiceFileName && refrence.voiceFileName.trim() != "") {
+                await uploadVoiceOnLatestUploadedRefrenceImage(page, refrence);
+            }
         }
     }
+}
+async function uploadVoiceOnLatestUploadedRefrenceImage(page, refrance) {
+    let imageUploadOptions = await page.$$('[data-test-id="creation-form-box-undefined"]');
+    await sleep(2000);
+    imageUploadOptions[imageUploadOptions.length - 3].click();
+    await sleep(2000);
+    clickOnElementByText(page, "Custom Voice", 'span');
+    await sleep(2000);
+    const [fileChooser] = await Promise.all([
+        page.waitForFileChooser(),
+        clickOnElementByText(page, "Upload from device", 'span')
+    ]);
+    await fileChooser.accept([
+        'temp/audio/' + refrance.voiceFileName,
+    ]);
+    await sleep(3000);
+    await clickOnElementByText(page, "Confirm", 'button');
+    await sleep(5000);
 }
 async function uploadStartImage(page, imageName) {
     let imageUploadOptions = await page.$$('[data-test-id="creation-form-box-undefined"]');

@@ -210,11 +210,7 @@ export async function GenerateWANAiVideos(requestModel: ExecutionRequestModel, r
     } finally {
         // page.off('response');
         config = {};
-        try {
-            await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=changeIsClaimedStatus&email=${requestModel.loginEmail}&status=No`);
-        } catch (error) {
-            console.log("Error while updating user status:", error);
-        }
+        await updateUserClaimedStatus(requestModel);
         await sleep(10000);
         console.log("Execution completed.");
 
@@ -237,6 +233,20 @@ export async function GenerateWANAiVideos(requestModel: ExecutionRequestModel, r
 }
 
 
+async function updateUserClaimedStatus(requestModel: ExecutionRequestModel, retryCount = 5) {
+    try {
+        await getRestResponse(`${ApiURLs.USER_DETAILS_GOOGLE_SHEET}?action=changeIsClaimedStatus&email=${requestModel.loginEmail}&status=No`);
+    } catch (error) {
+        if (retryCount > 0) {
+            console.log(`Retrying to update user claimed status... Attempts left: ${retryCount}`);
+            await sleep(5000);
+            await updateUserClaimedStatus(requestModel, retryCount - 1);
+        } else {
+            console.log("Error while updating user claimed status:", error);
+        }
+    }
+}
+
 // async function readAllPendingMessages() {
 //     await page.click('[data-test-id="header-message-button"]');
 //     await sleep(2000);
@@ -258,7 +268,7 @@ export async function GenerateWANAiVideos(requestModel: ExecutionRequestModel, r
 
 async function uploadReferenceImages(page: Page, refrenceImageList: RefrenceImageDetails[], prompt: string) {
     if (refrenceImageList.length > 0) {
-        for (let image of refrenceImageList) {
+        for (let refrence of refrenceImageList) {
             let imageUploadOptions = await page.$$('[data-test-id="creation-form-box-undefined"]');
             await sleep(2000);
 
@@ -271,12 +281,43 @@ async function uploadReferenceImages(page: Page, refrenceImageList: RefrenceImag
             ]);
 
             await fileChooser.accept([
-                'temp/images/' + image.imageName,
+                'temp/images/' + refrence.imageName,
             ]);
 
-            await sleep(5000);
+            await sleep(7000);
+
+            if (refrence.voiceFileName && refrence.voiceFileName.trim() != "") {
+                await uploadVoiceOnLatestUploadedRefrenceImage(page, refrence);
+            }
+
         }
     }
+}
+
+
+async function uploadVoiceOnLatestUploadedRefrenceImage(page: Page, refrance: RefrenceImageDetails) {
+    let imageUploadOptions = await page.$$('[data-test-id="creation-form-box-undefined"]');
+    await sleep(2000);
+
+    imageUploadOptions[imageUploadOptions.length - 3].click();
+    await sleep(2000);
+
+    clickOnElementByText(page, "Custom Voice", 'span');
+    await sleep(2000);
+
+    const [fileChooser] = await Promise.all([
+        page.waitForFileChooser(),
+        clickOnElementByText(page, "Upload from device", 'span')
+    ]);
+
+    await fileChooser.accept([
+        'temp/audio/' + refrance.voiceFileName,
+    ]);
+
+    await sleep(3000);
+    await clickOnElementByText(page, "Confirm", 'button');
+    await sleep(5000);
+
 }
 
 
@@ -297,6 +338,7 @@ async function uploadStartImage(page: Page, imageName: string) {
     ]);
     await sleep(5000);
 }
+
 
 async function typePromptWithImageTags(
     page: Page,

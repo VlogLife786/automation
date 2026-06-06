@@ -32,6 +32,7 @@
     {
         "originalName": "Cheeku",
         "imageName": "rabbit.png",
-        "imageType": "rabbit animal character"
+        "imageType": "rabbit animal character",
+        "voiceFileName": "Riya.mp3"
     }
 ]

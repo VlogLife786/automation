@@ -1,40 +1,41 @@
 {
-  "title": "Jadui Sheesha (The Magical Mirror)",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Jadui Sheesha Continuous Cinematic Sequence - Optimized for 5s Dialogues",
   "characters": {
     "char_1": {
       "name": "rabbit.png",
-      "appearance": "Small intelligent rabbit, soft white fur, bright expressive eyes, long upright ears, energetic body language, simple forest adventurer look, highly curious and clever personality."
+      "appearance": "A clever, highly expressive anthropomorphic rabbit character named Cheeku with soft grey fur, alert long ears, large bright dark eyes, wearing a simple brown vest."
     },
     "char_2": {
       "name": "bear.png",
-      "appearance": "Large brown bear, heavy build, round face, expressive eyes, gentle but nervous demeanor, thick fur, strong paws."
+      "appearance": "A large, bulky anthropomorphic brown bear character named Billu with thick dark brown fur, looking naturally clumsy yet expressive."
     },
     "char_3": {
       "name": "lion.png",
-      "appearance": "Majestic lion king, golden mane, muscular body, regal posture, commanding presence, expressive royal face."
+      "appearance": "A majestic, powerful lion king character named Shersingh with a massive golden mane, sharp Amber eyes, commanding posture, wearing a small ornate golden crown."
     },
     "char_4": {
-      "name": "lomdi.png",
-      "appearance": "Slim orange fox, sharp eyes, bushy tail, alert posture, curious forest resident."
+      "name": "mirror.png",
+      "appearance": "A large, clean, handheld magical mirror object with a polished silver metallic frame and a crystalline, highly reflective glass face."
     },
     "char_5": {
-      "name": "monkey.png",
-      "appearance": "Playful brown monkey, agile body, lively facial expressions, energetic movements."
+      "name": "lomdi.png",
+      "appearance": "A sleek, orange-furred anthropomorphic fox character with sharp features and a bushy white-tipped tail."
     },
     "char_6": {
-      "name": "parrot.png",
-      "appearance": "Colorful green parrot with red beak, bright feathers, animated movements and expressive eyes."
+      "name": "monkey.png",
+      "appearance": "A nimble, brown-furred monkey character with a long curling tail and a highly expressive face."
     },
     "char_7": {
-      "name": "mirror.png",
-      "appearance": "Large magical handheld mirror with polished reflective silver surface, ornate frame, mysterious glow when highlighted."
+      "name": "parrot.png",
+      "appearance": "A vibrant green parrot bird character with a bright red beak and colorful wings."
     }
   },
   "global_style": {
-    "genre": "Family fantasy animation, cinematic comedy, magical forest adventure",
-    "camera": "Smooth cinematic tracking shots, slow dolly movements, natural continuity between scenes, realistic animation camera language",
-    "lighting": "Consistent soft daylight in forest scenes, warm royal cave lighting in palace scenes, realistic shadows and atmospheric depth",
-    "quality": "Ultra detailed cinematic animation, highly expressive characters, realistic fur simulation, film-quality rendering",
+    "genre": "Cinematic Animal Fable Animation, Dramatic Comedy",
+    "camera": "Smooth stabilized cinematic movements, deliberate tracking, tracking pans, and precise focusing without jagged cuts",
+    "lighting": "Dynamic natural sunlight shifting from soft daylight in the forest to deep golden hour atmospheric lighting, and dramatic warm practical cave illumination",
+    "quality": "Ultra-realistic 3D animation texturing, hyper-detailed fur rendering, precise conversational lip-sync, organic fluid motions, 4K resolution, 24fps",
     "aspect_ratio": "16:9",
     "fps": 24
   },
@@ -42,204 +43,246 @@
     {
       "scene_id": 1,
       "duration": "5s",
-      "prompt": "Opening continuous cinematic shot. Slow panoramic camera movement across lush green Champakvan forest during bright morning daylight. Dense trees, colorful flowers, gentle breeze moving leaves. Camera glides toward forest edge where human trash is scattered. A partially buried mirror.png reflects sunlight through bushes. No character visible yet. Curious mysterious atmosphere. Narration in Hindi: 'चंपकवन जंगल में चीकू नाम का एक बहुत ही चतुर खरगोश रहता था।'",
-      "transition_to_next": "Camera continues moving toward shining reflection while maintaining direction and speed.",
+      "prompt": "Cinematic wide shot opening with a slow steady pan across a lush vibrant green Champakvan forest dense with trees. Near the forest edge, a visible pile of human trash sits on the mossy ground. A shiny metallic edge of mirror.png peeks out from beneath a pile of leaves and dirt, catching the soft morning daylight filtering through the canopy.",
+      "transition_to_next": "Continue the slow pan fluidly as a character enters the frame from the right side.",
       "reference_previous_video_last_frame": false
     },
     {
       "scene_id": 2,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. Camera keeps same slow tracking movement toward mirror.png. rabbit.png hops into frame from left side, moving toward shining object. rabbit.png suddenly stops, ears fully raised, eyes focused on reflection inside bushes. Curious expression. Soft forest daylight unchanged. Narration in Hindi: 'एक दिन जंगल के किनारे घूमते हुए, चीकू को झाड़ियों में एक अजीब चीज़ दिखाई दी।'",
-      "transition_to_next": "rabbit.png leans closer toward bushes while camera slowly dollies in.",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Medium shot tracking as rabbit.png hops nimbly into the forest clearing, stopping abruptly in front of the trash pile. rabbit.png points its long grey ears straight up, eyes widening in curiosity as it spots the shiny, twinkling surface of mirror.png embedded in the dirt.",
+      "transition_to_next": "Maintain the exact location and position as the camera moves down to a tight close-up of the hands.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 3,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. Camera dolly-in continues. Close-up of rabbit.png crouching beside bushes. rabbit.png uses both paws to pull mirror.png from dirt and leaves. Soil falls away from frame. Sunlight reflects brightly from mirror.png. Curious facial expression growing stronger. Narration in Hindi: 'वह एक बड़ा और साफ़ शीशा था। चीकू ने इससे पहले कभी ऐसा शीशा नहीं देखा था।'",
-      "transition_to_next": "rabbit.png raises mirror.png toward face as camera continues pushing closer.",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Close-up shot on the furry hands of rabbit.png as it carefully pulls the large, clean handheld mirror.png completely out of the loose dirt and rustling dry leaves. The metallic frame gleams clearly in the soft daylight as it is lifted upward.",
+      "transition_to_next": "Follow the upward motion of the mirror smoothly into a medium shot focusing on the character's face.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 4,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. Medium close-up. rabbit.png lifts mirror.png directly in front of face. rabbit.png jumps backward in surprise, then realizes reflection and makes a funny face while staring into mirror.png. Bright playful forest lighting. Dialogue by Cheeku: 'अरे! यह तो हुबहू मेरे जैसा ही कोई अंदर बैठा है... अच्छा! यह तो मेरा ही चेहरा है!' Voice: youthful clever rabbit voice, surprised then amused, perfect lip sync.",
-      "transition_to_next": "rabbit.png smiles mischievously while still holding mirror.png.",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Medium shot of rabbit.png holding mirror.png up and looking directly into its reflective surface. rabbit.png flinches back in brief shock, then instantly relaxes, pulling a funny face with wide eyes. rabbit.png speaks with realistic lip-sync and a cheerful, curious voice: 'अरे! यह तो हुबहू मेरे जैसा ही कोई अंदर बैठा है...'",
+      "transition_to_next": "Maintain the exact camera angle, lighting, and pose as the dialogue continues uninterrupted.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 5,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. Close-up on rabbit.png face holding mirror.png. Mischievous smile slowly grows. Animated lightbulb appears above head. Eyes sparkle with clever idea. Playful cartoon atmosphere. Narration in Hindi: 'शीशे का सच समझते ही, चीकू के दिमाग में जंगल के जानवरों से मज़ाक करने की एक तरकीब सूझी।'",
-      "transition_to_next": "Camera pulls back revealing wider forest clearing ahead.",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Medium shot maintaining the exact pose of rabbit.png looking directly into mirror.png. rabbit.png finishes its statement, its face breaking into a wide, happy, and satisfied grin with accurate lip-sync: 'अच्छा! यह तो मेरा ही चेहरा है!' The lighting stays perfectly consistent with soft forest daylight.",
+      "transition_to_next": "Move the camera to a tight profile shot to highlight a changing facial expression.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 6,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. Wide shot of forest clearing. rabbit.png stands atop large rock, waving both arms. monkey.png, parrot.png and lomdi.png begin gathering below. mirror.png stands nearby covered with red cloth. Daylight remains consistent. Dialogue by Cheeku: 'सुनो! सुनो! चंपकवन के निवासियों! मुझे वनदेवी ने एक जादुई शीशा दिया है!' Voice: confident energetic rabbit voice, proud expression, synchronized lip movement.",
-      "transition_to_next": "More animals gather while camera slowly circles rock clockwise.",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Close-up on the face of rabbit.png holding mirror.png. A mischievous, clever smirk slowly grows across its mouth, and its eyes light up with an intelligent spark. The background shows the softly blurred green forest context.",
+      "transition_to_next": "Transition to a wide shot of a different clearing where a crowd gathers.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 7,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. Camera continues same clockwise motion around gathering. monkey.png, parrot.png and lomdi.png whisper among themselves while staring at covered mirror.png. rabbit.png stands proudly beside mirror.png. Curious crowd energy. Narration in Hindi: 'जादुई शीशे की बात सुनकर सभी जानवर हैरान रह गए और वहाँ भीड़ जमा हो गई।'",
-      "transition_to_next": "rabbit.png reaches toward red cloth covering mirror.png.",
+      "prompt": "Cinematic wide shot of a bright forest clearing during golden hour. rabbit.png stands prominently on top of a high grey rock, waving both hands high in the air to grab attention. Standing around the base of the rock looking upward are monkey.png, parrot.png perched on a branch, and lomdi.png. rabbit.png speaks loudly with theatrical energy and dynamic lip-sync: 'सुनो! सुनो! चंपकवन के निवासियों!'",
+      "transition_to_next": "Maintain the wide clearing shot as the dialogue continues smoothly without changing character positions.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 8,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. Dramatic medium shot. rabbit.png pulls red cloth from mirror.png. Bright reflected light flashes toward gathered animals. rabbit.png stands confidently on rock. Dialogue by Cheeku: 'इस जादुई शीशे के सामने जो भी आएगा, यह उसके मन का सच बता देगा!' Voice: theatrical confident rabbit voice, serious expression, strong lip sync.",
-      "transition_to_next": "rabbit.png continues speaking without changing position.",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Wide shot from the exact same angle. rabbit.png remains standing on the rock, gesturing proudly towards a small table next to it where mirror.png sits completely covered by a red cloth. rabbit.png continues speaking dramatically with accurate lip-sync: 'मुझे वनदेवी ने एक जादुई शीशा दिया है!'",
+      "transition_to_next": "Cut to a medium shot facing the crowd of listening animals.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 9,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. Same framing and lighting. rabbit.png points toward mirror.png while crowd watches. Dialogue by Cheeku: 'झूठे का चेहरा इसमें डरावना दिखेगा!' Voice: dramatic mysterious rabbit voice, raised eyebrow, deliberate lip sync. mirror.png glints ominously.",
-      "transition_to_next": "Camera begins zooming through crowd toward bear.png at rear.",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Medium shot of the animal crowd consisting of monkey.png, parrot.png, and lomdi.png whispering to one another with deeply confused and astonished facial expressions. The warm golden hour sunlight creates long shadows behind them as they stare towards the rock.",
+      "transition_to_next": "Return focus back to the rock where the reveal action takes place.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 10,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. Camera zoom reaches bear.png standing behind crowd. Sweat appears on bear.png forehead. Semi-transparent memory image shows stolen carrots. Nervous breathing. Narration in Hindi: 'तभी वहाँ बिल्लू भालू आया, जिसने कल ही चीकू के खेत से गाजरें चुराई थीं।'",
-      "transition_to_next": "bear.png freezes while rabbit.png notices from rock.",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Medium shot of rabbit.png standing on the rock. With a dramatic sweep of its arm, rabbit.png pulls the red cloth completely off mirror.png. The pristine surface of mirror.png instantly reflects a bright flash of golden sunlight directly toward the gathered audience.",
+      "transition_to_next": "Keep the camera trained on rabbit.png as it immediately begins to speak.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 11,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. Medium shot from crowd perspective. rabbit.png points directly at bear.png with sly smile. Crowd turns toward bear.png. Dialogue by Cheeku: 'आओ बिल्लू भाई! ज़रा तुम ही पहले आकर देखो, तुमने तो कोई चोरी नहीं की ना?' Voice: playful teasing rabbit voice, confident grin, accurate lip sync.",
-      "transition_to_next": "bear.png begins nervous walk toward mirror.png.",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Medium shot of rabbit.png standing next to the uncovered mirror.png on the rock. Pointing a finger outward to the crowd, rabbit.png explains in a bold, authoritative voice with clear lip-sync: 'इस जादुई शीशे के सामने जो भी आएगा, यह उसके मन का सच बता देगा!'",
+      "transition_to_next": "Maintain the exact same shot, stance, and lighting for the second half of the statement.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 12,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. Tracking shot follows bear.png taking slow shaky steps toward mirror.png. Knees trembling. Heavy heartbeat atmosphere. rabbit.png remains atop rock watching. Narration in Hindi: 'बिल्लू भालू डर के मारे कांपने लगा। उसे लगा कि उसका काला सच सबके सामने आ जाएगा।'",
-      "transition_to_next": "bear.png reaches mirror.png and raises paws toward face.",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Medium shot of rabbit.png in the exact same position on the rock, widening its eyes to look mysterious. rabbit.png delivers the final warning with precise lip-sync: 'झूठे का चेहरा इसमें डरावना दिखेगा!'",
+      "transition_to_next": "Camera smoothly pans back to reveal a new character arriving at the rear of the crowd.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 13,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. Close-up. bear.png arrives before mirror.png, covers eyes with both paws and drops onto knees. Panic visible. Dialogue by Billu: 'नहीं-नहीं चीकू! मुझे शीशा मत दिखाओ!' Voice: deep trembling bear voice, fearful expression, synchronized lip movement.",
-      "transition_to_next": "bear.png continues confession while kneeling.",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Slow tracking zoom passing through the crowd to focus on bear.png standing nervously at the very back. bear.png starts visibly sweating, eyes darting around anxiously. A translucent thought bubble appears above its head briefly showing a memory of bear.png snatching bright orange carrots from a green field.",
+      "transition_to_next": "Cut back to the rock where rabbit.png looks out over the crowd.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 14,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. Same kneeling position. bear.png lowers head in guilt before mirror.png. Dialogue by Billu: 'मैं सच बताता हूँ, गाजरें मैंने ही चुराई थीं!' Voice: ashamed emotional bear voice, guilty facial expression, accurate lip sync.",
-      "transition_to_next": "Crowd reacts immediately with laughter.",
+      "prompt": "Medium shot of rabbit.png on the rock looking over the crowd. rabbit.png spots bear.png at the back and points directly at him with a sly, knowing grin. The surrounding animals all turn their heads to look back at bear.png. rabbit.png speaks with a teasing, playful voice and matched lip-sync: 'आओ बिल्लू भाई! ज़रा तुम ही पहले आकर देखो...'",
+      "transition_to_next": "Maintain the frame as rabbit.png delivers the remainder of the sentence.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 15,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. Medium crowd shot. monkey.png laughs holding stomach, parrot.png flaps wings happily, lomdi.png chuckles, rabbit.png smiles with satisfaction beside mirror.png. Bright cheerful atmosphere. Narration in Hindi: 'भालू का सच बाहर आते ही सब हँस पड़े। चीकू की चतुराई से चोर पकड़ा गया था।'",
-      "transition_to_next": "Scene naturally fades into royal cave setting while maintaining story flow.",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Medium shot of rabbit.png pointing from the rock, maintaining its sly expression and the exact same golden hour lighting. rabbit.png finishes speaking with flawless lip-sync: 'तुमने तो कोई चोरी नहीं की ना?'",
+      "transition_to_next": "Shift camera view to capture the slow approach of the bear.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 16,
       "duration": "5s",
-      "prompt": "Continue seamlessly through narrative transition. Interior royal cave. Warm golden torchlight. lion.png sits on stone throne. rabbit.png enters carrying mirror.png carefully. Grand royal atmosphere. Narration in Hindi: 'जादुई शीशे की चर्चा राजा शेरसिंह के कानों तक भी पहुँची। उन्होंने चीकू को दरबार में हाज़िर होने का हुक्म दिया।'",
-      "transition_to_next": "rabbit.png approaches throne while lion.png observes.",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Cinematic medium shot of bear.png taking slow, incredibly shaky steps forward through the parting crowd toward the high rock. Its large knees are visibly knocking together in comedic terror against the background of golden-lit forest trees.",
+      "transition_to_next": "Track the bear's movement until it stops directly in front of the mirror.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 17,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. Medium shot. lion.png proudly adjusts mane while seated on throne. rabbit.png bows respectfully holding mirror.png. Dialogue by Shersingh: 'चीकू! सुना है तुम्हारे पास कोई ऐसा शीशा है जो मन का हाल बताता है?' Voice: deep royal lion voice, confident expression, synchronized lip sync.",
-      "transition_to_next": "lion.png continues speaking in same posture.",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Close-up shot on bear.png as it arrives directly in front of mirror.png on the rock. Terrified to look at its reflection, bear.png violently covers both of its eyes with its large furry paws and drops heavily down onto its knees on the grass.",
+      "transition_to_next": "Keep the close-up framing locked on the bear as it begins its confession.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 18,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. Same camera angle. lion.png leans slightly forward on throne. Dialogue by Shersingh: 'हम भी अपनी परीक्षा लेना चाहते हैं!' Voice: commanding royal lion voice, proud smile, perfect lip sync. rabbit.png listens respectfully.",
-      "transition_to_next": "Camera moves closer toward rabbit.png reaction.",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Close-up on the kneeling bear.png with paws over its eyes. bear.png loudly blurts out the first part of its trembling statement with frantic lip-sync and a panicked tone: 'नहीं-नहीं चीकू! मुझे शीशा मत दिखाओ! मैं सच बताता हूँ...'",
+      "transition_to_next": "Maintain the exact close-up position, posture, and lighting as the bear finishes speaking.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 19,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. Close-up on rabbit.png. Small sweat drop appears, then rabbit.png regains confidence and smiles calmly while holding mirror.png. Warm cave lighting remains constant. Narration in Hindi: 'राजा के सामने चीकू थोड़ा घबराया, लेकिन उसने अपनी बुद्धिमानी का साथ नहीं छोड़ा।'",
-      "transition_to_next": "rabbit.png raises mirror.png toward lion.png.",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Close-up on the kneeling bear.png in the exact same position, crying out in deep guilt. bear.png finishes its confession with desperate lip-sync and heavy emotion: 'गाजरें मैंने ही चुराई थीं!'",
+      "transition_to_next": "Cut to a wider angle capturing the reaction of the entire clearing.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 20,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. rabbit.png slowly lifts mirror.png toward lion.png. lion.png leans forward from throne to examine reflection. Suspenseful atmosphere. Narration in Hindi: 'चीकू ने धीरे से शीशा महाराज के सामने रख दिया।'",
-      "transition_to_next": "Camera transitions into mirror point of view.",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Cinematic medium shot of the gathered crowd. monkey.png is holding its stomach while laughing hysterically, and parrot.png is happily dancing up and down on a tree branch. On the rock, rabbit.png stands confidently with hands on its hips, looking completely satisfied.",
+      "transition_to_next": "Change scene entirely to the dark, regal interior of a cave.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 21,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. POV from inside mirror.png. lion.png reflection appears fierce, sharp teeth visible, intense eyes, massive mane. Reflection looks intimidating. lion.png gasps in shock. Narration in Hindi: 'शीशे में अपना डरावना और खूंखार रूप देखकर राजा शेरसिंह खुद डर गए।'",
-      "transition_to_next": "lion.png recoils backward from mirror view.",
-      "reference_previous_video_last_frame": true
+      "prompt": "Cinematic wide shot of the interior of a grand royal cave. King lion character lion.png sits majestically upon a raised stone throne, illuminated by warm torch firelight. From the entrance of the cave, rabbit.png enters carefully walking forward, carrying mirror.png securely tucked under its arm.",
+      "transition_to_next": "Dolly in closer toward the throne as the king addresses the rabbit.",
+      "reference_previous_video_last_frame": false
     },
     {
       "scene_id": 22,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. Medium shot. lion.png falls back slightly onto throne, eyes wide with insecurity. rabbit.png stands calmly holding mirror.png. Dialogue by Shersingh: 'चीकू... मेरा चेहरा इतना खूंखार और भयानक क्यों दिख रहा है?' Voice: worried royal lion voice, anxious expression, lip sync.",
-      "transition_to_next": "lion.png continues question without changing posture.",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Medium shot of lion.png sitting on the throne, proudly twirling its whiskers with one paw and letting out a mild, booming roar. Down below, rabbit.png bows low and respectfully. lion.png speaks with a deep, royal voice and clear lip-sync: 'चीकू! सुना है तुम्हारे पास कोई ऐसा शीशा है जो मन का हाल बताता है?'",
+      "transition_to_next": "Maintain the exact positions and framing as the king finishes his statement.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 23,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. Same framing. lion.png looks uncertain toward rabbit.png. Dialogue by Shersingh: 'क्या हमारे मन में कोई पाप है?' Voice: nervous thoughtful lion voice, softened expression, accurate lip sync.",
-      "transition_to_next": "rabbit.png respectfully responds.",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Medium shot of lion.png leaning forward slightly on its throne, glaring down with intense royal curiosity. lion.png completes its dialogue with commanding lip-sync: 'हम भी अपनी परीक्षा लेना चाहते हैं!' rabbit.png remains bowed on the cave floor.",
+      "transition_to_next": "Cut to a tight close-up on the rabbit's face.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 24,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. Medium close-up on rabbit.png folding paws respectfully. Dialogue by Cheeku: 'नहीं महाराज! यह शीशा आपके मन का पाप नहीं, बल्कि आपकी ज़िम्मेदारी दिखा रहा है!' Voice: calm intelligent rabbit voice, respectful smile, precise lip sync.",
-      "transition_to_next": "rabbit.png continues explanation naturally.",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Close-up on the face of rabbit.png as it stands up from its bow. A single clear drop of sweat beads up and falls down its forehead in anxiety, but rabbit.png quickly replaces its nervous expression with a highly confident, polite smile.",
+      "transition_to_next": "Pan slightly as the rabbit lifts the mirror up toward the king.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 25,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. Same camera movement and lighting. rabbit.png gestures politely toward lion.png. Dialogue by Cheeku: 'आप राजा हैं!' Voice: confident respectful rabbit voice, warm expression, synchronized lip movement.",
-      "transition_to_next": "rabbit.png continues reasoning.",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Medium shot as rabbit.png steps forward and tilts the reflective face of mirror.png directly up toward lion.png. King lion.png leans his heavy head forward off the throne to peer straight down into the glass face. Suspenseful practical torchlight flickers across them.",
+      "transition_to_next": "Switch to a point-of-view perspective looking out from inside the mirror surface.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 26,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. rabbit.png explains calmly while lion.png listens attentively. Dialogue by Cheeku: 'अपराधियों और दुष्टों के लिए राजा का चेहरा डरावना होना ही चाहिए!' Voice: wise rabbit voice, sincere expression, perfect lip sync.",
-      "transition_to_next": "rabbit.png concludes statement.",
-      "reference_previous_video_last_frame": true
+      "prompt": "Cinematic Point-of-View shot from inside mirror.png looking straight out at lion.png. The glass surface reflects a highly aggressive and terrifying version of Shersingh, showcasing sharp bared teeth, fierce wide glowing eyes, and a wild, menacing golden mane contextually warped to look scary.",
+      "transition_to_next": "Quickly track backward as the king reacts physically to the reflection.",
+      "reference_previous_video_last_frame": false
     },
     {
       "scene_id": 27,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. Same positions. rabbit.png finishes explanation. Dialogue by Cheeku: 'तभी तो जंगल में न्याय रहेगा! आप तो नेक हैं।' Voice: reassuring rabbit voice, friendly smile, synchronized lip movement. lion.png expression softens completely.",
-      "transition_to_next": "lion.png bursts into laughter.",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Medium shot of lion.png violently recoiling backward into the cushions of his stone throne, his proud posture instantly melting into wide-eyed insecurity. lion.png stares down at rabbit.png trembling slightly, speaking with a startled voice and frantic lip-sync: 'चीकू... मेरा चेहरा इतना खूंखार और भयानक क्यों दिख रहा है?'",
+      "transition_to_next": "Keep the camera fixed on the king as he completes his anxious question.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 28,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. lion.png laughs heartily on throne. Warm joyful atmosphere. lion.png hands rabbit.png a large basket of fruits beside throne. rabbit.png accepts gratefully while holding mirror.png. Narration in Hindi: 'चीकू की बात सुनकर राजा बेहद खुश हुए और उन्होंने उसे बड़ा इनाम दिया।'",
-      "transition_to_next": "Camera slowly moves toward rabbit.png for final moral.",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Medium shot focusing on lion.png sitting back on the throne with a worried look. lion.png finishes speaking with precise lip-sync: 'क्या हमारे मन में कोई पाप है?' Down below, rabbit.png stands ready to respond with mirror.png at its side.",
+      "transition_to_next": "Cut to a medium close-up focusing directly on the rabbit.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 29,
       "duration": "5s",
-      "prompt": "Continue seamlessly from previous scene. rabbit.png faces camera directly, holding mirror.png and reward basket. Warm heroic smile. Moral text appears on screen: 'सीख: बुद्धिमानी से हर मुश्किल हल हो सकती है'. Narration in Hindi: 'तो दोस्तों, चीकू ने अपनी अक्ल से एक साधारण शीशे को जादुई बना दिया। कहानी अच्छी लगी तो चैनल को सब्सक्राइब ज़रूर करें!' Cinematic ending.",
-      "transition_to_next": "End of story with gentle fade out.",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Medium close-up on rabbit.png inside the warm torch-lit cave. rabbit.png gracefully folds its hands together in a respectful namaste gesture, speaking with absolute calm, grace, and steady lip-sync: 'नहीं महाराज! यह शीशा आपके मन का पाप नहीं...ं'",
+      "transition_to_next": "Maintain the exact angle and position as the dialogue continues smoothly.",
+      "reference_previous_video_last_frame": true
+    },
+    {
+      "scene_id": 30,
+      "duration": "5s",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Medium close-up on rabbit.png maintaining the exact same respectful stance. rabbit.png continues its explanation with clear, reassuring lip-sync: 'बल्कि आपकी ज़िम्मेदारी दिखा रहा है! आप राजा हैं!'",
+      "transition_to_next": "Keep the camera framed on the rabbit as it changes gestures slightly.",
+      "reference_previous_video_last_frame": true
+    },
+    {
+      "scene_id": 31,
+      "duration": "5s",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Medium close-up on rabbit.png as it drops its hands and gestures politely up towards the throne. rabbit.png says with a wise smile and accurate lip-sync: 'अपराधियों और दुष्टों के लिए राजा का चेहरा डरावना होना ही चाहिए...ं'",
+      "transition_to_next": "Maintain the camera positioning for the final clause of the sentence.",
+      "reference_previous_video_last_frame": true
+    },
+    {
+      "scene_id": 32,
+      "duration": "5s",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Medium close-up on rabbit.png finishing its explanation with perfect elegance, smiling warmly while lip-syncing the final words: 'तभी तो जंगल में न्याय रहेगा! आप तो नेक हैं।' The warm cave lighting softly highlights its grey fur.",
+      "transition_to_next": "Cut to a wide shot showing the king's grand reaction.",
+      "reference_previous_video_last_frame": true
+    },
+    {
+      "scene_id": 33,
+      "duration": "5s",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Wide shot of the cave royal court. lion.png breaks into a massive, booming, joyous laugh, his chest heaving with relief. He reaches to the side of his throne and hands a large, heavy woven basket overflowing with fresh fruits down to a delighted rabbit.png.",
+      "transition_to_next": "Transition to a final clean front-facing shot breaking the fourth wall.",
+      "reference_previous_video_last_frame": true
+    },
+    {
+      "scene_id": 34,
+      "duration": "5s",
+      "prompt": "Cinematic medium shot of rabbit.png standing against a soft, out-of-focus forest background, looking directly into the camera lens. rabbit.png holds mirror.png up proudly next to its face. Beautiful stylized Devanagari text softly fades onto the lower screen reading: 'शिक्षा: बुद्धिमानी से हर मुश्किल हल हो सकती है।' rabbit.png speaks cheerfully with flawless lip-sync: 'तो दोस्तों, चीकू ने अपनी अक्ल से एक साधारण शीशे को जादुई बना दिया।'",
+      "transition_to_next": "Maintain the identical direct camera framing for the channel outro message.",
+      "reference_previous_video_last_frame": true
+    },
+    {
+      "scene_id": 35,
+      "duration": "5s",
+      "prompt": "Continue seamlessly from the last frame of the previous scene. Medium shot of rabbit.png looking directly into the camera, holding mirror.png high with a friendly wink. The Devanagari moral text remains visible. rabbit.png concludes with a warm, inviting voice and perfect lip-sync: 'कहानी अच्छी लगी तो चैनल को Subscribe ज़रूर करें!'",
+      "transition_to_next": "Fade out completely to black.",
       "reference_previous_video_last_frame": true
     }
   ]

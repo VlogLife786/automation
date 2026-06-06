@@ -14,7 +14,8 @@ export const globalVars: GlobalVariables = {
     globalBrowser: null as unknown as Browser,
     chromeVersion: '148',
     videoDuration: VideoDuration.FIVE_SECONDS,
-    useExistingResponse: false
+    useExistingResponse: false, // Set to true to use existing response for testing, false to make actual API calls
+    searchOnModel: "gemini"
 };
 
 /**

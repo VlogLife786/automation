@@ -9,6 +9,7 @@ import ffmpeg from 'fluent-ffmpeg';
 import ffmpegPath from 'ffmpeg-static';
 import ffprobe from 'ffprobe-static';
 import { GenerateWANAiVideos } from './generate-wan-ai-video.js';
+import { searchOnGemini } from './gemini.js';
 ffmpeg.setFfmpegPath(ffmpegPath);
 ffmpeg.setFfprobePath(ffprobe.path);
 export let refrenceImageList = [];
@@ -21,8 +22,8 @@ export async function generateScene() {
             await (async () => {
                 await generatePromptForScene();
                 return JSON.parse(await fspromise.readFile('input/chatgpt-response.json', 'utf8'));
-            })() :
-            await generateScenesFromChatGpt();
+            })() : globalVars.searchOnModel == "chatgpt" ?
+            await generateScenesFromChatGpt() : await generateScenesFromGemini();
         if (refrenceVideoPromptScenes.scene_sequence.length > 0 && refrenceVideoPromptScenes.scene_sequence[0].scene_id == 1) {
             await saveFile("input/chatgpt-backup-response.json", JSON.stringify(refrenceVideoPromptScenes, null, 2));
         }
@@ -102,6 +103,21 @@ ${videoGenerationStory}`);
     await searchOnChatGpt(instructionPrompt, [], 5, false);
     let chatgptResponse = await searchOnChatGpt(videoGenerationStory, [], 5, true);
     return extractJSON(chatgptResponse);
+}
+async function generateScenesFromGemini() {
+    let videoGenerationStory = await generatePromptForScene();
+    const instructionPrompt = `${await fspromise.readFile('input/scene-generation-instructions.txt', 'utf8')}
+
+${await fspromise.readFile('input/input-schema.json', 'utf8')}`;
+    await saveFile('input/manual-text-prompt.txt', `${instructionPrompt}
+
+-----------------------------------------------------------------------------------------------------------------
+
+${videoGenerationStory}`);
+    await searchOnGemini(instructionPrompt, [], 5, false);
+    await searchOnGemini(videoGenerationStory, [], 5, false);
+    let geminiResponse = await searchOnGemini('I am seeing some scenes where the dialouges are long and will not fit in 5 second video, Can you create continuous multiple scenes for long dialouges.', [], 5, true);
+    return extractJSON(geminiResponse);
 }
 async function generateSceneSequence(scene) {
     await sleep(5000);
