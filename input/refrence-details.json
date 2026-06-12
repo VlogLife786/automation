@@ -1,38 +1,55 @@
 [
     {
-        "originalName": "Billu",
-        "imageName": "bear.png",
-        "imageType": "bear animal character"
+        "originalName": "Madhav",
+        "imageName": "madhav.png",
+        "imageType": "main character and pav bhaji cart owner",
+        "voiceFileName": "Bunty.mp3"
     },
     {
-        "originalName": "Shersingh",
-        "imageName": "lion.png",
-        "imageType": "lion animal character"
-    },
-    {
-        "originalName": "fox",
-        "imageName": "lomdi.png",
-        "imageType": "fox animal character"
-    },
-    {
-        "originalName": "mirror",
-        "imageName": "mirror.png",
-        "imageType": "magical mirror object"
-    },
-    {
-        "originalName": "monkey",
-        "imageName": "monkey.png",
-        "imageType": "monkey animal character"
-    },
-    {
-        "originalName": "parrot",
-        "imageName": "parrot.png",
-        "imageType": "parrot bird character"
-    },
-    {
-        "originalName": "Cheeku",
-        "imageName": "rabbit.png",
-        "imageType": "rabbit animal character",
+        "originalName": "Sumitra",
+        "imageName": "sumitra.png",
+        "imageType": "wife of madhav and helper in pav bhaji cart",
         "voiceFileName": "Riya.mp3"
+    },
+    {
+        "originalName": "Madhav's cart",
+        "imageName": "cart.png",
+        "imageType": "Madhav's pav bhaji cart"
+    },
+    {
+        "originalName": "Rajesh",
+        "imageName": "rajesh.png",
+        "imageType": "character and rival of character Madhav",
+        "voiceFileName": "Niraj.mp3"
+    },
+    {
+        "originalName": "Raghuveer Singh",
+        "imageName": "raghuvirsingh.png",
+        "imageType": "character of head constables of the area",
+        "voiceFileName": "Viraj.mp3"
+    },
+    {
+        "originalName": "Birju",
+        "imageName": "birju.png",
+        "imageType": "character of a villager and friend of Madhav",
+        "voiceFileName": "Leo.mp3"
+    },
+    {
+        "originalName": "Businessman",
+        "imageName": "citybusinessman.png",
+        "imageType": "character of a city businessman who provide offer to Madhav for opening a restaurant",
+        "voiceFileName": "Leo.mp3"
+    },
+    {
+        "originalName": "gentleman",
+        "imageName": "gentleman.png",
+        "imageType": "character of first gentleman who ate pav bhaji at madhav's cart and give good review",
+        "voiceFileName": "Bunty.mp3"
+    },
+    {
+        "originalName": "gentleman's wife",
+        "imageName": "gentlemanwife.png",
+        "imageType": "character of first gentleman's wife who ate pav bhaji at madhav's cart and give good review",
+        "voiceFileName": "Monika.mp3"
     }
 ]

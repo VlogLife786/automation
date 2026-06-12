@@ -14,7 +14,7 @@ export const globalVars: GlobalVariables = {
     globalBrowser: null as unknown as Browser,
     chromeVersion: '148',
     videoDuration: VideoDuration.FIVE_SECONDS,
-    useExistingResponse: false, // Set to true to use existing response for testing, false to make actual API calls
+    useExistingResponse: true, // Set to true to use existing response for testing, false to make actual API calls
     searchOnModel: "gemini"
 };
 
@@ -526,6 +526,47 @@ export async function saveFile(fileNameWithLocation: string, content: string): P
 export async function clickOnElementByText(
     page: Page,
     searchText: string,
+    elementTag: string = "span",
+    selectMatchingLastElement: boolean = false
+): Promise<boolean> {
+
+    await page.waitForSelector(elementTag);
+
+    const elements = await page.$$(elementTag);
+
+    let filteredElements = await Promise.all(elements.map(async (element) => {
+        const text = await page.evaluate(
+            el => el.textContent?.trim(),
+            element
+        );
+        return text === searchText.trim() ? element : null;
+    }));
+
+    filteredElements = filteredElements.filter(el => el !== null);
+
+    if (filteredElements && filteredElements.length > 0) {
+        let element = filteredElements[selectMatchingLastElement ? filteredElements.length - 1 : 0];
+
+        // Scroll into view first
+        await element?.evaluate(el => {
+            el.scrollIntoView({
+                behavior: "instant",
+                block: "center",
+            });
+        });
+
+        // Native puppeteer click
+        await element?.click();
+
+        return true;
+    }
+    return false;
+}
+
+
+export async function hoverOnElementByText(
+    page: Page,
+    searchText: string,
     elementTag: string = "span"
 ): Promise<boolean> {
 
@@ -551,7 +592,7 @@ export async function clickOnElementByText(
             });
 
             // Native puppeteer click
-            await element.click();
+            await element.hover();
 
             return true;
         }

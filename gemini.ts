@@ -89,7 +89,24 @@ export async function searchOnGemini(textPrompt: string, imagePaths: string[] = 
 
         await sleep(7000);
 
-        await checkResponseCompleted(page, 20);
+        await checkResponseCompleted(page, 30);
+
+        let resendRetryCount = 10;
+        while (resendRetryCount > 0) {
+            let inputTextIsVanished = await page.$$('rich-textarea');
+            if (inputTextIsVanished.length > 0) {
+                const textContent = await page.evaluate(el => el.textContent, inputTextIsVanished[0]);
+                if (textContent && textContent.trim() !== '') {
+                    console.log('Failed to send request, retrying...');
+                    await page.keyboard.press('Enter');
+                    await checkResponseCompleted(page, 10);
+                    resendRetryCount--;
+                    await sleep(6000); // Wait for 6 seconds before checking again
+                } else {
+                    break; // Input is empty, request sent successfully
+                }
+            }
+        }
 
 
         let ele = await page.$$('message-content');

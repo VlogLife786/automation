@@ -1,5 +1,5 @@
 import { Browser, BrowserContext, Page } from "puppeteer-core";
-import { clickOnElementByText, globalVars, openNewBrowser, replaceString, sleep } from "./utility.js";
+import { clickOnElementByText, globalVars, hoverOnElementByText, openNewBrowser, replaceString, sleep } from "./utility.js";
 import { ApiURLs, Flags } from "./constants.js";
 import { getRestResponse } from "./restTemplate.js";
 import { ExecutionRequestModel, RefrenceImageDetails, StartVideoGenerationResponse, TaskResultByIdResponse } from "./wan-video-object-models.js";
@@ -46,7 +46,7 @@ export async function GenerateWANAiVideos(requestModel: ExecutionRequestModel, r
     try {
 
         //Navigate to wan ai
-        await page.goto("https://create.wan.video/generate/video/reference?model=wan2.7", { waitUntil: "load", timeout: 120000 });
+        await page.goto(requestModel.refrenceImageList.length > 0 ? "https://create.wan.video/generate/video/reference?model=wan2.7" : "https://create.wan.video/generate", { waitUntil: "load", timeout: 120000 });
         await sleep(5000);
         console.log("Navigated to WAN AI Site.");
 
@@ -100,7 +100,11 @@ export async function GenerateWANAiVideos(requestModel: ExecutionRequestModel, r
         await sleep(5000);
 
         if (requestModel.startImageName && requestModel.startImageName != "") {
-            await uploadStartImage(page, requestModel.startImageName);
+            if (requestModel.refrenceImageList.length > 0) {
+                await uploadStartImageForRefrenceToVideoGeneration(page, requestModel.startImageName);
+            } else {
+                await uploadStartImageForImageToVideoGeneration(page, requestModel.startImageName);
+            }
         }
 
         let filteredRefImages = refrenceImageList.filter(image => requestModel.prompt.includes(image.imageName));
@@ -194,8 +198,10 @@ export async function GenerateWANAiVideos(requestModel: ExecutionRequestModel, r
         return videoUrl;
 
     } catch (error: any) {
-
+        await closeBrowserInstances(incognitoContext, browser);
         if (retries > 0) {
+            console.log(error?.message ?? error);
+
             console.log(`Retrying... Attempts left: ${retries}`);
             return await GenerateWANAiVideos(requestModel, retries - 1);
         }
@@ -214,24 +220,28 @@ export async function GenerateWANAiVideos(requestModel: ExecutionRequestModel, r
         await sleep(10000);
         console.log("Execution completed.");
 
-        try {
-            if (incognitoContext && browser?.connected) {
-                await incognitoContext.close();
-            }
-        } catch (e: any) {
-            console.log("Ignoring context close error:", e.message);
-        }
-
-        try {
-            if (browser?.connected) {
-                await browser.close();
-            }
-        } catch (e: any) {
-            console.log("Ignoring browser close error:", e.message);
-        }
+        await closeBrowserInstances(incognitoContext, browser);
     }
 }
 
+
+async function closeBrowserInstances(incognitoContext: BrowserContext, browser: Browser) {
+    try {
+        if (incognitoContext && browser?.connected) {
+            await incognitoContext.close();
+        }
+    } catch (e: any) {
+        console.log("Ignoring context close error:", e.message);
+    }
+
+    try {
+        if (browser?.connected) {
+            await browser.close();
+        }
+    } catch (e: any) {
+        console.log("Ignoring browser close error:", e.message);
+    }
+}
 
 async function updateUserClaimedStatus(requestModel: ExecutionRequestModel, retryCount = 5) {
     try {
@@ -269,7 +279,7 @@ async function updateUserClaimedStatus(requestModel: ExecutionRequestModel, retr
 async function uploadReferenceImages(page: Page, refrenceImageList: RefrenceImageDetails[], prompt: string) {
     if (refrenceImageList.length > 0) {
         for (let refrence of refrenceImageList) {
-            let imageUploadOptions = await page.$$('[data-test-id="creation-form-box-undefined"]');
+            let imageUploadOptions = await page.$$('[data-test-id="creation-form-box-undefined"][class^=CoverWrapper]');
             await sleep(2000);
 
             imageUploadOptions[imageUploadOptions.length - 2].click();
@@ -277,7 +287,7 @@ async function uploadReferenceImages(page: Page, refrenceImageList: RefrenceImag
 
             const [fileChooser] = await Promise.all([
                 page.waitForFileChooser(),
-                clickOnElementByText(page, "Upload from device", 'span')
+                clickOnElementByText(page, "Upload from device", '[data-test-id="creation-form-box-upload-undefined"] span')
             ]);
 
             await fileChooser.accept([
@@ -296,18 +306,47 @@ async function uploadReferenceImages(page: Page, refrenceImageList: RefrenceImag
 
 
 async function uploadVoiceOnLatestUploadedRefrenceImage(page: Page, refrance: RefrenceImageDetails) {
-    let imageUploadOptions = await page.$$('[data-test-id="creation-form-box-undefined"]');
+    let imageUploadOptions = await page.$$('[data-test-id="creation-form-box-undefined"][class^=CoverWrapper]');
     await sleep(2000);
 
     imageUploadOptions[imageUploadOptions.length - 3].click();
     await sleep(2000);
 
-    clickOnElementByText(page, "Custom Voice", 'span');
+    // const upload = await page.$eval(
+    //     'body',
+    //     el => el.innerText.includes('Upload from device')
+    // );
+
+    // console.log(upload);
+    // document.querySelector("#\\:r76\\: > div > div > div.SettingItem-sc-1mp98jj-0.fUxlsc.ant-popover-open");
+    await clickOnElementByText(page, "Custom Voice", '[data-test-id="creation-form-box-Operation"] div', true);
+    // await page.click('[data-test-id="creation-form-box-voice-undefined"]');
+
+    // const handles = await page.$$(
+    //     '[data-test-id="creation-form-box-voice-undefined"]'
+    // );
+
+    // for (let i = 0; i < handles.length; i++) {
+    //     const visible = await handles[i].evaluate(el => {
+    //         const style = getComputedStyle(el);
+    //         const rect = el.getBoundingClientRect();
+
+    //         return (
+    //             style.display !== 'none' &&
+    //             style.visibility !== 'hidden' &&
+    //             rect.width > 0 &&
+    //             rect.height > 0
+    //         );
+    //     });
+
+    //     console.log(i, visible);
+    // }
+
     await sleep(2000);
 
     const [fileChooser] = await Promise.all([
         page.waitForFileChooser(),
-        clickOnElementByText(page, "Upload from device", 'span')
+        clickOnElementByText(page, "Upload from device", '[data-test-id="creation-form-box-upload-voice"] span', true)
     ]);
 
     await fileChooser.accept([
@@ -315,13 +354,13 @@ async function uploadVoiceOnLatestUploadedRefrenceImage(page: Page, refrance: Re
     ]);
 
     await sleep(3000);
-    await clickOnElementByText(page, "Confirm", 'button');
+    await clickOnElementByText(page, "Confirm", 'button[type="button"]');
     await sleep(5000);
 
 }
 
 
-async function uploadStartImage(page: Page, imageName: string) {
+async function uploadStartImageForRefrenceToVideoGeneration(page: Page, imageName: string) {
     let imageUploadOptions = await page.$$('[data-test-id="creation-form-box-undefined"]');
     await sleep(2000);
 
@@ -330,7 +369,7 @@ async function uploadStartImage(page: Page, imageName: string) {
 
     const [fileChooser] = await Promise.all([
         page.waitForFileChooser(),
-        clickOnElementByText(page, "Upload from device", 'span')
+        clickOnElementByText(page, "Upload from device", 'span', true)
     ]);
 
     await fileChooser.accept([
@@ -338,6 +377,28 @@ async function uploadStartImage(page: Page, imageName: string) {
     ]);
     await sleep(5000);
 }
+
+
+async function uploadStartImageForImageToVideoGeneration(page: Page, imageName: string) {
+    let imageUploadOptions = await page.$$('[data-test-id="creation-form-box-undefined"]');
+    await sleep(2000);
+
+    imageUploadOptions[0].click();
+    await sleep(2000);
+
+    const [fileChooser] = await Promise.all([
+        page.waitForFileChooser(),
+        clickOnElementByText(page, "Upload from device", 'span', true)
+    ]);
+
+    await fileChooser.accept([
+        'temp/images/' + imageName,
+    ]);
+    await sleep(5000);
+}
+
+
+
 
 
 async function typePromptWithImageTags(

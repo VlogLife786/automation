@@ -21,7 +21,8 @@
                     "type": "object",
                     "required": [
                         "name",
-                        "appearance"
+                        "appearance",
+                        "alias"
                     ],
                     "properties": {
                         "name": {
@@ -31,6 +32,10 @@
                         "appearance": {
                             "type": "string",
                             "description": "Detailed physical appearance, clothing, hairstyle, age, accessories, etc."
+                        },
+                        "alias": {
+                            "type": "string",
+                            "description": "Character alias or nickname to be used in prompts for better video generation consistency"
                         }
                     },
                     "additionalProperties": false

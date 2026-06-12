@@ -15,13 +15,19 @@ ffmpeg.setFfprobePath(ffprobe.path);
 export let refrenceImageList = [];
 export let refrenceStartFrame = {};
 export let videoResolution = "16:9";
+const geminiFinalTouchUpPrompt = [
+    `I am seeing some scenes where the dialouges are too long and will not fit in single 5 second video, Can you create continuous multiple scenes for long dialouges.`,
+    `Also there are some scenes where the action is performed and then the dialogue is said, Can you create continuous multiple scenes for such cases, where in first scene only action is performed and in second scene dialogue is said. Please make sure to keep the scene transition natural between such scenes.`,
+    `Avoid using he/she/him/they/her in the prompt, Instead use the character's alias name which refer to the character, it will help in better video generation. Keep the sequence id sequencial and generate every scene prompt in scene sequence in detail.`
+];
 export async function generateScene() {
     // Your scene generation logic here
     try {
         let refrenceVideoPromptScenes = globalVars.useExistingResponse ?
             await (async () => {
-                await generatePromptForScene();
+                refrenceImageList = JSON.parse(await fspromise.readFile('input/refrence-details.json', 'utf8'));
                 return JSON.parse(await fspromise.readFile('input/chatgpt-response.json', 'utf8'));
+                // await generatePromptForScene();
             })() : globalVars.searchOnModel == "chatgpt" ?
             await generateScenesFromChatGpt() : await generateScenesFromGemini();
         if (refrenceVideoPromptScenes.scene_sequence.length > 0 && refrenceVideoPromptScenes.scene_sequence[0].scene_id == 1) {
@@ -29,6 +35,7 @@ export async function generateScene() {
         }
         await saveFile("input/chatgpt-response.json", JSON.stringify(refrenceVideoPromptScenes, null, 2));
         for (const scene of refrenceVideoPromptScenes.scene_sequence) {
+            console.log("We started a new scene again...", scene.scene_id);
             let retryCount = 5;
             try {
                 await generateSceneSequence(scene);
@@ -116,7 +123,10 @@ ${await fspromise.readFile('input/input-schema.json', 'utf8')}`;
 ${videoGenerationStory}`);
     await searchOnGemini(instructionPrompt, [], 5, false);
     await searchOnGemini(videoGenerationStory, [], 5, false);
-    let geminiResponse = await searchOnGemini('I am seeing some scenes where the dialouges are long and will not fit in 5 second video, Can you create continuous multiple scenes for long dialouges.', [], 5, true);
+    for (const prompt of geminiFinalTouchUpPrompt.filter((p, index) => index < geminiFinalTouchUpPrompt.length - 1)) {
+        await searchOnGemini(prompt, [], 5, false);
+    }
+    let geminiResponse = await searchOnGemini(geminiFinalTouchUpPrompt[geminiFinalTouchUpPrompt.length - 1], [], 5, true);
     return extractJSON(geminiResponse);
 }
 async function generateSceneSequence(scene) {
@@ -143,15 +153,27 @@ async function generateSceneSequence(scene) {
         webhookUrl: "",
         startImageName: startImageName,
         audioFileName: "",
-        refrenceImageList: scene.prompt.includes('@Image') ? refrenceImageList : [],
+        refrenceImageList: scene.prompt.includes('.png') ? refrenceImageList : [],
         sendEmail: false
     });
     console.log("Generated video URL:", videoUrl);
     await createFolderIfNotExist("input/assets/output-videos");
+    await createFolderIfNotExist("input/assets/backup-clips");
     let downloadVideoRetryCount = 5;
     while (downloadVideoRetryCount > 0) {
         try {
             await downloadVideoByLink(videoUrl, `input/assets/output-videos/${scene.scene_id}.mp4`);
+            break; // Break the loop if download is successful
+        }
+        catch (error) {
+            downloadVideoRetryCount--;
+            console.error(`Error downloading video (attempt ${5 - downloadVideoRetryCount}):`, error);
+            await sleep(10000); // Wait before retrying
+        }
+    }
+    while (downloadVideoRetryCount > 0) {
+        try {
+            await downloadVideoByLink(videoUrl, `input/assets/backup-clips/${scene.scene_id}.mp4`);
             break; // Break the loop if download is successful
         }
         catch (error) {

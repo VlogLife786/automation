@@ -10,7 +10,7 @@ export const globalVars = {
     globalBrowser: null,
     chromeVersion: '148',
     videoDuration: VideoDuration.FIVE_SECONDS,
-    useExistingResponse: false, // Set to true to use existing response for testing, false to make actual API calls
+    useExistingResponse: true, // Set to true to use existing response for testing, false to make actual API calls
     searchOnModel: "gemini"
 };
 /**
@@ -419,7 +419,80 @@ export async function saveFile(fileNameWithLocation, content) {
         console.error("Error writing file:", error);
     }
 }
-export async function clickOnElementByText(page, searchText, elementTag = "span") {
+export async function clickOnElementByText(page, searchText, elementTag = "span", selectMatchingLastElement = false) {
+    await page.waitForSelector(elementTag);
+    const elements = await page.$$(elementTag);
+    let filteredElements = await Promise.all(elements.map(async (element) => {
+        const text = await page.evaluate(el => el.textContent?.trim(), element);
+        return text === searchText.trim() ? element : null;
+    }));
+    filteredElements = filteredElements.filter(el => el !== null);
+    if (filteredElements && filteredElements.length > 0) {
+        let element = filteredElements[selectMatchingLastElement ? filteredElements.length - 1 : 0];
+        // Scroll into view first
+        await element?.evaluate(el => {
+            el.scrollIntoView({
+                behavior: "instant",
+                block: "center",
+            });
+        });
+        // Native puppeteer click
+        await element?.click();
+        return true;
+    }
+    // for (const element of elements) {
+    // const text = await page.evaluate(
+    //     el => el.textContent?.trim(),
+    //     element
+    // );
+    // if (text === searchText.trim()) {
+    //     if (clickByMouse) {
+    //         console.log(await element.evaluate(el => el.outerHTML));
+    //         // await element?.evaluate((el) => {
+    //         //     el.dispatchEvent(
+    //         //         new MouseEvent('click', {
+    //         //             bubbles: true,
+    //         //             cancelable: true,
+    //         //         })
+    //         //     );
+    //         // });
+    //         //     // const box: any = await element.boundingBox();
+    //         //     // await page.mouse.move(
+    //         //     //     box.x + box.width / 2,
+    //         //     //     box.y + box.height / 2
+    //         //     // );
+    //         //     // await page.mouse.down({ button: 'left' });
+    //         //     // await sleep(100);
+    //         //     // await page.mouse.up({ button: 'left' });
+    //         //     console.log("Element is visible:", await element.isVisible());
+    //         //     console.log("Element is hidden:", await element.isHidden());
+    //         //     await element.evaluate(el => {
+    //         //         el.scrollIntoView({
+    //         //             behavior: "instant",
+    //         //             block: "center",
+    //         //         });
+    //         //     });
+    //         //     await element.hover();
+    //         //     // Native puppeteer click
+    //         //     await element.click();
+    //     }
+    //     // else {
+    //     // Scroll into view first
+    //     await element.evaluate(el => {
+    //         el.scrollIntoView({
+    //             behavior: "instant",
+    //             block: "center",
+    //         });
+    //     });
+    //     // Native puppeteer click
+    //     await element.click();
+    //     // }
+    //     return true;
+    // }
+    // }
+    return false;
+}
+export async function hoverOnElementByText(page, searchText, elementTag = "span") {
     await page.waitForSelector(elementTag);
     const elements = await page.$$(elementTag);
     for (const element of elements) {
@@ -433,7 +506,7 @@ export async function clickOnElementByText(page, searchText, elementTag = "span"
                 });
             });
             // Native puppeteer click
-            await element.click();
+            await element.hover();
             return true;
         }
     }
