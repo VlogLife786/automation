@@ -1,957 +1,719 @@
 {
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "The Triumph of Kindness - Madhav's Pav Bhaji Journey",
+  "title": "Continuous Cinematic Video Sequence Schema",
+  "type": "object",
   "characters": {
     "char_1": {
       "name": "Madhav",
-      "appearance": "A humble, hardworking Indian man in his mid-30s, showing expressions of resilience, deep worry, and ultimate joy. Wears simple, weathered clothes suitable for a street vendor, later appearing in a neat, clean shirt.",
+      "appearance": "A poor, middle-aged Indian man with an honest face, humble posture, wearing a simple worn-out cotton kurta.",
       "alias": "madhav.png"
     },
     "char_2": {
       "name": "Sumitra",
-      "appearance": "Madhav's supportive wife, an empathetic Indian woman in her early 30s, dressed in a simple traditional saree, showing expressions of concern and hard work.",
+      "appearance": "Madhav's wife, a traditional Indian village woman wearing a simple cotton saree, hard-working with a supportive expression.",
       "alias": "sumitra.png"
     },
     "char_3": {
-      "name": "Madhav's Cart",
-      "appearance": "An old, heavy wooden and steel food cart specialized for making Indian street food (Pav Bhaji), equipped with a large flat iron griddle (tawa), steel containers, and a gas cylinder setup.",
+      "name": "Madhav's cart",
+      "appearance": "An old, rustic wooden food cart with large wooden wheels, a metal griddle (tawa), and small containers for spices and pav.",
       "alias": "cart.png"
     },
     "char_4": {
       "name": "Rajesh",
-      "appearance": "A cunning, envious middle-aged Indian local grocery store owner with sharp, malicious eyes and a bitter expression, later appearing broken, thin, and haggard in tattered clothes.",
+      "appearance": "A greedy village shopkeeper with an arrogant face, sharp eyes, wearing a clean but simple linen shirt.",
       "alias": "rajesh.png"
     },
     "char_5": {
       "name": "Raghuveer Singh",
-      "appearance": "The new local Head Constable, an imposing, stern-faced Indian man in a crisp, authoritative khaki police uniform with an air of complete integrity.",
+      "appearance": "A strict yet fair Indian Head Constable wearing a khaki police uniform with a mustache and authoritative demeanor.",
       "alias": "raghuvirsingh.png"
     },
     "char_6": {
       "name": "Birju",
-      "appearance": "A kind-hearted local villager and friend of Madhav, wearing simple rural casual clothes, carrying a large black umbrella during the storm.",
+      "appearance": "A friendly Indian villager wearing traditional rural clothing (dhoti-kurta) with a caring expression.",
       "alias": "birju.png"
     },
     "char_7": {
       "name": "Businessman",
-      "appearance": "A wealthy, polished city businessman in a sharp, tailored corporate suit, exuding professionalism, confidence, and immense respect.",
+      "appearance": "A wealthy, well-dressed city businessman wearing a sharp modern suit and a wristwatch with an encouraging expression.",
       "alias": "citybusinessman.png"
     },
     "char_8": {
-      "name": "Gentleman",
-      "appearance": "An affluent, well-dressed, warm-hearted man riding in a luxury SUV, possessing a generous smile and expressive face.",
+      "name": "gentleman",
+      "appearance": "A well-to-do city traveler wearing casual premium clothes, a friendly smile, and a neat haircut.",
       "alias": "gentleman.png"
     },
     "char_9": {
-      "name": "Gentleman's Wife",
-      "appearance": "An elegantly dressed, pleasant Indian woman with a warm, expressive face, acting as the supportive companion in the passenger seat of the luxury SUV.",
+      "name": "gentleman's wife",
+      "appearance": "A polite city woman wearing an elegant modern salwar-kameez, standing or sitting gracefully.",
       "alias": "gentlemanwife.png"
     }
   },
   "global_style": {
-    "genre": "Cinematic Drama, Emotional, Inspiring",
-    "camera": "Professional cinematic camera work, utilizing intimate close-ups, wide landscape drone shots, and dynamic tracking movements with realistic shallow depth of field.",
-    "lighting": "Atmospheric lighting changing dynamically across acts: dark, ominous blue-grey tones during storms; warm, inviting golden hour light during triumph and emotional resolution.",
-    "quality": "Photorealistic, high-fidelity 4K resolution, realistic skin textures, fluid natural motion, and highly expressive characters.",
+    "genre": "Cinematic Drama",
+    "camera": "Smooth stabilized tracking shots, slow dollys, close-ups with professional background blur, 24fps",
+    "lighting": "Realistic weather-dependent atmosphere ranging from dramatic stormy dusk to warm indoor lighting and golden hour sunshine",
+    "quality": "Ultra-realistic skin textures, 4K resolution, hyper-detailed environments",
     "aspect_ratio": "16:9",
     "fps": 24
   },
   "scene_sequence": [
     {
+      "scene_id": 3,
+      "duration": "5s",
+      "prompt": "Cinematic close-up shot. Continue seamlessly from the last frame of the previous scene. madhav.png stands beside cart.png under the heavy rain, folding hands in a silent prayer while staring upward with tears welling in the eyes of madhav.png. Rainwater streams down the face of madhav.png. The lips of madhav.png accurately sync to form the words in Hindi: 'भगवान, आज बारिश मत होने देना।' Voice type: Soft, trembling, emotional male voice. Expression: Desperate prayer, intense grief. 4K, 24fps.",
+      "transition_to_next": "Maintain the close-up as the prayer continues seamlessly.",
+      "reference_previous_video_last_frame": true
+    },
+    {
+      "scene_id": 4,
+      "duration": "5s",
+      "prompt": "Cinematic close-up shot. Continue seamlessly from the last frame of the previous scene. Maintaining the same framing, madhav.png continues the desperate prayer under the torrential rain next to cart.png. The eyes of madhav.png remain fixed upwards with deep worry. The lips of madhav.png form the words: 'भाजी बिकी नहीं तो खराब हो जाएगी।' Voice type: Soft, trembling, emotional male voice. Expression: Sorrowful, pleading. 4K, 24fps.",
+      "transition_to_next": "Keep the camera locked on Madhav as he continues his emotional plea.",
+      "reference_previous_video_last_frame": true
+    },
+    {
+      "scene_id": 5,
+      "duration": "5s",
+      "prompt": "Cinematic close-up shot. Continue seamlessly from the last frame of the previous scene. madhav.png remains in the same position under the downpour next to cart.png. Tears and rain mix on the cheeks of madhav.png. The lips of madhav.png form the words: 'घर पर राशन भी नहीं बचा है।' Voice type: Soft, trembling, emotional male voice. Expression: Despondent, broken-hearted. 4K, 24fps.",
+      "transition_to_next": "Maintain focus on Madhav's expressive face for the final line of his prayer.",
+      "reference_previous_video_last_frame": true
+    },
+    {
+      "scene_id": 6,
+      "duration": "5s",
+      "prompt": "Cinematic close-up shot. Continue seamlessly from the last frame of the previous scene. madhav.png finishes the prayer under the heavy rain beside cart.png. The lips of madhav.png form the words: 'सुमित्रा आस लगाए बैठी होगी।' Voice type: Soft, trembling, emotional male voice. Expression: Deeply anxious, caring. 4K, 24fps.",
+      "transition_to_next": "Widen out to a medium shot as a villager approaches.",
+      "reference_previous_video_last_frame": true
+    },
+    {
+      "scene_id": 7,
+      "duration": "5s",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png hurriedly pulls a torn plastic sheet to cover the food on cart.png under the pouring rain. madhav.png is completely drenched. Just then, birju.png, a friendly villager holding an umbrella, walks past and stops near cart.png, looking at madhav.png with concern. Heavy rain atmosphere, realistic droplets, 4K, 24fps.",
+      "transition_to_next": "Shift camera focus onto Birju as he begins to speak.",
+      "reference_previous_video_last_frame": true
+    },
+    {
+      "scene_id": 8,
+      "duration": "5s",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. birju.png stands under an umbrella looking at madhav.png who is managing cart.png. The lips of birju.png form the words: 'अरे माधव, यह क्या कर रहे हो?' Voice type: Rustic, friendly male voice. Expression: Concerned, surprised. 4K, 24fps.",
+      "transition_to_next": "Maintain the over-the-shoulder framing on Birju.",
+      "reference_previous_video_last_frame": true
+    },
+    {
+      "scene_id": 9,
+      "duration": "5s",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. birju.png continues speaking from the same position under the umbrella near cart.png. The lips of birju.png form the words: 'ऐसी आफत वाली बारिश में कौन आएगा?' Voice type: Rustic, friendly male voice. Expression: Warning, pitying. 4K, 24fps.",
+      "transition_to_next": "Keep the shot continuous as Birju concludes his sentence.",
+      "reference_previous_video_last_frame": true
+    },
+    {
+      "scene_id": 10,
+      "duration": "5s",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. birju.png gestures towards the road while standing near cart.png. The lips of birju.png form the words: 'घर जाओ भाई, वरना बीमार हो जाओगे।' Voice type: Rustic, friendly male voice. Expression: Urging, helpful. 4K, 24fps.",
+      "transition_to_next": "Pan slightly to focus on Madhav's sad response.",
+      "reference_previous_video_last_frame": true
+    },
+    {
+      "scene_id": 11,
+      "duration": "5s",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png looks at birju.png with a sad, defeated expression under the rain beside cart.png. The lips of madhav.png form the words: 'बिरजू भाई, गरीब को भूख का डर है।' Voice type: Low, sad male voice. Expression: Melancholic, hopeless. 4K, 24fps.",
+      "transition_to_next": "Maintain composition as Madhav continues speaking.",
+      "reference_previous_video_last_frame": true
+    },
+    {
       "scene_id": 12,
       "duration": "5s",
-      "prompt": "Extreme close-up of madhav.png's face. He wipes a thick stream of rain mixed with tears from his eyes using the back of his soaking wet fabric sleeve, looking completely heartbroken and defeated. SFX: Heavy, continuous sound of downpour.",
-      "transition_to_next": "Slight pan to track conversation",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png continues talking, looking down at cart.png. The lips of madhav.png form the words: 'आज एक रुपये की बोहनी नहीं हुई।' Voice type: Low, sad male voice. Expression: Despondent, stressed. 4K, 24fps.",
+      "transition_to_next": "Keep the framing steady as Madhav finishes his statement.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 13,
       "duration": "5s",
-      "prompt": "madhav.png slowly lowers his wet arm, staring weakly and emotionally directly at birju.png. Dialogue (Madhav): “भाई, गरीब को भूख का ज्यादा डर लगता है।”",
-      "transition_to_next": "Low angle medium shot",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png looks up again with a sigh towards birju.png. The lips of madhav.png form the words: 'खाली हाथ गया तो सुमित्रा को क्या दिखाऊंगा?' Voice type: Low, sad male voice. Expression: Heartbroken, worried. 4K, 24fps.",
+      "transition_to_next": "Fade transition to show a time jump to later that night.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 14,
       "duration": "5s",
-      "prompt": "Low-angle medium shot. madhav.png slowly turns his head away, staring blankly in the direction of his distant home into the dark, rainy night. His shoulders slump completely in total defeat and exhaustion. SFX: Melancholic wind howling through the dark street.",
-      "transition_to_next": "Close-up on lips",
-      "reference_previous_video_last_frame": true
+      "prompt": "Cinematic medium shot. The time is now 8 PM. The heavy rain has slowed down to a light drizzle, creating deep puddles on the ground. madhav.png stands under a large tree, looking completely defeated as madhav.png begins slowly packing up the steel containers on cart.png. Dark night ambiance with soft wet road reflections, 4K, 24fps.",
+      "transition_to_next": "A sudden splash of headlights cuts into the scene.",
+      "reference_previous_video_last_frame": false
     },
     {
       "scene_id": 15,
       "duration": "5s",
-      "prompt": "Close-up focusing on madhav.png's trembling lips as he speaks out into the vast darkness, rain running down his chin. Dialogue (Madhav): “खाली हाथ सुमित्रा को क्या मुंह दिखाऊंगा?”",
-      "transition_to_next": "Cut to clock insert",
+      "prompt": "Cinematic medium wide shot. Continue seamlessly from the last frame of the previous scene. A large luxury car drives through the mud, splashing water, and comes to a sudden stop right next to cart.png. The bright headlights cut through the darkness, illuminating madhav.png who looks up in surprise from cart.png. Drizzle, night atmosphere, 4K, 24fps.",
+      "transition_to_next": "Focus on the car door opening as a gentleman steps out.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 16,
       "duration": "5s",
-      "prompt": "Insert shot of an old, weathered wall clock showing exactly 8:00 PM. Quick cut back to madhav.png sighing deeply, his head bowed low in sadness as he slowly reaches out with wet hands to untie the wet plastic rope of cart.png to pack up for the night. SFX: A slow, melancholic, lonely acoustic guitar melody begins to play gently.",
-      "transition_to_next": "High-energy jump cut",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. gentleman.png steps out of the car, shielding against the drizzle, and looks at madhav.png standing by cart.png. The lips of gentleman.png form the words: 'ओ भाई, क्या कुछ खाने को मिलेगा?' Voice type: Clear, urban, sophisticated male voice. Expression: Hungry, hopeful. 4K, 24fps.",
+      "transition_to_next": "Maintain the shot as the gentleman continues explaining his situation.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 17,
       "duration": "5s",
-      "prompt": "High-energy cinematic cut. Blinding white headlights suddenly pierce through the dark rain, filling the screen with bright light. A large, clean luxury SUV splashes heavily through a massive water puddle and screeches to a sudden halt right next to madhav.png's food cart cart.png. SFX: Sharp sound of car tires splashing through deep water puddles and brakes squealing softly over the rain sounds.",
-      "transition_to_next": "Medium shot from car interior",
-      "reference_previous_video_last_frame": false
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. gentleman.png continues talking to madhav.png, pointing back down the dark highway road. The lips of gentleman.png form the words: 'हम शहर जा रहे थे, रास्ता बंद है।' Voice type: Clear, urban, sophisticated male voice. Expression: Tired, explaining. 4K, 24fps.",
+      "transition_to_next": "Keep the camera on the gentleman for his final line.",
+      "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 18,
       "duration": "5s",
-      "prompt": "Medium shot framed from inside the dark luxury car looking out. A well-dressed man gentleman.png rolls down the tinted passenger window, revealing his face, which instantly gets wet with a few stray drops of rain. SFX: Mechanical whirring sound of a car window rolling down smoothly.",
-      "transition_to_next": "Close-up on Gentleman",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. gentleman.png stands near cart.png, patting his stomach lightly. The lips of gentleman.png form the words: 'बहुत जोर की भूख लगी है।' Voice type: Clear, urban, sophisticated male voice. Expression: Exhausted, very hungry. 4K, 24fps.",
+      "transition_to_next": "Pan to Madhav's ecstatic reaction.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 19,
       "duration": "5s",
-      "prompt": "Close-up of gentleman.png looking out from the rolled-down car window directly at madhav.png, speaking clearly over the rain. Dialogue (Gentleman): “ओ भाई! कुछ खाने को मिलेगा?”",
-      "transition_to_next": "Slight camera shift following gaze",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. The gloomy face of madhav.png instantly lights up with a surprised and happy expression behind cart.png. The lips of madhav.png form the words: 'जी साहब, भाजी तो तैयार है।' Voice type: Polite, eager, humble male voice. Expression: Joyful, deeply relieved. 4K, 24fps.",
+      "transition_to_next": "Keep framing continuous as Madhav points to the griddle.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 20,
       "duration": "5s",
-      "prompt": "Close-up of gentleman.png as he shifts his gaze slightly, extending his hand to point out into the dark, flooded road ahead with a tired, frustrated facial expression. SFX: Sound of heavy rain pounding outside the vehicle shell.",
-      "transition_to_next": "Cut back to facing window",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png quickly gestures to the metal tawa on cart.png. The lips of madhav.png form the words: 'बस पाव गरम करने की देर है।' Voice type: Polite, eager, humble male voice. Expression: Enthusiastic, energetic. 4K, 24fps.",
+      "transition_to_next": "Maintain focus on Madhav's bright smile.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 21,
       "duration": "5s",
-      "prompt": "gentleman.png turns back to the open window frame, shaking his head in annoyance at the weather. Dialogue (Gentleman): “आगे का रास्ता बंद है।”",
-      "transition_to_next": "Tight shot on passenger seat",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png smiles widely at gentleman.png across cart.png. The lips of madhav.png form the words: 'आप पांच मिनट रुकिए, अभी देता हूं।' Voice type: Polite, eager, humble male voice. Expression: Reassuring, welcoming. 4K, 24fps.",
+      "transition_to_next": "Cut to the gentleman's pleasant response.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 22,
       "duration": "5s",
-      "prompt": "Tight medium shot of the passenger seat. His companion gentlemanwife.png leans forward across the center console, rubbing her stomach with a visibly exhausted, hungry look. SFX: Soft, low mechanical hum of the car engine idling.",
-      "transition_to_next": "Close-up on companion",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. gentleman.png smiles back warmly at madhav.png, nodding. The lips of gentleman.png form the words: 'अरे भाई, जल्दी करो।' Voice type: Friendly, urban male voice. Expression: Pleased, eager to eat. 4K, 24fps.",
+      "transition_to_next": "Maintain shot as the gentleman wraps up his sentence.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 23,
       "duration": "5s",
-      "prompt": "Close-up of gentlemanwife.png looking directly out of the open window past her husband at madhav.png, her face pleading. Dialogue (Companion): “बहुत जोर की भूख लगी है।”",
-      "transition_to_next": "Extreme close-up on Madhav",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. gentleman.png rubs his hands together from the cold air near cart.png. The lips of gentleman.png form the words: 'इस ठंड में गरमा-गरम मिल जाए।' Voice type: Friendly, urban male voice. Expression: Anticipating comfort, smiling. 4K, 24fps.",
+      "transition_to_next": "Extreme close-up on the cooking process.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 24,
       "duration": "5s",
-      "prompt": "Extreme close-up on madhav.png's face. His previous sad, defeated expression instantly vanishes, completely replaced by a radiant, deeply hopeful smile as his eyes widen with sudden excitement. SFX: The lonely guitar music transitions smoothly into a lighter, happier acoustic strumming melody.",
-      "transition_to_next": "Medium shot action",
+      "prompt": "Cinematic close-up shot. Continue seamlessly from the last frame of the previous scene. The hands of madhav.png ignite the gas stove under cart.png. A warm orange glow casts onto the face of madhav.png. Rich yellow butter sizzles loudly as madhav.png mashes a colorful, steaming vegetable bhaji on the hot flat steel griddle. Hyper-detailed textures, 4K, 24fps.",
+      "transition_to_next": "Slight pan to show the pav being toasted.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 25,
       "duration": "5s",
-      "prompt": "madhav.png nods his head vigorously in confirmation, gesturing enthusiastically with his hand toward his hot iron tawa on cart.png. Dialogue (Madhav): “जी साहब! भाजी बिल्कुल तैयार है।”",
-      "transition_to_next": "Medium shot tracking madhav",
+      "prompt": "Cinematic close-up shot. Continue seamlessly from the last frame of the previous scene. madhav.png deftly turns and toasts fluffy bread pav on the buttery griddle of cart.png until they turn a perfect golden brown. Rich steam rises beautifully into the cool night air. Gastronomy shot, 4K, 24fps.",
+      "transition_to_next": "Widen framing to a medium shot as the food is served.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 26,
       "duration": "5s",
-      "prompt": "Medium shot. madhav.png spins around toward cart.png with lightning speed and high energy, pulling a fresh, clear packet of pav buns from a wooden shelf and quickly turning his gas cylinder valve open. SFX: Plastic bread packet rustling sharply.",
-      "transition_to_next": "Over-the-shoulder look",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png proudly hands a steaming plate of fresh pav bhaji to gentleman.png. The lips of madhav.png form the words: 'लीजिए साहब, गरमागरम पाव भाजी खाइए।' Voice type: Humble, polite male voice. Expression: Respectful, proud of his work. 4K, 24fps.",
+      "transition_to_next": "Shift view to a close-up of the gentleman tasting the food.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 27,
       "duration": "5s",
-      "prompt": "madhav.png looks over his shoulder back at the luxury car window, giving a reassuring, friendly nod to the customers. Dialogue (Madhav): \"बस ५ मिनट रुकिए, अभी देता हूं।\"",
-      "transition_to_next": "Macro close-up shot",
+      "prompt": "Cinematic close-up shot. Continue seamlessly from the last frame of the previous scene. gentleman.png takes a large bite of the pav bhaji, his eyes widening with immense delight and satisfaction. The lips of gentleman.png form the words: 'वाह भाई, क्या स्वाद है!' Voice type: Enthusiastic, cheerful male voice. Expression: Amazed, genuinely happy. 4K, 24fps.",
+      "transition_to_next": "Maintain the close-up as he continues expressing his appreciation.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 28,
       "duration": "5s",
-      "prompt": "Macro close-up shot. A matchstick is struck, a bright blue gas flame roars to life under the iron griddle of cart.png, and a massive slab of yellow butter slides smoothly across the hot tawa surface, melting instantly into foam. SFX: Sharp hiss of the match, roaring sound of the gas burner, and a loud, intensely satisfying sizzle of melting butter.",
-      "transition_to_next": "Over-the-shoulder on griddle",
+      "prompt": "Cinematic close-up shot. Continue seamlessly from the last frame of the previous scene. gentleman.png continues chewing and smiling happily while holding the plate. The lips of gentleman.png form the words: 'ऐसी चटपटी भाजी कहीं नहीं मिली।' Voice type: Enthusiastic, cheerful male voice. Expression: Highly impressed, savouring the flavor. 4K, 24fps.",
+      "transition_to_next": "Keep framing locked as he delivers his final praise.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 29,
       "duration": "5s",
-      "prompt": "Over-the-shoulder shot looking down at the wide iron griddle. madhav.png rhythmically and aggressively mashes a mountain of steaming, rich red-orange bhaji gravy using a wooden masher tool, followed immediately by a quick flip of thick pav buns in butter on cart.png. SFX: Rhythmic thud-thud of the food masher tool and the scraping of a metal spatula against the hot iron tawa.",
-      "transition_to_next": "Smooth tracking shot on plate",
+      "prompt": "Cinematic close-up shot. Continue seamlessly from the last frame of the previous scene. gentleman.png gives a big thumbs up toward madhav.png. The lips of gentleman.png form the words: 'तुमने तो कमाल कर दिया!' Voice type: Enthusiastic, cheerful male voice. Expression: Appreciative, praising. 4K, 24fps.",
+      "transition_to_next": "Widen to a medium shot for the payment sequence.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 30,
       "duration": "5s",
-      "prompt": "Smooth tracking shot following a clean stainless steel plate. The plate is beautifully loaded with a steaming hill of fresh bhaji garnished with bright green coriander, a fresh wedge of yellow lemon, and two perfectly golden-brown pav buns, being passed carefully through the car window. SFX: Light metallic steel plate clinking.",
-      "transition_to_next": "Medium shot of delivery",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. gentleman.png finishes eating, takes out a wallet, and hands a crisp pink ₹2000 note to madhav.png. madhav.png stands completely stunned behind cart.png, staring at the valuable note in his hands with wide eyes. Night ambiance, 4K, 24fps.",
+      "transition_to_next": "Focus on Madhav trying to return the note due to lack of change.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 31,
       "duration": "5s",
-      "prompt": "Medium shot. madhav.png stands out in the light rain by the car window, holding the filled steel plate out with immense respect and a humble posture. Dialogue (Madhav): “लीजिए साहब, गरमागरम खाइए।”",
-      "transition_to_next": "Tight close-up on eating",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png shakes his head, extending his hand to offer the note back politely. The lips of madhav.png form the words: 'साहब, यह तो बहुत ज्यादा है।' Voice type: Surprised, honest male voice. Expression: Hesitant, humble. 4K, 24fps.",
+      "transition_to_next": "Maintain composition as Madhav explains further.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 32,
       "duration": "5s",
-      "prompt": "Tight close-up of gentleman.png inside the car taking a large, hearty bite of the rich, buttery pav dipped deep into the steaming bhaji. His eyes instantly widen in absolute culinary shock and pure delight. SFX: Soft chewing sounds, followed by a deep breath of immense food satisfaction.",
-      "transition_to_next": "Close-up reaction",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png points honestly to the small cash drawer on cart.png. The lips of madhav.png form the words: 'मेरे पास छुट्टे भी नहीं हैं।' Voice type: Surprised, honest male voice. Expression: Apologetic, sincere. 4K, 24fps.",
+      "transition_to_next": "Pan slightly to show the gentleman's generous response.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 33,
       "duration": "5s",
-      "prompt": "gentleman.png swallows his food quickly, looking down at his plate in complete awe of the flavor. Dialogue (Gentleman): “वाह भाई! क्या स्वाद है!”",
-      "transition_to_next": "Medium shot shifting angle",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. gentleman.png gently pushes Madhav's hand back, closing the fingers of madhav.png around the note with a warm smile. The lips of gentleman.png form the words: 'रख लो भाई, खुश रहो।' Voice type: Kind, generous male voice. Expression: Benevolent, warm. 4K, 24fps.",
+      "transition_to_next": "Track the car driving away, leaving Madhav alone in joy.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 34,
       "duration": "5s",
-      "prompt": "Medium shot of gentleman.png gesturing excitedly with his half-eaten buttery pav bun toward his companion gentlemanwife.png sitting next to him. Dialogue (Gentleman): “ऐसी चटपटी भाजी कहीं नहीं मिली!”",
-      "transition_to_next": "Close-up on companion seat",
+      "prompt": "Cinematic wide shot. Continue seamlessly from the last frame of the previous scene. The luxury car drives away into the dark night. madhav.png holds the ₹2000 note, touches it reverently to his forehead, and looks up to thank God with an ecstatic smile before pushing cart.png home happily. Wet road reflections, 4K, 24fps.",
+      "transition_to_next": "Cut to a nearby grocery store where Rajesh is watching.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 35,
       "duration": "5s",
-      "prompt": "Close-up of gentlemanwife.png in the passenger seat, taking an enthusiastic bite from her own plate, nodding her head up and down vigorously in complete, joyful agreement. SFX: Sizzling sounds continuing from cart.png in the background.",
-      "transition_to_next": "Companion looks up",
-      "reference_previous_video_last_frame": true
+      "prompt": "Cinematic medium shot. rajesh.png, a greedy villager with a malicious look, stands under the wooden awning of his small grocery store in the distance. rajesh.png watches Madhav's departure with narrow, intensely jealous eyes. Dimly lit store interior background, 4K, 24fps.",
+      "transition_to_next": "Track Rajesh as he turns around to speak to his store assistant.",
+      "reference_previous_video_last_frame": false
     },
     {
       "scene_id": 36,
       "duration": "5s",
-      "prompt": "gentlemanwife.png looks up from her plate directly at madhav.png standing outside, wearing a big, thoroughly satisfied smile. Dialogue (Companion): “सच में यार! स्वाद दुगुना हो गया है।”",
-      "transition_to_next": "Tracking motion on hand gesture",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. rajesh.png turns around inside the dimly lit grocery shop, a bitter, angry scowl across his face. The lips of rajesh.png form the words: 'देख रहा है इसके ठाट?' Voice type: Harsh, jealous, raspy male voice. Expression: Envious, bitter. 4K, 24fps.",
+      "transition_to_next": "Keep the camera steady as Rajesh continues his complaint.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 37,
       "duration": "5s",
-      "prompt": "gentlemanwife.png rolls her side window down even further, sticks her hand out slightly into the rain, and holds up two fingers toward madhav.png with a bright, hungry grin. SFX: Rain pattering lightly and rhythmically on the metal car roof.",
-      "transition_to_next": "Close-up on face gesture",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. rajesh.png points a finger aggressively out towards the road. The lips of rajesh.png form the words: 'कल तक पैसे नहीं थे इसके पास।' Voice type: Harsh, jealous, raspy male voice. Expression: Indignant, hateful. 4K, 24fps.",
+      "transition_to_next": "Close in slightly as Rajesh schemes maliciously.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 38,
       "duration": "5s",
-      "prompt": "Close-up on gentlemanwife.png's face as she makes the ordering gesture happily out the window. Dialogue (Companion): “भाई, दो प्लेट और लगाओ।”",
-      "transition_to_next": "Low-angle shot from inside cart",
+      "prompt": "Cinematic close-up shot. Continue seamlessly from the last frame of the previous scene. rajesh.png narrows his eyes, whispering a dark plan with a sinister grin. The lips of rajesh.png form the words: 'इसकी दुकान पर कोई नहीं जाएगा।' Voice type: Harsh, jealous, raspy male voice. Expression: Cunning, malicious. 4K, 24fps.",
+      "transition_to_next": "Cut to the next evening at the busy crossroads.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 39,
       "duration": "5s",
-      "prompt": "Low-angle shot looking down from inside the counter of cart.png. gentleman.png extends his arm out of the car window, holding out a bright pink, crisp, brand-new Indian ₹2000 currency note into the light. SFX: A soft, magical chime or an upbeat acoustic guitar strum enters the cinematic soundtrack smoothly.",
-      "transition_to_next": "Extreme close-up on Madhav",
-      "reference_previous_video_last_frame": true
+      "prompt": "Cinematic medium shot. The next evening. Light rain falls on the crossroads. madhav.png is behind cart.png, preparing fresh bhaji under warm lighting. Suddenly, rajesh.png arrives with a group of rough-looking companions, aggressively breaking the peaceful atmosphere. 4K, 24fps.",
+      "transition_to_next": "Focus on Rajesh as he starts shouting loudly.",
+      "reference_previous_video_last_frame": false
     },
     {
       "scene_id": 40,
       "duration": "5s",
-      "prompt": "Extreme close-up of madhav.png's face. He stares down at the large currency note in his palm, his jaw practically dropping open in utter disbelief, hesitating to fully touch or take it. SFX: Sound of heavy background rain fading slightly into a softer mix.",
-      "transition_to_next": "Madhav looks up",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. rajesh.png points dramatically at the griddle on cart.png, making an exaggerated disgusted face. The lips of rajesh.png form the words: 'अरे छी छी माधव, ये कैसी बदबू है?' Voice type: Loud, dramatic, mocking male voice. Expression: Repulsed, hostile. 4K, 24fps.",
+      "transition_to_next": "Maintain framing as Rajesh addresses the gathering village crowd.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 41,
       "duration": "5s",
-      "prompt": "madhav.png looks up from the currency note at gentleman.png, shaking his head gently in confusion and honesty. Dialogue (Madhav): “साहब, मेरे पास छुट्टी नहीं है।”",
-      "transition_to_next": "Close-up on hands",
+      "prompt": "Cinematic medium wide shot. Continue seamlessly from the last frame of the previous scene. rajesh.png steps closer to cart.png, addressing the nearby villagers who are stopping to look. The lips of rajesh.png form the words: 'भाजी में सड़ी सब्जियां इस्तेमाल कर रहा है?' Voice type: Loud, dramatic, mocking male voice. Expression: Accusing, instigating. 4K, 24fps.",
+      "transition_to_next": "Keep the continuous shot as Rajesh hurls his next insult.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 42,
       "duration": "5s",
-      "prompt": "Close-up shot focusing tightly on their hands. gentleman.png smiles warmly, reaches his hand out further, and gently pushes madhav.png's fingers closed over the crisp pink note, cementing the gift. SFX: Soft crisp rustle of high-quality paper currency.",
-      "transition_to_next": "Close-up on Gentleman's face",
+      "prompt": "Cinematic medium wide shot. Continue seamlessly from the last frame of the previous scene. rajesh.png stands arrogantly in front of cart.png, sneering at Madhav. The lips of rajesh.png form the words: 'अब हमें बीमार करने का इरादा है क्या?' Voice type: Loud, dramatic, mocking male voice. Expression: Aggressive, provocative. 4K, 24fps.",
+      "transition_to_next": "Pan to Madhav's shocked and defensive reaction.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 43,
       "duration": "5s",
-      "prompt": "Close-up on gentleman.png's smiling, benevolent face framed beautifully through the wet car window glass. Dialogue (Gentleman): “रख लो भाई! यह तुम्हारा इनाम है।”",
-      "transition_to_next": "Medium shot of car moving",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png joins hands together in a defensive gesture behind cart.png, looking deeply shocked and hurt. The lips of madhav.png form the words: 'नहीं राजेश भैया, यह आप क्या कह रहे हैं?' Voice type: Mild, hurt, honest male voice. Expression: Innocent, defensive. 4K, 24fps.",
+      "transition_to_next": "Maintain framing as Madhav clarifies with honesty.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 44,
       "duration": "5s",
-      "prompt": "The luxury car window rolls back up with a sleek movement. The large SUV slowly starts to accelerate forward, its clean tires rolling smoothly through puddles into the dark, rainy village night. SFX: Car engine revving softly, and tires rolling over wet tarmac roads.",
-      "transition_to_next": "Waving shot through glass",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png points to the clean, fresh ingredients arranged neatly on cart.png. The lips of madhav.png form the words: 'सुमित्रा सुबह ही ताज़ी सब्ज़ियाँ लाई है।' Voice type: Mild, hurt, honest male voice. Expression: Earnest, explaining. 4K, 24fps.",
+      "transition_to_next": "Cut back to Rajesh rudely interrupting.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 45,
       "duration": "5s",
-      "prompt": "gentleman.png waves his hand through the glass window just before the luxury vehicle fully disappears into the distance. Dialogue (Gentleman): “हमेशा खुश रहो!”",
-      "transition_to_next": "Medium shot on Madhav",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. rajesh.png rudely cuts him off, raising an arrogant hand to silence Madhav. The lips of rajesh.png form the words: 'अरे चुप कर, सबको दिख रहा है।' Voice type: Arrogant, booming male voice. Expression: Dismissive, angry. 4K, 24fps.",
+      "transition_to_next": "Widen framing as Rajesh turns fully to the crowd.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 46,
       "duration": "5s",
-      "prompt": "Medium shot of madhav.png standing completely alone under the falling rain. He emotionaly presses the pink ₹2000 note tightly against his forehead, closes his eyes, and looks up at the sky as warm tears of pure joy stream down his wet cheeks. SFX: An emotional, sweeping violin and rich orchestral music theme swells beautifully.",
-      "transition_to_next": "Cinematic pan to alleyway",
+      "prompt": "Cinematic medium wide shot. Continue seamlessly from the last frame of the previous scene. rajesh.png turns fully to the gathering crowd of villagers near cart.png. The lips of rajesh.png form the words: 'यह गंदे पानी में पाव सेक रहा है।' Voice type: Arrogant, booming male voice. Expression: Slanderous, dramatic. 4K, 24fps.",
+      "transition_to_next": "Keep tracking as Rajesh delivers his final warning.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 47,
       "duration": "5s",
-      "prompt": "Cinematic pan across the street to a dark, narrow alleyway. The camera frames the greedy local store owner, rajesh.png, peeking out stealthily from behind a messy stack of wooden crates. His eyes are narrowed and filled with bitter envy and malice. SFX: The beautiful orchestral music abruptly cuts into a low, tense, threatening cello bass note.",
-      "transition_to_next": "Medium shot inside shop",
-      "reference_previous_video_last_frame": false
+      "prompt": "Cinematic medium wide shot. Continue seamlessly from the last frame of the previous scene. rajesh.png waves his arms around, warning the gathered customers away from cart.png. The lips of rajesh.png form the words: 'इसकी भाजी खाई तो पेट खराब होगा।' Voice type: Arrogant, booming male voice. Expression: Threatening, malicious. 4K, 24fps.",
+      "transition_to_next": "Show the villagers walking away, leaving Madhav alone.",
+      "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 48,
       "duration": "5s",
-      "prompt": "Medium shot inside rajesh.png's dimly lit, dusty grocery store. rajesh.png wheels around angrily in a huff, his face twisted in disgust and rage as he speaks sharply to his young store assistant who is out of focus. SFX: Low, tense background dramatic music score continues.",
-      "transition_to_next": "Close-up on Rajesh pointing",
+      "prompt": "Cinematic wide shot. Continue seamlessly from the last frame of the previous scene. Villagers look highly suspicious, whisper to one another, and walk away from cart.png. madhav.png stands entirely alone, looking devastated and helpless behind his cart under the dim evening light. 4K, 24fps.",
+      "transition_to_next": "Slow dolly-in onto Madhav sitting alone later.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 49,
       "duration": "5s",
-      "prompt": "Close-up of rajesh.png pointing an angry, accusing finger through his open store door toward madhav.png's distant cart across the road. Dialogue (Rajesh): \"कल तक इसके पास पैसे नहीं थे!\"",
-      "transition_to_next": "Close-up on hands striking",
-      "reference_previous_video_last_frame": true
+      "prompt": "Cinematic medium shot. Two hours later. madhav.png sits sorrowfully on a small stool next to the empty cart.png, with absolutely no customers around. In the far background across the street, rajesh.png stands at his store, pointing and laughing maliciously with his friends. 4K, 24fps.",
+      "transition_to_next": "The same luxury car from before pulls up again suddenly.",
+      "reference_previous_video_last_frame": false
     },
     {
       "scene_id": 50,
       "duration": "5s",
-      "prompt": "Close-up focusing tightly on rajesh.png's hands. He slams his clenched right fist violently down into his open left palm, his chest heaving with deep, bitter jealousy. SFX: A sharp flesh-striking-flesh smack sound effect.",
-      "transition_to_next": "Cut back to face profile",
-      "reference_previous_video_last_frame": true
+      "prompt": "Cinematic wide shot. Unexpectedly, the same luxury car from the previous night arrives and stops smoothly right next to cart.png. gentleman.png and his elegant wife gentlemanwife.png step out of the vehicle together, smiling brightly at a shocked Madhav. Evening rain reflections, 4K, 24fps.",
+      "transition_to_next": "Focus on the gentleman approaching Madhav.",
+      "reference_previous_video_last_frame": false
     },
     {
       "scene_id": 51,
       "duration": "5s",
-      "prompt": "Cut back to rajesh.png's face, his eyes wide with irrational anger and frustration as he glares out. Dialogue (Rajesh): \"और आज इसके ठाट देखो!\"",
-      "transition_to_next": "Tracking shot stepping out",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. gentleman.png approaches cart.png and greets Madhav warmly. The lips of gentleman.png form the words: 'नमस्ते भाई, हम फिर आ गए।' Voice type: Cheerful, friendly urban male voice. Expression: Warm, genuinely happy. 4K, 24fps.",
+      "transition_to_next": "Keep framing as the gentleman introduces his wife.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 52,
       "duration": "5s",
-      "prompt": "Tracking shot following rajesh.png as he steps out onto the wet wooden porch of his shop, his malicious eyes locked dead onto madhav.png's food cart cart.png parked across the crossroads. SFX: Sound of heavy footsteps stomping on a wet wooden plank.",
-      "transition_to_next": "Close-up on face whispering",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. gentleman.png gestures affectionately towards gentlemanwife.png who nods politely near cart.png. The lips of gentleman.png form the words: 'मेरी पत्नी को तुम्हारी भाजी बहुत पसंद आई।' Voice type: Cheerful, friendly urban male voice. Expression: Proud, smiling. 4K, 24fps.",
+      "transition_to_next": "Pan to Madhav's confused and tentative face.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 53,
       "duration": "5s",
-      "prompt": "Close-up on rajesh.png's face in profile as he speaks in a low, gravelly, plotting tone into the dark evening. Dialogue (Rajesh): “हमें कुछ ऐसा करना होगा...”",
-      "transition_to_next": "Tight close-up on mouth smile",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png looks up from cart.png, completely confused and hesitant. The lips of madhav.png form the words: 'साहब, लोग कह रहे हैं आप बीमार हो गए।' Voice type: Timid, confused male voice. Expression: Bewildered, anxious. 4K, 24fps.",
+      "transition_to_next": "Cut to the gentleman laughing heartily.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 54,
       "duration": "5s",
-      "prompt": "Tight close-up of rajesh.png's face. A slow, cruel, malicious grin spreads wide across his thin lips as he narrows his eyes into sinister slits. SFX: A suspenseful, high string musical note peaks sharply.",
-      "transition_to_next": "Fierce glare close-up",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. gentleman.png bursts into loud, amused laughter, waving a hand dismissively near cart.png. The lips of gentleman.png form the words: 'अरे, कौन फैला रहा है यह झूठ?' Voice type: Booming, amused male voice. Expression: Jovial, highly amused. 4K, 24fps.",
+      "transition_to_next": "Keep the shot continuous as he points behind him.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 55,
       "duration": "5s",
-      "prompt": "rajesh.png glares fiercely ahead at his target, whispering maliciously through tightly gritted teeth. Dialogue (Rajesh): “...कि इसकी दुकान पर कोई कदम ना रखे!”",
-      "transition_to_next": "Jump cut to next evening",
+      "prompt": "Cinematic medium wide shot. Continue seamlessly from the last frame of the previous scene. gentleman.png points down the road behind his car where another vehicle is arriving. The lips of gentleman.png form the words: 'पीछे देखो, मेरे और दोस्त आ रहे हैं।' Voice type: Booming, amused male voice. Expression: Excited, welcoming. 4K, 24fps.",
+      "transition_to_next": "Widen out to show multiple cars and a gathering crowd.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 56,
       "duration": "5s",
-      "prompt": "Jump cut to the very next evening. The weather is gloomy with a light drizzle falling. rajesh.png, accompanied closely by three aggressive-looking, rowdy men, marches right up to madhav.png's cart cart.png and dramatically pinches his nose shut with his hand. SFX: Sound of splashing footsteps in mud.",
-      "transition_to_next": "Close-up on Rajesh's face",
+      "prompt": "Cinematic wide shot. Multiple cars pull up, their headlights brightly illuminating the crossroads. madhav.png instantly starts cooking with immense joy and high energy on cart.png, butter steam rising up as a huge crowd forms. 4K, 24fps.",
+      "transition_to_next": "Focus on an elderly village man stepping forward.",
       "reference_previous_video_last_frame": false
     },
     {
       "scene_id": 57,
       "duration": "5s",
-      "prompt": "Close-up of rajesh.png's disgusted face as he mockingly glares down at the pav bhaji cooking on the cart counter. Dialogue (Rajesh): “अरे छी छी माधव! ये कैसी बदबू है?”",
-      "transition_to_next": "Close-up on hand pointing",
-      "reference_previous_video_last_frame": true
+      "prompt": "Cinematic medium shot. An elderly village man walks up to cart.png, looking deeply regretful and apologetic in front of Madhav. The lips of the elderly villager form the words: 'माधव बेटा, हमें माफ करना।' Voice type: Frail, apologetic elderly male voice. Expression: Sorry, genuinely ashamed. 4K, 24fps.",
+      "transition_to_next": "Maintain composition as the elder requests a plate.",
+      "reference_previous_video_last_frame": false
     },
     {
       "scene_id": 58,
       "duration": "5s",
-      "prompt": "Close-up of rajesh.png’s dirty hand as he points an accusing, dramatic finger right into the open, steaming large pot of bhaji on cart.png, yelling loud enough to purposefully attract nearby pedestrians. SFX: Background drizzle and wind blowing.",
-      "transition_to_next": "Rajesh leans over counter",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. The elderly villager points eagerly to the sizzling griddle on cart.png. The lips of the elderly villager form the words: 'हमें भी एक प्लेट पाव भाजी खिलाओ।' Voice type: Frail, apologetic elderly male voice. Expression: Hungry, eager. 4K, 24fps.",
+      "transition_to_next": "Cut to Rajesh reacting in absolute shame.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 59,
       "duration": "5s",
-      "prompt": "rajesh.png leans aggressively way over the cart counter, shouting loudly and menacingly into madhav.png's face. Dialogue (Rajesh): “क्या सड़ी सब्जियां बेच रहा है?”",
-      "transition_to_next": "Shaky medium shot on Madhav",
-      "reference_previous_video_last_frame": true
+      "prompt": "Cinematic close-up shot. rajesh.png watches the massive, enthusiastic crowd gather around Madhav's cart from afar. The face of rajesh.png turns completely pale and full of intense shame, and rajesh.png quietly slips away into the dark shadows. 4K, 24fps.",
+      "transition_to_next": "Smooth montage fade showing the passage of months.",
+      "reference_previous_video_last_frame": false
     },
     {
       "scene_id": 60,
       "duration": "5s",
-      "prompt": "Shaky, handheld medium shot focusing on madhav.png. He instantly panics, dropping his metal spatula onto cart.png, folding his hands together, and pleading with wide, frightened, innocent eyes. SFX: Metal spatula loudly clattering onto the steel cart surface.",
-      "transition_to_next": "Close-up on Madhav's face",
-      "reference_previous_video_last_frame": true
+      "prompt": "Cinematic medium wide shot. Over the following months. A beautiful cinematic sequence showing madhav.png and sumitra.png working together happily behind cart.png, seamlessly serving a massive, cheerful line of diverse city and village customers on a pleasant evening. 4K, 24fps.",
+      "transition_to_next": "Transition to inside Madhav's house during a heavy rainstorm.",
+      "reference_previous_video_last_frame": false
     },
     {
       "scene_id": 61,
       "duration": "5s",
-      "prompt": "Close-up on madhav.png's terrified face as he shakes his head frantically from side to side to deny the false accusation. Dialogue (Madhav): “नहीं राजेश भैया, यह ताजी सब्जियां हैं।”",
-      "transition_to_next": "Wide shot of crossroads",
-      "reference_previous_video_last_frame": true
+      "prompt": "Cinematic interior medium shot. Nighttime inside Madhav's poor mud house during a heavy rainstorm. Rainwater leaks heavily through the ceiling. sumitra.png is busy placing metal pots and bowls on the floor to catch the leaking water, looking tired. 4K, 24fps.",
+      "transition_to_next": "Pan across to Madhav sitting on the wet bed.",
+      "reference_previous_video_last_frame": false
     },
     {
       "scene_id": 62,
       "duration": "5s",
-      "prompt": "Wide shot of the village crossroads. A few passing villagers stop walking and turn around to watch the scene. rajesh.png aggressively spins around on his heel, waving his arms wide to actively gather a larger crowd. SFX: Sound of light drizzle underlaid with low crowd murmurs.",
-      "transition_to_next": "Rajesh in center road",
+      "prompt": "Cinematic interior medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png sits on a completely soaked wooden bed, looking determined and resolute as madhav.png looks at sumitra.png. The lips of madhav.png form the words: 'सुमित्रा, अब बहुत हो गया।' Voice type: Firm, resolved male voice. Expression: Decisive, serious. 4K, 24fps.",
+      "transition_to_next": "Maintain framing as Madhav continues speaking.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 63,
       "duration": "5s",
-      "prompt": "rajesh.png stands confidently in the exact center of the wet road, pointing dramatically at the gathered crowd of villagers. Dialogue (Rajesh): “सुन लो गांव वालों!”",
-      "transition_to_next": "Close-up on Rajesh shouting",
+      "prompt": "Cinematic interior medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png continues talking to sumitra.png, gesturing up to the leaking roof. The lips of madhav.png form the words: 'हम इस टपकती छत के नीचे नहीं रहेंगे।' Voice type: Firm, resolved male voice. Expression: Determined, protective. 4K, 24fps.",
+      "transition_to_next": "Keep the camera steady as Madhav shares his ambition.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 64,
       "duration": "5s",
-      "prompt": "Close-up of rajesh.png yelling out at the crowd, pointing his finger violently backward over his shoulder directly at madhav.png's shocked face. SFX: A distant, low rumble of thunder.",
-      "transition_to_next": "Rajesh screaming close-up",
+      "prompt": "Cinematic interior medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png smiles with genuine hope, looking at sumitra.png. The lips of madhav.png form the words: 'मैं अब एक छोटी दुकान किराए पर लूंगा।' Voice type: Firm, resolved male voice. Expression: Optimistic, ambitious. 4K, 24fps.",
+      "transition_to_next": "Focus on Sumitra's concerned but hopeful response.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 65,
       "duration": "5s",
-      "prompt": "rajesh.png sneers maliciously, raising his vocal pitch to an angry, piercing scream to convince everyone. Dialogue (Rajesh): “इसकी भाजी खाई तो पेट खराब पक्का है!”",
-      "transition_to_next": "Medium shot of villagers",
+      "prompt": "Cinematic interior medium shot. Continue seamlessly from the last frame of the previous scene. sumitra.png stops her work, looking at Madhav with a worried yet hopeful expression. The lips of sumitra.png form the words: 'दुकान पर तो बहुत पैसे लगेंगे।' Voice type: Gentle, traditional female voice. Expression: Apprehensive, concerned. 4K, 24fps.",
+      "transition_to_next": "Pan back to Madhav for a comforting reassurance.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 66,
       "duration": "5s",
-      "prompt": "Medium shot focusing on the group of villagers. They look at each other very suspiciously and take a collective step backward away from cart.png. rajesh.png leans into them closer, lowering his voice into a malicious rumor tone. SFX: Low whispering crowd murmurs.",
-      "transition_to_next": "Final blow close-up",
+      "prompt": "Cinematic interior medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png steps closer and smiles reassuringly at sumitra.png. The lips of madhav.png form the words: 'कोशिश करने में क्या हर्ज है?' Voice type: Comforting, confident male voice. Expression: Reassuring, loving. 4K, 24fps.",
+      "transition_to_next": "Cut to the next day showing shop renovation.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 67,
       "duration": "5s",
-      "prompt": "Close-up of rajesh.png's face as he delivers the ultimate false blow to smash madhav.png's vendor reputation. Dialogue (Rajesh): “कल वाले लोग बीमार हो गए हैं!”",
-      "transition_to_next": "Wide desolate time lapse cut",
-      "reference_previous_video_last_frame": true
+      "prompt": "Cinematic medium wide shot. The next day, bright daylight. madhav.png is seen working hard, cleaning, and painting the walls of a small rented brick shop near the village crossroads. A fresh sign proudly reads 'Madhav Pav Bhaji Center'. 4K, 24fps.",
+      "transition_to_next": "Cut to the opening day outside Rajesh's grocery store.",
+      "reference_previous_video_last_frame": false
     },
     {
       "scene_id": 68,
       "duration": "5s",
-      "prompt": "Wide, desolate shot of the village crossroads. Two hours have passed into the deep night. madhav.png sits completely alone on a small wooden stool next to his empty cart cart.png, his head buried in his hands, weeping silently. In the far background, rajesh.png stands triumphantly by his shop porch, laughing evilly. SFX: A cold, lonely wind whistles softly across the empty frame.",
-      "transition_to_next": "High-impact cut",
-      "reference_previous_video_last_frame": false
+      "prompt": "Cinematic medium shot. Opening day of the new eatery, filled with festive lights. madhav.png walks over to rajesh.png's grocery store across the street, offering a polite invitation. The lips of madhav.png form the words: 'राजेश भाई, आज मेरी दुकान का उद्घाटन है।' Voice type: Polite, humble male voice. Expression: Peaceful, inviting. 4K, 24fps.",
+      "transition_to_next": "Maintain continuous framing as Madhav finishes the invitation.",
+      "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 69,
       "duration": "5s",
-      "prompt": "High-impact cut. Sudden, upbeat, triumphant percussion music blasts out loudly. The exact same luxury SUV from before pulls up with a sharp turn, stopping directly in front of madhav.png's food cart cart.png. gentleman.png steps out quickly, waving his hand enthusiastically. SFX: Upbeat, cheerful rhythm music tracks begin, and a car door slams shut loudly.",
-      "transition_to_next": "Medium shot of walking",
-      "reference_previous_video_last_frame": false
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png continues speaking to rajesh.png with an open, kind heart. The lips of madhav.png form the words: 'आप जरूर आना, मुझे खुशी होगी।' Voice type: Polite, humble male voice. Expression: Sincere, warm. 4K, 24fps.",
+      "transition_to_next": "Focus on Rajesh's arrogant, bitter reaction.",
+      "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 70,
       "duration": "5s",
-      "prompt": "Medium shot. gentleman.png walks briskly and happily toward cart.png with a massive, genuine smile on his face, holding the hand of his elegantly dressed wife gentlemanwife.png who walks beside him. SFX: Joyful, rhythmic background orchestration.",
-      "transition_to_next": "Close-up greeting",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. rajesh.png scoffs, crossing arms and turning away with deep arrogance and jealousy. The lips of rajesh.png form the words: 'जा, मैं नहीं आने वाला तेरी दुकान पर।' Voice type: Sneering, bitter male voice. Expression: Hateful, prideful. 4K, 24fps.",
+      "transition_to_next": "Cut to that evening inside the bustling eatery.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 71,
       "duration": "5s",
-      "prompt": "Close-up of gentleman.png approaching madhav.png with his hands folded in a respectful, warm Indian Namaste greeting gesture. Dialogue (Gentleman): “नमस्ते भाई! हम फिर वापस आ गए।”",
-      "transition_to_next": "Close-up on wife",
-      "reference_previous_video_last_frame": true
+      "prompt": "Cinematic interior wide shot. That evening, the new 'Madhav Pav Bhaji Center' is packed with happy villagers eating. Suddenly, a local troublemaker hired by Rajesh deliberately throws a steel plate onto the floor with a loud crash, disrupting the peace. 4K, 24fps.",
+      "transition_to_next": "Focus on the troublemaker shouting at Madhav.",
+      "reference_previous_video_last_frame": false
     },
     {
       "scene_id": 72,
       "duration": "5s",
-      "prompt": "Close-up of gentlemanwife.png smiling warmly and nodding her head kindly at madhav.png, while her husband gentleman.png stands close next to her frame. SFX: Soft crowd murmurs starting up in the background as distant villagers stop to watch.",
-      "transition_to_next": "Gentleman gestures to wife",
+      "prompt": "Cinematic interior medium shot. Continue seamlessly from the last frame of the previous scene. The troublemaker stands up, pointing aggressively at madhav.png behind the counter. The lips of the troublemaker form the words: 'इसमें तो कंकड़ पत्थर हैं!' Voice type: Rowdy, aggressive male voice. Expression: Hostile, fake anger. 4K, 24fps.",
+      "transition_to_next": "Head Constable Raghuveer Singh steps into the room.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 73,
       "duration": "5s",
-      "prompt": "gentleman.png gestures proudly with his arm toward his wife gentlemanwife.png with a lighthearted expression. Dialogue (Gentleman): “आज घर पर खाना नहीं बनाया है।”",
-      "transition_to_next": "Close-up on Madhav's face",
+      "prompt": "Cinematic interior medium shot. Continue seamlessly from the last frame of the previous scene. Suddenly, the new Head Constable raghuvirsingh.png steps into the restaurant, looking highly authoritative and stern in a khaki police uniform. The lips of raghuvirsingh.png form the words: 'रुको, यह क्या बदतमीजी है?' Voice type: Powerful, commanding male voice. Expression: Strict, interrogative. 4K, 24fps.",
+      "transition_to_next": "Focus on Raghuveer Singh examining the food plate.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 74,
       "duration": "5s",
-      "prompt": "Close-up of madhav.png's confused, tear-swollen face. He slowly blinks away a fresh tear, looking completely baffled and stunned by their sudden return. SFX: Upbeat music continues playing at a lower, ambient volume level.",
-      "transition_to_next": "Madhav speaks hesitantly",
+      "prompt": "Cinematic interior close-up shot. Continue seamlessly from the last frame of the previous scene. raghuvirsingh.png picks up the dropped plate, inspecting it closely under the bright indoor lights. The lips of raghuvirsingh.png form the words: 'ये कंकड़ तो ऊपर से डाले गए हैं।' Voice type: Powerful, commanding male voice. Expression: Analytical, strict. 4K, 24fps.",
+      "transition_to_next": "Raghuveer Singh glares intensely at the troublemaker.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 75,
       "duration": "5s",
-      "prompt": "madhav.png speaks hesitantly and softly, pointing his finger toward the watching, quiet villagers gathered across the street. Dialogue (Madhav): “साहब, लोग कह रहे हैं आप बीमार हो गए?”",
-      "transition_to_next": "Medium shot laughter",
+      "prompt": "Cinematic interior medium shot. Continue seamlessly from the last frame of the previous scene. raghuvirsingh.png glares intensely at the trembling troublemaker. The lips of raghuvirsingh.png form the words: 'सच बताओ, तुम्हें किसने भेजा है?' Voice type: Powerful, commanding male voice. Expression: Threatening, investigative. 4K, 24fps.",
+      "transition_to_next": "The troublemaker confesses in fear.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 76,
       "duration": "5s",
-      "prompt": "Medium shot of gentleman.png throwing his head back in a loud, hearty, booming laugh, waving his hand off dismissively into the air to deny it. SFX: Hearty, deep male laughter echoing across the open space.",
-      "transition_to_next": "Close-up on Gentleman smiling",
+      "prompt": "Cinematic interior medium shot. Continue seamlessly from the last frame of the previous scene. The terrified troublemaker trembles, pointing outside towards Rajesh's shop across the street. The lips of the troublemaker form the words: 'हमें राजेश भैया ने बोला था।' Voice type: Shaky, frightened male voice. Expression: Scared, confessing under pressure. 4K, 24fps.",
+      "transition_to_next": "Raghuveer Singh turns to Madhav with a supportive smile.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 77,
       "duration": "5s",
-      "prompt": "Close-up of gentleman.png smiling confidently and brightly after his big laugh settles down. Dialogue (Gentleman): “अरे झूठ! हम तो बिल्कुल ठीक हैं!”",
-      "transition_to_next": "Close-up on smartphone screen",
+      "prompt": "Cinematic interior medium shot. Continue seamlessly from the last frame of the previous scene. raghuvirsingh.png turns toward madhav.png with a reassuring, supportive smile, patting his shoulder. The lips of raghuvirsingh.png form the words: 'माधव भाई डरो मत, ईमानदारी तुम्हारी ताकत है।' Voice type: Warm, encouraging male voice. Expression: Friendly, deeply supportive. 4K, 24fps.",
+      "transition_to_next": "Maintain composition as Raghuveer Singh orders food cheerfully.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 78,
       "duration": "5s",
-      "prompt": "Close-up of gentleman.png's modern smartphone screen held in his hand. He shows an active WhatsApp group chat overflowing with photos of madhav.png's food cart, then points his phone down the village road. SFX: Clear cell phone text notification chime sound.",
-      "transition_to_next": "Gentleman points to road",
+      "prompt": "Cinematic interior medium shot. Continue seamlessly from the last frame of the previous scene. raghuvirsingh.png points to a clean dining table cheerfully. The lips of raghuvirsingh.png form the words: 'हमारे लिए दो प्लेट पाव भाजी लगाओ।' Voice type: Warm, encouraging male voice. Expression: Cheerful, hungry. 4K, 24fps.",
+      "transition_to_next": "Close-up on Madhav's emotional gratitude.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 79,
       "duration": "5s",
-      "prompt": "gentleman.png turns his entire body to face the open crossroads, pointing his finger off into the clear distance with high energy. Dialogue (Gentleman): “देखो, पीछे मेरे दोस्त भी आ रहे हैं!”",
-      "transition_to_next": "Wide shot of oncoming cars",
+      "prompt": "Cinematic close-up shot. Continue seamlessly from the last frame of the previous scene. madhav.png wipes a tear of gratitude from his eye, bowing slightly with a deeply touched smile behind the counter of the thriving eatery. Warm indoor light, 4K, 24fps.",
+      "transition_to_next": "Fade transition to show the passage of several years.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 80,
       "duration": "5s",
-      "prompt": "Wide shot. Bright headlights of three more large passenger cars pull up in a clean line. An elderly, respected local villager steps out from the gathering crowd, looking down at the muddy ground in deep, visible shame. SFX: Car horns honking cheerfully, and multiple car doors opening up.",
-      "transition_to_next": "Close-up on elder",
+      "prompt": "Cinematic wide shot. Years pass. madhav.png's modern brick restaurant is thriving with a massive crowd. Across the street, rajesh.png has set up a cheap, unhygienic pav bhaji stall using stale vegetables, looking miserable and broke. 4K, 24fps.",
+      "transition_to_next": "Focus on an angry customer confronting Rajesh at his stall.",
       "reference_previous_video_last_frame": false
     },
     {
       "scene_id": 81,
       "duration": "5s",
-      "prompt": "Close-up of the elderly villager looking up directly at madhav.png with genuine, deep regret and apology shining in his old eyes. Dialogue (Elderly Villager): “माधव बेटा, हमें माफ कर देना।”",
-      "transition_to_next": "Medium shot focusing on elder",
-      "reference_previous_video_last_frame": true
+      "prompt": "Cinematic medium shot. An angry villager stands at the stall of rajesh.png, slamming a hand down in frustration. The lips of the angry villager form the words: 'अरे राजेश, यह क्या खिला दिया तुमने?' Voice type: Furious, harsh male voice. Expression: Enraged, sick. 4K, 24fps.",
+      "transition_to_next": "Maintain framing as the angry customer finishes yelling.",
+      "reference_previous_video_last_frame": false
     },
     {
       "scene_id": 82,
       "duration": "5s",
-      "prompt": "Medium shot focusing on the elderly villager. He turns his head sharply and glares angrily across the street at rajesh.png, whose face has gone completely pale, frozen, and shocked. SFX: Triumphant, powerful brass musical notes build up in the score background.",
-      "transition_to_next": "Elder turns back to Madhav",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. The angry villager continues yelling while a terrified rajesh.png cowers backwards. The lips of the angry villager form the words: 'तुम्हारी भाजी खाकर सबका पेट खराब है।' Voice type: Furious, harsh male voice. Expression: Severe anger, pointing accusingly. 4K, 24fps.",
+      "transition_to_next": "Cut to inside Madhav's busy restaurant with a businessman.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 83,
       "duration": "5s",
-      "prompt": "The elderly villager turns back to face madhav.png's clean shop counter, speaking loudly for the whole crowd to hear. Dialogue (Elderly Villager): “हम इस राजेश की बातों में आ गए थे।”",
-      "transition_to_next": "Close-up placing money",
-      "reference_previous_video_last_frame": true
+      "prompt": "Cinematic interior medium shot. Inside Madhav's bustling restaurant, a wealthy city businessman citybusinessman.png in a sleek modern suit sits at a table across from madhav.png. The lips of citybusinessman.png form the words: 'माधव भाई, आपकी भाजी में अनोखा स्वाद है।' Voice type: Professional, sophisticated male voice. Expression: Appreciative, highly impressed. 4K, 24fps.",
+      "transition_to_next": "Maintain shot as the businessman extends a grand offer.",
+      "reference_previous_video_last_frame": false
     },
     {
       "scene_id": 84,
       "duration": "5s",
-      "prompt": "Close-up of the old villager turning fully to madhav.png, a kind, warm, grandfatherly smile returning to his face as he places a clean currency note flat on the steel counter. SFX: Sound of a fresh tawa burner sizzling back to life.",
-      "transition_to_next": "Elder taps counter",
+      "prompt": "Cinematic interior medium shot. Continue seamlessly from the last frame of the previous scene. citybusinessman.png leans forward, offering a formal restaurant contract folder to Madhav. The lips of citybusinessman.png form the words: 'हम हाईवे पर बड़ा रेस्टोरेंट खोलेंगे।' Voice type: Professional, sophisticated male voice. Expression: Inspiring, highly businesslike. 4K, 24fps.",
+      "transition_to_next": "Pan to Madhav's humble, nervous reaction.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 85,
       "duration": "5s",
-      "prompt": "The old villager gently taps the metal counter with his index finger, smiling warmly with anticipation. Dialogue (Elderly Villager): “हमारे लिए भी एक प्लेट लगाओ।”",
-      "transition_to_next": "Rapid-fire montage cut",
+      "prompt": "Cinematic interior medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png looks nervous, rubbing his hands together humbly across the table. The lips of madhav.png form the words: 'साहब, मैं तो छोटा आदमी हूँ।' Voice type: Humble, hesitant male voice. Expression: Modest, slightly intimidated by the big opportunity. 4K, 24fps.",
+      "transition_to_next": "Cut back to the businessman encouraging him warmly.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 86,
       "duration": "5s",
-      "prompt": "Rapid-fire cinematic montage: A huge yellow block of butter hits the sizzling tawa; hot pav plates are rapidly handed out to laughing, happy customers; hands drop cash into madhav.png's metal box; and an envious rajesh.png slinks away into the shadows of his dark grocery store. SFX: Upbeat, celebratory festive folk music swells with hand clapping and busy crowd chatter.",
-      "transition_to_next": "Jump cut to months later",
-      "reference_previous_video_last_frame": false
+      "prompt": "Cinematic interior medium shot. Continue seamlessly from the last frame of the previous scene. citybusinessman.png smiles warmly and taps the table reassuringly. The lips of citybusinessman.png form the words: 'भगवान ने मौका दिया है, इसे मत छोड़ो।' Voice type: Energetic, encouraging male voice. Expression: Positive, highly persuasive. 4K, 24fps.",
+      "transition_to_next": "Transition to a sweeping wide shot of the grand highway restaurant.",
+      "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 87,
       "duration": "5s",
-      "prompt": "Jump cut to a few months later. A close-up shot of heavy rainwater splashing directly onto a rolled-up, soaked mattress inside a leaky hut. madhav.png and sumitra.png stand side-by-side, looking up at the wet ceiling in complete physical exhaustion but mutual love. SFX: A heavy, loud thud of rolling thunder outside.",
-      "transition_to_next": "Medium shot inside hut",
+      "prompt": "Cinematic exterior wide shot. A grand, modern family restaurant is open on a bright, sunny highway. A massive glowing neon sign proudly reads 'Madhav Ki Asli Pav Bhaji', and the parking lot is fully packed with luxury city cars and happy customers. 4K, 24fps.",
+      "transition_to_next": "Cut to Madhav visiting the old village crossroads.",
       "reference_previous_video_last_frame": false
     },
     {
       "scene_id": 88,
       "duration": "5s",
-      "prompt": "Medium shot. madhav.png sits down closely next to sumitra.png on a small wooden storage chest. He reaches deep into his shirt pocket and pulls out a thick, heavy cloth pouch, opening it carefully to reveal a large, neatly stacked pile of saved currency cash notes. SFX: Soft fabric rustling pouch sound.",
-      "transition_to_next": "Close-up on Madhav smiling",
-      "reference_previous_video_last_frame": true
+      "prompt": "Cinematic medium wide shot. madhav.png, now looking well-off and respectably dressed but still humble, walks past the old village crossroads. madhav.png spots rajesh.png sitting entirely alone, broken and sad outside his closed, abandoned grocery shop. Golden hour lighting, 4K, 24fps.",
+      "transition_to_next": "Track Madhav as he approaches Rajesh with kindness.",
+      "reference_previous_video_last_frame": false
     },
     {
       "scene_id": 89,
       "duration": "5s",
-      "prompt": "Close-up on madhav.png's proud, smiling face as he looks lovingly at his wife sumitra.png, presenting the pouch. Dialogue (Madhav): “सुमित्रा, अब हमारे पास पैसे जमा हैं।”",
-      "transition_to_next": "Close-up on eyes determination",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png walks up to rajesh.png with a kind, open smile. The lips of madhav.png form the words: 'राजेश भाई राम-राम, क्या हालचाल है?' Voice type: Warm, gentle male voice. Expression: Affectionate, deeply peaceful. 4K, 24fps.",
+      "transition_to_next": "Focus on Rajesh looking up in total shock and regret.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 90,
       "duration": "5s",
-      "prompt": "Close-up of madhav.png's face. His eyes are burning brightly with a new, powerful sense of determination, and a confident, hopeful smile breaks across his face. SFX: A low, inspiring, emotional string melody transitions in.",
-      "transition_to_next": "Madhav points finger",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. rajesh.png looks up slowly, his eyes instantly filling with heavy tears of deep regret. The lips of rajesh.png form the words: 'माधव, भाई मुझे माफ कर दो।' Voice type: Choking, weeping male voice. Expression: Completely broken, intensely remorseful. 4K, 24fps.",
+      "transition_to_next": "Maintain continuous shot as Rajesh confesses his guilt.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 91,
       "duration": "5s",
-      "prompt": "madhav.png points his finger firmly in the direction of the village crossroads to show his vision. Dialogue (Madhav): “अब हम एक दुकान किराए पर लेंगे।”",
-      "transition_to_next": "Over-the-shoulder on Sumitra",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. rajesh.png covers his face in deep shame. The lips of rajesh.png form the words: 'मैंने तुम्हारे साथ बहुत बुरा किया।' Voice type: Choking, weeping male voice. Expression: Guilt-ridden, crying softly. 4K, 24fps.",
+      "transition_to_next": "Pan slightly as Madhav offers comfort.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 92,
       "duration": "5s",
-      "prompt": "Over-the-shoulder shot looking closely at sumitra.png. She looks down at the money pouch in her lap, biting her lip nervously with a deeply worried, anxious facial expression. SFX: Rainwater dripping softly into a metal pot nearby.",
-      "transition_to_next": "Sumitra looks up",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png kneels down and places a comforting hand on rajesh.png's shoulder with immense kindness. The lips of madhav.png form the words: 'पुरानी बातें भूल जाओ, राजेश भाई।' Voice type: Gentle, compassionate male voice. Expression: Forgiving, serene. 4K, 24fps.",
+      "transition_to_next": "Keep the continuous tracking shot as Madhav offers a job.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 93,
       "duration": "5s",
-      "prompt": "sumitra.png looks up directly into madhav.png's eyes, shaking her head slightly with concern about the village market. Dialogue (Sumitra): “लेकिन दुकान मिलना बहुत मुश्किल है।”",
-      "transition_to_next": "Close-up on hands holding",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png smiles and offers an open hand to help. The lips of madhav.png form the words: 'तुम मेरे होटल में मैनेजर बन जाओ।' Voice type: Gentle, compassionate male voice. Expression: Highly generous, friendly. 4K, 24fps.",
+      "transition_to_next": "Focus on Rajesh reacting with overwhelming gratitude.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 94,
       "duration": "5s",
-      "prompt": "Close-up on their hands. madhav.png reaches out his larger hands and places them both firmly and reassuringly over hers, squeezing them gently with a supportive nod. SFX: Warm, emotional piano chord notes play.",
-      "transition_to_next": "Close-up on Madhav gently smiling",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. rajesh.png looks up at Madhav with a mixture of overwhelming gratitude and utter shock. The lips of rajesh.png form the words: 'तुम सच में महान हो, माधव।' Voice type: Emotional, humble male voice. Expression: Uplifted, astounded. 4K, 24fps.",
+      "transition_to_next": "Keep framing locked as Rajesh promises honesty.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 95,
       "duration": "5s",
-      "prompt": "Close-up on madhav.png's face as he smiles gently and lovingly at her to wipe away her fear. Dialogue (Madhav): “कोशिश करने में क्या हर्ज है?”",
-      "transition_to_next": "Fast jump-cut montage",
+      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. rajesh.png wipes his tears away and nods his head firmly with a serious gaze. The lips of rajesh.png form the words: 'मैं अब पूरी ईमानदारी से काम करूँगा।' Voice type: Emotional, humble male voice. Expression: Deeply sincere, dedicated. 4K, 24fps.",
+      "transition_to_next": "Widen out to a final grand cinematic shot of their embrace.",
       "reference_previous_video_last_frame": true
     },
     {
       "scene_id": 96,
       "duration": "5s",
-      "prompt": "Fast jump-cut renovation montage: madhav.png rolling bright white paint onto a fresh shop wall; sumitra.png wiping down a shiny, brand-new stainless steel food counter; and a metal hammer nailing up a large, beautiful wooden sign reading: \"Madhav Pav Bhaji Center\". SFX: Fast-paced, energetic rock beat with crisp sounds of hammering and drilling.",
-      "transition_to_next": "Medium shot entering shop",
-      "reference_previous_video_last_frame": false
-    },
-    {
-      "scene_id": 97,
-      "duration": "5s",
-      "prompt": "Medium shot. madhav.png walks directly into rajesh.png’s empty, dusty, old grocery store. With genuine kindness and a forgiving smile, he extends a glossy, elegant invitation card toward an angry rajesh.png. SFX: Soft footsteps on dusty floorboards.",
-      "transition_to_next": "Madhav keeps hand extended",
+      "prompt": "Beautiful cinematic wide tracking shot. Continue seamlessly from the last frame of the previous scene. madhav.png and rajesh.png stand up together and embrace warmly outside the old abandoned shop. Brilliant golden daylight breaks beautifully through the clouds, symbolizing a fresh, honest start. Ultra-realistic, 4K, 24fps.",
+      "transition_to_next": "Slow fade to black, ending the cinematic sequence.",
       "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 98,
-      "duration": "5s",
-      "prompt": "madhav.png keeps his hand extended politely, speaking with a warm, open, and friendly tone to his rival. Dialogue (Madhav): “राजेश भाई, मेरी दुकान पर जरूर आना।”",
-      "transition_to_next": "Close-up on Rajesh snatching",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 99,
-      "duration": "5s",
-      "prompt": "Close-up on rajesh.png's face. He scowls in deep, bitter jealousy, violently snatches the premium card out of Madhav's hand, rips it aggressively right down the middle, and throws it onto the dirt floor. SFX: Loud rip-tear sound of heavy card paper.",
-      "transition_to_next": "Rajesh crosses arms",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 100,
-      "duration": "5s",
-      "prompt": "rajesh.png crosses his arms angrily over his chest, turning his back on madhav.png completely in total rejection. Dialogue (Rajesh): “मैं नहीं आने वाला तेरी दुकान पर!”",
-      "transition_to_next": "Dynamic tracking shot in new shop",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 101,
-      "duration": "5s",
-      "prompt": "Dynamic tracking shot inside the bright, heavily crowded new shop during the grand opening day. Suddenly, a rough-looking young thug slams his steel food plate down hard onto a wooden table, standing up angrily. SFX: Steel plate slamming loudly and aggressively on a wooden table.",
-      "transition_to_next": "Close-up on thug yelling",
-      "reference_previous_video_last_frame": false
-    },
-    {
-      "scene_id": 102,
-      "duration": "5s",
-      "prompt": "Close-up on the angry thug character as he points down at his plate accusingly, yelling out to make a scene in front of the customers. Dialogue (Thug): “अरे! इस भाजी में कंकड़ पत्थर है!”",
-      "transition_to_next": "Low angle hero shot doorway",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 103,
-      "duration": "5s",
-      "prompt": "Low-angle hero shot of the shop doorway. The village's new Head Constable, raghuvirsingh.png, steps firmly inside wearing a crisp khaki police uniform, polished badges, and a stern, intimidating facial expression. SFX: Heavy leather boot heels stepping firmly and loudly on the tiled floor.",
-      "transition_to_next": "Close-up on Constable",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 104,
-      "duration": "5s",
-      "prompt": "Close-up of the Constable raghuvirsingh.png as his sharp eyes lock instantly onto the rowdy, shouting thug's table. Dialogue (Constable): “रुको! यह क्या बदतमीजी है?”",
-      "transition_to_next": "Close-up on hand picking stone",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 105,
-      "duration": "5s",
-      "prompt": "Close-up on the Constable raghuvirsingh.png's hand. He walks over calmly, picks up a completely clean, dry grey pebble resting off the top of the bright red bhaji dish, and holds it up closely to the room light. SFX: Tense, rhythmic background investigation string music starts.",
-      "transition_to_next": "Constable rotates pebble",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 106,
-      "duration": "5s",
-      "prompt": "The Constable raghuvirsingh.png rotates the clean pebble slowly in front of his eyes, showing it off clearly to the entire quiet room of onlookers. Dialogue (Constable): “इस कंकड़ पर मसाला नहीं लगा है!”",
-      "transition_to_next": "Medium close-up moving fast",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 107,
-      "duration": "5s",
-      "prompt": "Medium close-up. The Constable raghuvirsingh.png moves like lightning, grabbing the loud, troublemaking thug tightly by his shirt collar with one hand and pulling him face-to-face. SFX: Sudden fabric pulling whoosh sound effect.",
-      "transition_to_next": "Constable glares into thug eyes",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 108,
-      "duration": "5s",
-      "prompt": "The Constable raghuvirsingh.png glares deeply and threateningly into the terrified thug's wide eyes. Dialogue (Constable): “सच बताओ, तुम्हें किसने भेजा है?”",
-      "transition_to_next": "Close-up on thug shaking",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 109,
-      "duration": "5s",
-      "prompt": "Close-up of the thug. His face has gone completely pale white, shaking with absolute terror as he points his trembling finger out the open glass shop window directly toward rajesh.png’s store. SFX: Shaky, rapid breathing sounds from the caught thug.",
-      "transition_to_next": "Tight shot on lips confessing",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 110,
-      "duration": "5s",
-      "prompt": "Tight shot on the thug's trembling lips as he speaks out his confession out of fear of the law. Dialogue (Thug): “राजेश भैया ने पैसे दिए थे!”",
-      "transition_to_next": "Medium shot shove",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 111,
-      "duration": "5s",
-      "prompt": "Medium shot. The Constable raghuvirsingh.png shoves the thug away out of frame, turns around to face a highly stressed madhav.png, smiles warmly, and places a strong, reassuring hand on Madhav's shoulder. SFX: Thug stumbling away, upbeat melodic tones return to the music track.",
-      "transition_to_next": "Close-up on Constable face",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 112,
-      "duration": "5s",
-      "prompt": "Close-up on the Constable raghuvirsingh.png's face as he looks at madhav.png with complete trust and community support. Dialogue (Constable): “माधव भाई डरो मत, तुम सच्चे हो।”",
-      "transition_to_next": "Constable pulls chair",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 113,
-      "duration": "5s",
-      "prompt": "The Constable raghuvirsingh.png pulls out a heavy wooden chair, sits down confidently at the main center table with a wide, hearty grin, and gestures happily toward the kitchen counter. SFX: Wooden chair scraping smoothly and loudly on the tiled floor.",
-      "transition_to_next": "Constable settles in",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 114,
-      "duration": "5s",
-      "prompt": "The Constable raghuvirsingh.png settles comfortably into his seat, looking up at madhav.png with a friendly, hungry nod. Dialogue (Constable): “चलो, हमारे लिए दो प्लेट लगाओ!”",
-      "transition_to_next": "High-speed transition jump cut",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 115,
-      "duration": "5s",
-      "prompt": "High-speed cinematic transition indicating years passing. Cut to a rundown, dirty roadside food stall with a handwritten cardboard sign reading: \"Rajesh Pav Bhaji\". A furious, unsatisfied customer is slamming his fist onto the dirty counter, yelling directly at a miserable rajesh.png. SFX: Flesh slamming hard on wood, fast drum fills signifying the rapid time jump.",
-      "transition_to_next": "Close-up on angry customer",
-      "reference_previous_video_last_frame": false
-    },
-    {
-      "scene_id": 116,
-      "duration": "5s",
-      "prompt": "Close-up on the angry customer's face as he screams in deep disgust and anger right into rajesh.png's face. Dialogue (Customer): “राजेश! सड़ी भाजी खिलाकर सबको बीमार कर दिया!”",
-      "transition_to_next": "Close-up on padlock lock",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 117,
-      "duration": "5s",
-      "prompt": "Close-up of a massive iron padlock securing the shop door shut. A large, official bright red government ink stamp slams violently over the lock reading in bold letters: \"SHUT DOWN\". SFX: Heavy metallic locking slam sound, followed by a crisp ink stamping sound effect.",
-      "transition_to_next": "Camera pans down from lock",
-      "reference_previous_video_last_frame": false
-    },
-    {
-      "scene_id": 118,
-      "duration": "5s",
-      "prompt": "The camera pans down smoothly from the government lock to show a broken rajesh.png sitting hopelessly in the dirt next to the wall, holding his head in his hands, weeping. SFX: A sad, hollow, and deeply melancholic solo flute melody plays.",
-      "transition_to_next": "Wide slick tracking shot inside office",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 119,
-      "duration": "5s",
-      "prompt": "Wide, slick tracking shot inside a luxury, high-end corporate glass office overlooking the city. A wealthy city businessman citybusinessman.png wearing a premium tailored suit slides a premium leather contract folder across a polished mahogany table to madhav.png, who is looking sharp and successful in a clean shirt. SFX: Smooth sliding sound of a leather folder over polished wood.",
-      "transition_to_next": "Close-up on businessman",
-      "reference_previous_video_last_frame": false
-    },
-    {
-      "scene_id": 120,
-      "duration": "5s",
-      "prompt": "Close-up of the city businessman citybusinessman.png smiling professionally and encouragingly, leaning forward to offer a deal. Dialogue (Businessman): “चलो हाईवे पर बड़ा रेस्टोरेंट खोलते हैं!”",
-      "transition_to_next": "Close-up on Madhav",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 121,
-      "duration": "5s",
-      "prompt": "Close-up of madhav.png. He looks down at the premium contract folder nervously, humbly rubbing the back of his neck with a modest, down-to-earth smile, feeling overwhelmed. SFX: Soft, low ambient office air conditioning hum.",
-      "transition_to_next": "Madhav shifts in chair",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 122,
-      "duration": "5s",
-      "prompt": "madhav.png shifts his body slightly in his plush, high-back corporate office chair, speaking softly and modestly. Dialogue (Madhav): “साहब, मैं इतनी बड़ी जिम्मेदारी संभाल पाऊंगा?”",
-      "transition_to_next": "Medium close-up businessman leaning",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 123,
-      "duration": "5s",
-      "prompt": "Medium close-up of the businessman citybusinessman.png leaning forward further across the table, his eyes full of encouragement and deep business respect as he lightly taps the contract folder. SFX: Finger tapping lightly and rhythmically on leather surface.",
-      "transition_to_next": "Close-up on businessman face",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 124,
-      "duration": "5s",
-      "prompt": "Close-up of the businessman citybusinessman.png's face as he nods his head with absolute, unshakeable confidence in Madhav's skill. Dialogue (Businessman): “बिल्कुल! यह मौका मत छोड़िए।”",
-      "transition_to_next": "Cinematic aerial drone shot restaurant",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 125,
-      "duration": "5s",
-      "prompt": "Breathtaking, cinematic aerial drone shot zooming rapidly up and away from a massive, modern, brilliantly lit two-story restaurant building situated on a bustling highway. A giant, clean neon sign glows brightly reading: \"Madhav Ki Asli Pav Bhaji\". The vast parking lot is packed with luxury modern cars. SFX: A grand, cinematic, inspiring orchestral theme music reaches a powerful, beautiful crescendo.",
-      "transition_to_next": "Tracking shot luxury SUV village",
-      "reference_previous_video_last_frame": false
-    },
-    {
-      "scene_id": 126,
-      "duration": "5s",
-      "prompt": "Tracking shot following a clean, shiny luxury SUV as it pulls up smoothly to the old village crossroads. The door opens, and madhav.png steps out onto the dirt wearing polished leather shoes. He stops walking as his eyes notice a broken, very thin, haggard rajesh.png sitting miserably on a stone block in tattered clothes. SFX: Car door opening chime, and crisp footsteps stepping on dry gravel.",
-      "transition_to_next": "Close-up on Madhav smiling",
-      "reference_previous_video_last_frame": false
-    },
-    {
-      "scene_id": 127,
-      "duration": "5s",
-      "prompt": "Close-up on madhav.png's warm, deeply compassionate smiling face as he looks down at his old rival rajesh.png. Dialogue (Madhav): “राजेश भाई राम-राम! क्या हालचाल?”",
-      "transition_to_next": "Wide emotional shot",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 128,
-      "duration": "5s",
-      "prompt": "Wide emotional shot. rajesh.png looks up from the ground, gasping sharply as he recognizes madhav.png, and instantly slides off the stone block straight down onto his knees in the dirt, sobbing bitterly with his hands joined in tight apology. SFX: Soft, emotional violin chords creep beautifully into the music soundtrack.",
-      "transition_to_next": "Tight close-up on Rajesh face",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 129,
-      "duration": "5s",
-      "prompt": "Tight close-up of rajesh.png’s haggard, tear-streaked face looking up into the camera lens with absolute, crushing shame and humility. Dialogue (Rajesh): “माधव मुझे माफ कर दो! मैंने तुम्हारा बुरा चाहा।”",
-      "transition_to_next": "Medium shot on knees head down",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 130,
-      "duration": "5s",
-      "prompt": "Medium shot of rajesh.png still resting on his knees in the dirt, his head dropping low to his chest in complete despair and sadness. SFX: Soft, muffled sound of rajesh.png weeping heavily.",
-      "transition_to_next": "Rajesh looks up again",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 131,
-      "duration": "5s",
-      "prompt": "rajesh.png looks up again at Madhav, his thin shoulders shaking uncontrollably as he speaks out his stark reality. Dialogue (Rajesh): “आज मेरे पास कोई काम नहीं है।”",
-      "transition_to_next": "Medium shot Madhav bending down",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 132,
-      "duration": "5s",
-      "prompt": "Medium shot. Without a single second of hesitation, madhav.png bends down kindly, takes rajesh.png gently by his upper arms, and lifts him up to his feet, carefully brushing the dry village dirt off rajesh.png’s tattered fabric shirt. SFX: Soft rustling clothes sound effect.",
-      "transition_to_next": "Close-up Madhav handkerchief",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 133,
-      "duration": "5s",
-      "prompt": "Close-up of madhav.png. He pulls a clean white cloth handkerchief from his pocket and hands it over to rajesh.png with a deeply compassionate, warm, and forgiving smile. SFX: Soft fabric handkerchief sliding out of a tight pocket.",
-      "transition_to_next": "Madhav speaks softly close-up",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 134,
-      "duration": "5s",
-      "prompt": "madhav.png speaks softly and reassuringly, placing a firm, loving hand over rajesh.png's shaking arm to comfort him. Dialogue (Madhav): “पुरानी बातें भूल जाओ राजेश भाई।”",
-      "transition_to_next": "Close-up Madhav smile expands",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 135,
-      "duration": "5s",
-      "prompt": "Close-up on madhav.png's face as his kind smile expands with genuine, total, forgiving warmth, offering a lifeline. Dialogue (Madhav): “तुम मेरे होटल में मैनेजर बन जाओ।”",
-      "transition_to_next": "Emotional medium shot hug",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 136,
-      "duration": "5s",
-      "prompt": "Emotional medium shot. rajesh.png breaks down completely into heavy, overwhelming tears of immense gratitude and throws his thin arms around madhav.png, hugging him tightly. madhav.png smiles and pats his back lovingly in true friendship. SFX: Heartwarming orchestral string orchestration swells beautifully.",
-      "transition_to_next": "Close-up over shoulder",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 137,
-      "duration": "5s",
-      "prompt": "Close-up shot framed over madhav.png's shoulder, focusing closely on rajesh.png's tear-streaked face as he cries tears of profound relief and joy during the warm hug. Dialogue (Rajesh): “तुम सच में महान हो माधव!”",
-      "transition_to_next": "Rajesh pulls back slightly",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 138,
-      "duration": "5s",
-      "prompt": "rajesh.png pulls back slightly from the warm hug, looking directly into madhav.png's eyes with absolute dedication, loyalty, and a firm, honest nod of his head. Dialogue (Rajesh): “मैं पूरी ईमानदारी से काम करूंगा।”",
-      "transition_to_next": "Wide beautiful panoramic sunset shot",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 139,
-      "duration": "5s",
-      "prompt": "Wide, beautiful panoramic sunset shot of the sprawling, glittering, and highly bustling highway restaurant building filled to the brim with happy, smiling families dining together. The camera slowly and elegantly tilts up toward the vast golden, glowing sky. Bold, clean white cinematic typography gently fades onto the center screen: \"Honesty, hard work, and kindness always triumph over jealousy and greed.\" SFX: The beautiful orchestral music theme reaches its ultimate, inspiring peak, holding a long, triumphant final note before slowly fading out entirely into absolute blackness.",
-      "transition_to_next": "Fade out to black end",
-      "reference_previous_video_last_frame": false
     }
   ]
 }

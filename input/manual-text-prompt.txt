@@ -78,7 +78,8 @@ STRICT RULES:
    * Dialogues should sound natural and human.
    * Dialogue length must fit comfortably within a 5-second video.
    * If dialogue is too long, split it into multiple consecutive scenes.
-   * If a dialogue cannot be spoken naturally within 5 seconds because of multiple statement in single dialouge, split it across multiple consecutive scenes while maintaining conversational continuity.
+   * In scenes where the dialouge is more than 3 to 5 words, Then split that scene across multiple consecutive scenes while maintaining conversational continuity.
+   * If there is no dialouge in the scene then mention that there is no dialogue otherwise my AI tool automatically add english dialouge.
 
   For ex, refer the example below: 
   If the scene is "Chiku pulls red cloth from mirror. Bright reflection flashes toward gathered animals. Dialogue by Cheeku: 'इस जादुई शीशे के सामने जो भी आएगा, यह उसके मन का सच बता देगा! झूठे का चेहरा इसमें डरावना दिखेगा!' Bold theatrical voice."
