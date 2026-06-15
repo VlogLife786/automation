@@ -58,86 +58,9 @@
   },
   "scene_sequence": [
     {
-      "scene_id": 3,
-      "duration": "5s",
-      "prompt": "Cinematic close-up shot. Continue seamlessly from the last frame of the previous scene. madhav.png stands beside cart.png under the heavy rain, folding hands in a silent prayer while staring upward with tears welling in the eyes of madhav.png. Rainwater streams down the face of madhav.png. The lips of madhav.png accurately sync to form the words in Hindi: 'भगवान, आज बारिश मत होने देना।' Voice type: Soft, trembling, emotional male voice. Expression: Desperate prayer, intense grief. 4K, 24fps.",
-      "transition_to_next": "Maintain the close-up as the prayer continues seamlessly.",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 4,
-      "duration": "5s",
-      "prompt": "Cinematic close-up shot. Continue seamlessly from the last frame of the previous scene. Maintaining the same framing, madhav.png continues the desperate prayer under the torrential rain next to cart.png. The eyes of madhav.png remain fixed upwards with deep worry. The lips of madhav.png form the words: 'भाजी बिकी नहीं तो खराब हो जाएगी।' Voice type: Soft, trembling, emotional male voice. Expression: Sorrowful, pleading. 4K, 24fps.",
-      "transition_to_next": "Keep the camera locked on Madhav as he continues his emotional plea.",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 5,
-      "duration": "5s",
-      "prompt": "Cinematic close-up shot. Continue seamlessly from the last frame of the previous scene. madhav.png remains in the same position under the downpour next to cart.png. Tears and rain mix on the cheeks of madhav.png. The lips of madhav.png form the words: 'घर पर राशन भी नहीं बचा है।' Voice type: Soft, trembling, emotional male voice. Expression: Despondent, broken-hearted. 4K, 24fps.",
-      "transition_to_next": "Maintain focus on Madhav's expressive face for the final line of his prayer.",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 6,
-      "duration": "5s",
-      "prompt": "Cinematic close-up shot. Continue seamlessly from the last frame of the previous scene. madhav.png finishes the prayer under the heavy rain beside cart.png. The lips of madhav.png form the words: 'सुमित्रा आस लगाए बैठी होगी।' Voice type: Soft, trembling, emotional male voice. Expression: Deeply anxious, caring. 4K, 24fps.",
-      "transition_to_next": "Widen out to a medium shot as a villager approaches.",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 7,
-      "duration": "5s",
-      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png hurriedly pulls a torn plastic sheet to cover the food on cart.png under the pouring rain. madhav.png is completely drenched. Just then, birju.png, a friendly villager holding an umbrella, walks past and stops near cart.png, looking at madhav.png with concern. Heavy rain atmosphere, realistic droplets, 4K, 24fps.",
-      "transition_to_next": "Shift camera focus onto Birju as he begins to speak.",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 8,
-      "duration": "5s",
-      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. birju.png stands under an umbrella looking at madhav.png who is managing cart.png. The lips of birju.png form the words: 'अरे माधव, यह क्या कर रहे हो?' Voice type: Rustic, friendly male voice. Expression: Concerned, surprised. 4K, 24fps.",
-      "transition_to_next": "Maintain the over-the-shoulder framing on Birju.",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 9,
-      "duration": "5s",
-      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. birju.png continues speaking from the same position under the umbrella near cart.png. The lips of birju.png form the words: 'ऐसी आफत वाली बारिश में कौन आएगा?' Voice type: Rustic, friendly male voice. Expression: Warning, pitying. 4K, 24fps.",
-      "transition_to_next": "Keep the shot continuous as Birju concludes his sentence.",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 10,
-      "duration": "5s",
-      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. birju.png gestures towards the road while standing near cart.png. The lips of birju.png form the words: 'घर जाओ भाई, वरना बीमार हो जाओगे।' Voice type: Rustic, friendly male voice. Expression: Urging, helpful. 4K, 24fps.",
-      "transition_to_next": "Pan slightly to focus on Madhav's sad response.",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 11,
-      "duration": "5s",
-      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png looks at birju.png with a sad, defeated expression under the rain beside cart.png. The lips of madhav.png form the words: 'बिरजू भाई, गरीब को भूख का डर है।' Voice type: Low, sad male voice. Expression: Melancholic, hopeless. 4K, 24fps.",
-      "transition_to_next": "Maintain composition as Madhav continues speaking.",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 12,
-      "duration": "5s",
-      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png continues talking, looking down at cart.png. The lips of madhav.png form the words: 'आज एक रुपये की बोहनी नहीं हुई।' Voice type: Low, sad male voice. Expression: Despondent, stressed. 4K, 24fps.",
-      "transition_to_next": "Keep the framing steady as Madhav finishes his statement.",
-      "reference_previous_video_last_frame": true
-    },
-    {
-      "scene_id": 13,
-      "duration": "5s",
-      "prompt": "Cinematic medium shot. Continue seamlessly from the last frame of the previous scene. madhav.png looks up again with a sigh towards birju.png. The lips of madhav.png form the words: 'खाली हाथ गया तो सुमित्रा को क्या दिखाऊंगा?' Voice type: Low, sad male voice. Expression: Heartbroken, worried. 4K, 24fps.",
-      "transition_to_next": "Fade transition to show a time jump to later that night.",
-      "reference_previous_video_last_frame": true
-    },
-    {
       "scene_id": 14,
       "duration": "5s",
-      "prompt": "Cinematic medium shot. The time is now 8 PM. The heavy rain has slowed down to a light drizzle, creating deep puddles on the ground. madhav.png stands under a large tree, looking completely defeated as madhav.png begins slowly packing up the steel containers on cart.png. Dark night ambiance with soft wet road reflections, 4K, 24fps.",
+      "prompt": "Cinematic medium shot. The time is now 8 PM. The heavy rain has slowed down to a light drizzle, creating deep puddles on the ground. madhav.png stands under a large tree with cart.png, looking completely defeated as madhav.png begins slowly packing up the steel containers on cart.png. Dark night ambiance with soft wet road reflections, 4K, 24fps.",
       "transition_to_next": "A sudden splash of headlights cuts into the scene.",
       "reference_previous_video_last_frame": false
     },

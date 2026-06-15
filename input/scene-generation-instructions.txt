@@ -18,6 +18,7 @@ STRICT RULES:
 
 2. Scene Duration Rule
    * Every scene must be designed for approximately 5 seconds of video generation.
+   * Provide the video generation prompt in detail, as it mention every step, every camera detail, expression of character if any.
    * Do not overload a scene with too many actions.
    * Ensure all actions and dialogues comfortably fit within 5 seconds.
 

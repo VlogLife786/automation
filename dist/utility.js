@@ -1,4 +1,5 @@
-import puppeteer from "puppeteer-core"; // If "type": "module" in package.json
+import puppeteer from 'puppeteer-extra';
+import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import { EnvConstants, Flags, PageNames, VideoDuration } from "./constants.js";
 import Chromium from "@sparticuz/chromium";
 import fs from "fs";
@@ -250,6 +251,36 @@ export async function openNewBrowser(instanceType) {
                 headless: true,
             }); // headless:false shows the browser
 }
+export async function openStealthBrowser() {
+    // puppeteer
+    //     .use(StealthPlugin())
+    //     .launch({ headless: true,
+    //         executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    //      }).then(async browser => {
+    //         console.log('Running tests..')
+    //         const page = await browser.newPage()
+    //         await page.goto('https://bot.sannysoft.com')
+    //         // await page.waitForTimeout(5000)
+    //         await page.screenshot({ path: 'testresult.png', fullPage: true })
+    //         await browser.close()
+    //         console.log(`All done, check the screenshot. ✨`)
+    //     });
+    return await puppeteer
+        .use(StealthPlugin())
+        .launch({
+        headless: false,
+        defaultViewport: null, // optional: to see full page
+        executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--no-first-run',
+            '--no-default-browser-check',
+            '--disable-default-apps',
+            '--start-maximized'
+        ]
+    });
+}
 /**
  * Generate password based on input length
  * @param length Length of the password
@@ -440,56 +471,6 @@ export async function clickOnElementByText(page, searchText, elementTag = "span"
         await element?.click();
         return true;
     }
-    // for (const element of elements) {
-    // const text = await page.evaluate(
-    //     el => el.textContent?.trim(),
-    //     element
-    // );
-    // if (text === searchText.trim()) {
-    //     if (clickByMouse) {
-    //         console.log(await element.evaluate(el => el.outerHTML));
-    //         // await element?.evaluate((el) => {
-    //         //     el.dispatchEvent(
-    //         //         new MouseEvent('click', {
-    //         //             bubbles: true,
-    //         //             cancelable: true,
-    //         //         })
-    //         //     );
-    //         // });
-    //         //     // const box: any = await element.boundingBox();
-    //         //     // await page.mouse.move(
-    //         //     //     box.x + box.width / 2,
-    //         //     //     box.y + box.height / 2
-    //         //     // );
-    //         //     // await page.mouse.down({ button: 'left' });
-    //         //     // await sleep(100);
-    //         //     // await page.mouse.up({ button: 'left' });
-    //         //     console.log("Element is visible:", await element.isVisible());
-    //         //     console.log("Element is hidden:", await element.isHidden());
-    //         //     await element.evaluate(el => {
-    //         //         el.scrollIntoView({
-    //         //             behavior: "instant",
-    //         //             block: "center",
-    //         //         });
-    //         //     });
-    //         //     await element.hover();
-    //         //     // Native puppeteer click
-    //         //     await element.click();
-    //     }
-    //     // else {
-    //     // Scroll into view first
-    //     await element.evaluate(el => {
-    //         el.scrollIntoView({
-    //             behavior: "instant",
-    //             block: "center",
-    //         });
-    //     });
-    //     // Native puppeteer click
-    //     await element.click();
-    //     // }
-    //     return true;
-    // }
-    // }
     return false;
 }
 export async function hoverOnElementByText(page, searchText, elementTag = "span") {

@@ -1,5 +1,5 @@
 import { Browser, BrowserContext, Page } from "puppeteer-core";
-import { clickOnElementByText, globalVars, hoverOnElementByText, openNewBrowser, replaceString, sleep } from "./utility.js";
+import { clickOnElementByText, globalVars, hoverOnElementByText, openNewBrowser, openStealthBrowser, replaceString, sleep } from "./utility.js";
 import { ApiURLs, Flags } from "./constants.js";
 import { getRestResponse } from "./restTemplate.js";
 import { ExecutionRequestModel, RefrenceImageDetails, StartVideoGenerationResponse, TaskResultByIdResponse } from "./wan-video-object-models.js";
@@ -14,7 +14,7 @@ export async function GenerateWANAiVideos(requestModel: ExecutionRequestModel, r
 
     console.log('Launching new browser and creating incognito context');
 
-    let browser: Browser = await openNewBrowser(Flags.BROWSER_LOCAL);
+    let browser: Browser = await openStealthBrowser();
 
     // ✅ Get default pages but DON'T close them yet
     const defaultPages = await browser.pages();

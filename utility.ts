@@ -1,4 +1,6 @@
-import puppeteer, { Browser, Page } from "puppeteer-core";   // If "type": "module" in package.json
+import puppeteer from 'puppeteer-extra';
+import type { Browser, Page } from "puppeteer-core";
+import StealthPlugin from 'puppeteer-extra-plugin-stealth';
 import { ApiURLs, Configs, EnvConstants, Flags, PageNames, VideoDuration } from "./constants.js";
 import Chromium from "@sparticuz/chromium";
 import nodeCron from "node-cron";
@@ -276,6 +278,37 @@ export async function openNewBrowser(instanceType: Flags): Promise<Browser> {
             // executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
             headless: true,
         }); // headless:false shows the browser
+}
+
+export async function openStealthBrowser() {
+    // puppeteer
+    //     .use(StealthPlugin())
+    //     .launch({ headless: true,
+    //         executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+    //      }).then(async browser => {
+    //         console.log('Running tests..')
+    //         const page = await browser.newPage()
+    //         await page.goto('https://bot.sannysoft.com')
+    //         // await page.waitForTimeout(5000)
+    //         await page.screenshot({ path: 'testresult.png', fullPage: true })
+    //         await browser.close()
+    //         console.log(`All done, check the screenshot. ✨`)
+    //     });
+    return await puppeteer
+        .use(StealthPlugin())
+        .launch({
+            headless: false,
+            defaultViewport: null,         // optional: to see full page
+            executablePath: "C:\\Program Files\\Google\\Chrome\\Application\\chrome.exe",
+            args: [
+                '--no-sandbox',
+                '--disable-setuid-sandbox',
+                '--no-first-run',
+                '--no-default-browser-check',
+                '--disable-default-apps',
+                '--start-maximized'
+            ]
+        });
 }
 
 /**

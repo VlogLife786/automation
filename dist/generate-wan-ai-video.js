@@ -1,5 +1,5 @@
-import { clickOnElementByText, globalVars, openNewBrowser, replaceString, sleep } from "./utility.js";
-import { ApiURLs, Flags } from "./constants.js";
+import { clickOnElementByText, globalVars, openStealthBrowser, replaceString, sleep } from "./utility.js";
+import { ApiURLs } from "./constants.js";
 import { getRestResponse } from "./restTemplate.js";
 import { refrenceImageList } from "./generate-scene.js";
 import axios from "axios";
@@ -8,7 +8,7 @@ export async function GenerateWANAiVideos(requestModel, retries = 10) {
     let taskResultResponse = {};
     let videoGenerationResponse = {};
     console.log('Launching new browser and creating incognito context');
-    let browser = await openNewBrowser(Flags.BROWSER_LOCAL);
+    let browser = await openStealthBrowser();
     // ✅ Get default pages but DON'T close them yet
     const defaultPages = await browser.pages();
     // Create incognito context FIRST

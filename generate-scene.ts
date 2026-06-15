@@ -46,7 +46,8 @@ export async function generateScene() {
 
         await saveFile("input/chatgpt-response.json", JSON.stringify(refrenceVideoPromptScenes, null, 2));
 
-        for (const scene of refrenceVideoPromptScenes.scene_sequence) {
+        while (refrenceVideoPromptScenes.scene_sequence.length > 0) {
+            let scene = refrenceVideoPromptScenes.scene_sequence[0];
             console.log("We started a new scene again...", scene.scene_id);
 
             let retryCount = 5;
@@ -64,6 +65,7 @@ export async function generateScene() {
             let tempScenes: ContinuousCinematicVideoSequence = JSON.parse(await fspromise.readFile('input/chatgpt-response.json', 'utf8')) as ContinuousCinematicVideoSequence;
             tempScenes.scene_sequence = tempScenes.scene_sequence.filter(s => s.scene_id != scene.scene_id);
             await saveFile("input/chatgpt-response.json", JSON.stringify(tempScenes, null, 2));
+            refrenceVideoPromptScenes = tempScenes;
         }
 
         console.log("All video sequences generated, Now merging the videos");
