@@ -46,6 +46,9 @@ export async function GenerateWANAiVideos(requestModel: ExecutionRequestModel, r
     try {
 
         //Navigate to wan ai
+        await page.goto(requestModel.refrenceImageList.length > 0 ? "https://create.wan.video/generate/video/reference?model=wan3.0" :
+            requestModel.startImageName != "" ? "https://create.wan.video/generate/video/generate?model=wan2.7" : "https://create.wan.video/generate/video/omni?model=wan3.0", { waitUntil: "load", timeout: 120000 });
+
         await page.goto(requestModel.refrenceImageList.length > 0 ? "https://create.wan.video/generate/video/reference?model=wan3.0" : "https://create.wan.video/generate/video/generate?model=wan2.7", { waitUntil: "load", timeout: 120000 });
         await sleep(5000);
         console.log("Navigated to WAN AI Site.");
@@ -88,7 +91,7 @@ export async function GenerateWANAiVideos(requestModel: ExecutionRequestModel, r
 
         await page.type('[data-test-id="login-form-box-password"]', requestModel.loginPassword, { delay: 120 });
         await sleep(5000);
-        
+
         console.log("Password is entered.");
 
         await Promise.all([
@@ -139,7 +142,7 @@ export async function GenerateWANAiVideos(requestModel: ExecutionRequestModel, r
 
         await sleep(5000);
 
-        if (requestModel.refrenceImageList.length > 0) {
+        if (requestModel.refrenceImageList.length > 0 || requestModel.startImageName == "") {
             await clickOnElementByText(page, '720PSmart Ratio5s', 'div');
 
             await sleep(4000);
