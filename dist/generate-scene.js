@@ -155,7 +155,7 @@ async function generateSceneSequence(scene) {
         webhookUrl: "",
         startImageName: startImageName,
         audioFileName: "",
-        refrenceImageList: scene.prompt.includes('.png') ? refrenceImageList : [],
+        refrenceImageList: ['.png', '.jpg', '.jpeg'].some(ext => scene.prompt.includes(ext)) ? refrenceImageList : [],
         sendEmail: false
     });
     console.log("Generated video URL:", videoUrl);

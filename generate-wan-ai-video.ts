@@ -48,8 +48,6 @@ export async function GenerateWANAiVideos(requestModel: ExecutionRequestModel, r
         //Navigate to wan ai
         await page.goto(requestModel.refrenceImageList.length > 0 ? "https://create.wan.video/generate/video/reference?model=wan3.0" :
             requestModel.startImageName != "" ? "https://create.wan.video/generate/video/generate?model=wan2.7" : "https://create.wan.video/generate/video/omni?model=wan3.0", { waitUntil: "load", timeout: 120000 });
-
-        await page.goto(requestModel.refrenceImageList.length > 0 ? "https://create.wan.video/generate/video/reference?model=wan3.0" : "https://create.wan.video/generate/video/generate?model=wan2.7", { waitUntil: "load", timeout: 120000 });
         await sleep(5000);
         console.log("Navigated to WAN AI Site.");
 
@@ -143,50 +141,11 @@ export async function GenerateWANAiVideos(requestModel: ExecutionRequestModel, r
         await sleep(5000);
 
         if (requestModel.refrenceImageList.length > 0 || requestModel.startImageName == "") {
-            await clickOnElementByText(page, '720PSmart Ratio5s', 'div');
-
-            await sleep(4000);
-
-            const thumb = await page.waitForSelector('div[class*="Thumb"]');
-
-            const box = await thumb?.boundingBox();
-
-            if (!box) throw new Error('Thumb not visible');
-
-            let startX = box.x + box.width / 2;
-            const startY = box.y + box.height / 2;
-
-            await page.mouse.move(startX, startY);
-            await new Promise(r => setTimeout(r, 100));
-
-            await page.mouse.down();
-
-            for (let i = 0; i < 30; i++) {
-                let time = await page.$eval(
-                    'div[class*="ThumbLabel"]',
-                    el => el.innerText
-                );
-
-                console.log("Selected time: " + time);
-
-                if (time && time.includes('4')) {
-                    break;
-                }
-                startX -= 10;
-                await page.mouse.move(startX, startY, {
-                    steps: 30
-                });
-
-                await sleep(500);
-
+            try {
+                await selectVideoResolutionAndDuration(page);
+            } catch (error) {
+                console.log("Error while selecting video resolution and duration: ", error);
             }
-            await page.mouse.up();
-
-            await sleep(4000);
-
-            await clickOnElementByText(page, '16:9', 'div[class^="Label-sc-"]', true);
-
-            await sleep(2000);
         }
 
         await sleep(5000);
@@ -280,6 +239,53 @@ export async function GenerateWANAiVideos(requestModel: ExecutionRequestModel, r
     }
 }
 
+
+async function selectVideoResolutionAndDuration(page: Page) {
+    await clickOnElementByText(page, '720PSmart Ratio5s', 'div');
+
+    await sleep(4000);
+
+    const thumb = await page.waitForSelector('div[class*="Thumb"]');
+
+    const box = await thumb?.boundingBox();
+
+    if (!box) throw new Error('Thumb not visible');
+
+    let startX = box.x + box.width / 2;
+    const startY = box.y + box.height / 2;
+
+    await page.mouse.move(startX, startY);
+    await new Promise(r => setTimeout(r, 100));
+
+    await page.mouse.down();
+
+    for (let i = 0; i < 30; i++) {
+        let time = await page.$eval(
+            'div[class*="ThumbLabel"]',
+            el => el.innerText
+        );
+
+        console.log("Selected time: " + time);
+
+        if (time && time.includes('4')) {
+            break;
+        }
+        startX -= 10;
+        await page.mouse.move(startX, startY, {
+            steps: 30
+        });
+
+        await sleep(500);
+
+    }
+    await page.mouse.up();
+
+    await sleep(4000);
+
+    await clickOnElementByText(page, '16:9', 'div[class^="Label-sc-"]', true);
+
+    await sleep(2000);
+}
 
 async function closeBrowserInstances(incognitoContext: BrowserContext, browser: Browser) {
     try {
