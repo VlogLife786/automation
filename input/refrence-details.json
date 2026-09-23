@@ -1,55 +1,48 @@
 [
     {
-        "originalName": "Madhav",
-        "imageName": "madhav.png",
-        "imageType": "main character and pav bhaji cart owner",
+        "originalName": "चिड़िया",
+        "imageName": "bird.jpeg",
+        "imageType": "bird character in the poem named as चिड़िया",
         "voiceFileName": "Bunty.mp3"
     },
     {
-        "originalName": "Sumitra",
-        "imageName": "sumitra.png",
-        "imageType": "wife of madhav and helper in pav bhaji cart",
-        "voiceFileName": "Riya.mp3"
+        "originalName": "तितली",
+        "imageName": "butterfly.jpeg",
+        "imageType": "butterfly character in the poem named as तितली"
     },
     {
-        "originalName": "Madhav's cart",
-        "imageName": "cart.png",
-        "imageType": "Madhav's pav bhaji cart"
+        "originalName": "हाथी",
+        "imageName": "elephant.jpeg",
+        "imageType": "elephant animal character in the poem named as हाथी"
     },
     {
-        "originalName": "Rajesh",
-        "imageName": "rajesh.png",
-        "imageType": "character and rival of character Madhav",
-        "voiceFileName": "Niraj.mp3"
+        "originalName": "जिराफ़",
+        "imageName": "giraffe.jpeg",
+        "imageType": "giraffe animal character in the poem named as जिराफ़"
     },
     {
-        "originalName": "Raghuveer Singh",
-        "imageName": "raghuvirsingh.png",
-        "imageType": "character of head constables of the area",
-        "voiceFileName": "Viraj.mp3"
+        "originalName": "शेर",
+        "imageName": "lion.jpeg",
+        "imageType": "lion animal character in the poem named as शेर"
     },
     {
-        "originalName": "Birju",
-        "imageName": "birju.png",
-        "imageType": "character of a villager and friend of Madhav",
-        "voiceFileName": "Leo.mp3"
+        "originalName": "बंदर",
+        "imageName": "monkey.jpeg",
+        "imageType": "monkey animal character in the poem named as बंदर"
     },
     {
-        "originalName": "Businessman",
-        "imageName": "citybusinessman.png",
-        "imageType": "character of a city businessman who provide offer to Madhav for opening a restaurant",
-        "voiceFileName": "Leo.mp3"
+        "originalName": "तोता",
+        "imageName": "parrot.jpeg",
+        "imageType": "parrot bird character in the poem named as तोता"
     },
     {
-        "originalName": "gentleman",
-        "imageName": "gentleman.png",
-        "imageType": "character of first gentleman who ate pav bhaji at madhav's cart and give good review",
-        "voiceFileName": "Bunty.mp3"
+        "originalName": "मोर",
+        "imageName": "peacock.jpeg",
+        "imageType": "peacock bird character in the poem named as मोर"
     },
     {
-        "originalName": "gentleman's wife",
-        "imageName": "gentlemanwife.png",
-        "imageType": "character of first gentleman's wife who ate pav bhaji at madhav's cart and give good review",
-        "voiceFileName": "Monika.mp3"
+        "originalName": "ज़ेब्रा",
+        "imageName": "zebra.jpeg",
+        "imageType": "zebra animal character in the poem named as ज़ेब्रा"
     }
 ]

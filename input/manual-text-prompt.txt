@@ -1,9 +1,9 @@
 You will be provided with:
 
 1. Reference image details (including Original Name and Alias Name).
-2. A story/script.
+2. A story/script/poem.
 
-Your task is to analyze the complete story and generate a detailed video generation prompt in JSON format.
+Your task is to analyze the complete story/poem and generate a detailed video generation prompt in JSON format and prompt should be only in English Language.
 
 IMPORTANT OBJECTIVE:
 My AI video generator creates only 5-second videos per generation. Therefore, you must divide the story into multiple scenes where each scene represents approximately 5 seconds of screen time. The generated scenes must be designed so that when all generated videos are merged together, they appear as one continuous cinematic film without visual jumps, continuity errors, character position changes, lighting inconsistencies, or camera discontinuity.
@@ -21,7 +21,7 @@ STRICT RULES:
    * Do not overload a scene with too many actions.
    * Ensure all actions and dialogues comfortably fit within 5 seconds.
 
-3. Video Continuity Rule (VERY IMPORTANT)
+3. Video Continuity Rule (VERY IMPORTANT) only for story not for poem
    * Treat all scenes as parts of one continuous movie.
    * The ending frame of a scene must naturally connect to the starting frame of the next scene.
    * Preserve:
@@ -40,7 +40,7 @@ STRICT RULES:
    * Never suddenly reset character positions or camera angles unless the story explicitly requires a scene transition.
    * Each scene should mention how it continues from the previous scene's final frame.
 
-4. Previous Scene Reference Rule
+4. Previous Scene Reference Rule only for story not for poem
    * Starting from Scene 2, include a continuity instruction such as:
      "Continue seamlessly from the last frame of the previous scene."
    * Mention the exact character position, movement state, emotion, and camera state inherited from the previous scene.
@@ -77,10 +77,10 @@ STRICT RULES:
    * Correct any grammar issues.
    * Dialogues should sound natural and human.
    * Dialogue length must fit comfortably within a 5-second video.
-   * If dialogue is too long, split it into multiple consecutive scenes.
-   * In scenes where the dialouge is more than 3 to 5 words, Then split that scene across multiple consecutive scenes while maintaining conversational continuity.
+   * If dialogue is too long, split it into multiple consecutive scene, because each scenes will be 5 second long. You can modify the dialouges but keep in mind the meaning of dialouge should not change.
+   * Keep the dialouge short and simple for one scene otherwise AI tool make it too fast, Which will impact video.
    * If there is no dialouge in the scene then mention that there is no dialogue otherwise my AI tool automatically add english dialouge.
-
+  
   For ex, refer the example below: 
   If the scene is "Chiku pulls red cloth from mirror. Bright reflection flashes toward gathered animals. Dialogue by Cheeku: 'इस जादुई शीशे के सामने जो भी आएगा, यह उसके मन का सच बता देगा! झूठे का चेहरा इसमें डरावना दिखेगा!' Bold theatrical voice."
   Then in the above prompt the dialouge is too long to be added in single 5 second video, So split it across multiple consecutive scenes while maintaining conversational continuity.
@@ -103,7 +103,7 @@ STRICT RULES:
      * they
    * Always use the Alias Name. 
 
-10. Motion Consistency Rule
+10. Motion Consistency Rule only for story not for poem
     * Character movement must be continuous.
     * Example:
       * If Alias_A starts walking in Scene 1,
@@ -172,14 +172,14 @@ Provide me json output in the below format strictly without any changes:
 
 
 {
-    "$schema": "https://json-schema.org/draft/2020-12/schema",
     "title": "Continuous Cinematic Video Sequence Schema",
     "type": "object",
     "required": [
         "title",
         "characters",
         "global_style",
-        "scene_sequence"
+        "scene_sequence",
+        "isResponseForPoem"
     ],
     "properties": {
         "title": {
@@ -295,6 +295,10 @@ Provide me json output in the below format strictly without any changes:
                 },
                 "additionalProperties": false
             }
+        },
+        "isResponseForPoem": {
+            "type": "boolean",
+            "description": "Indicates if the response is for a poem"
         }
     },
     "additionalProperties": false
@@ -304,146 +308,67 @@ Provide me json output in the below format strictly without any changes:
 
 Please find the list of reference images details below: 
     
-1. Image of Madhav has alias of madhav.png is a main character and pav bhaji cart owner.
-2. Image of Sumitra has alias of sumitra.png is a wife of madhav and helper in pav bhaji cart.
-3. Image of Madhav's cart has alias of cart.png is a Madhav's pav bhaji cart.
-4. Image of Rajesh has alias of rajesh.png is a character and rival of character Madhav.
-5. Image of Raghuveer Singh has alias of raghuvirsingh.png is a character of head constables of the area.
-6. Image of Birju has alias of birju.png is a character of a villager and friend of Madhav.
-7. Image of Businessman has alias of citybusinessman.png is a character of a city businessman who provide offer to Madhav for opening a restaurant.
-8. Image of gentleman has alias of gentleman.png is a character of first gentleman who ate pav bhaji at madhav's cart and give good review.
-9. Image of gentleman's wife has alias of gentlemanwife.png is a character of first gentleman's wife who ate pav bhaji at madhav's cart and give good review.
+1. Image of चिड़िया has alias of bird.jpeg is a bird character in the poem named as चिड़िया.
+2. Image of तितली has alias of butterfly.jpeg is a butterfly character in the poem named as तितली.
+3. Image of हाथी has alias of elephant.jpeg is a elephant animal character in the poem named as हाथी.
+4. Image of जिराफ़ has alias of giraffe.jpeg is a giraffe animal character in the poem named as जिराफ़.
+5. Image of शेर has alias of lion.jpeg is a lion animal character in the poem named as शेर.
+6. Image of बंदर has alias of monkey.jpeg is a monkey animal character in the poem named as बंदर.
+7. Image of तोता has alias of parrot.jpeg is a parrot bird character in the poem named as तोता.
+8. Image of मोर has alias of peacock.jpeg is a peacock bird character in the poem named as मोर.
+9. Image of ज़ेब्रा has alias of zebra.jpeg is a zebra animal character in the poem named as ज़ेब्रा.
 Below are the story details:.
 
-Evening was approaching in the village. Thick black clouds had covered the sky as if night had fallen during the day itself. Cold winds were blowing, and thunder rumbled across the heavens.
-Madhav was pushing his old wooden cart toward the village crossroads. He was very poor. The only thing he owned was this food cart, through which he sold pav bhaji to make a living. The roof of his house was made of mud and leaked every time it rained.
-He silently prayed, "God, please don't let it rain today. If I can't sell the bhaji today, it will spoil by tomorrow. There are no groceries left at home either. Sumitra must be hoping that I'll bring some money today so that the stove can be lit."
-As soon as Madhav set up his cart at the crossroads, large raindrops began to fall. Within moments, a heavy downpour started. People quickly shut the shutters of their shops and headed home.
-Madhav hurriedly pulled out a torn plastic sheet and covered his pav bhaji to protect it. He himself was getting drenched, but his concern was only for his food.
-Just then, a villager named Birju passed by the cart and said,
-“अरे माधव यह क्या कर रहे हो? ऐसी आफत वाली बारिश में कौन बाहर आएगा तुम्हारी पाव भाजी खाने? घर जा भाई वरना बीमार हो जाएगा।”
-Madhav replied sadly,
-“बिरजू भाई गरीब को बीमारी से ज्यादा भूख का डर लगता है। आज दिन भर से ₹1 की भी बोहनी नहीं हुई है। अगर खाली हाथ घर गया तो सुमित्रा को क्या मुंह दिखाऊंगा?”
-The rain became even heavier. Madhav stood under a tree, staring at the sky. Tears filled his eyes, and fear gripped his heart.
-By 8 PM, the rain had slowed down slightly, but silence surrounded the area. Madhav decided that the day was ruined and began packing up.
-Suddenly, a large car splashed through the mud and stopped beside his cart.
-A gentleman stepped out and asked,
-“ओ भाई क्या कुछ खाने को मिलेगा? हम लोग शहर जा रहे थे लेकिन आगे का रास्ता बंद है। बहुत जोर की भूख लगी है।”
-Madhav immediately replied,
-“जी साहब भाजी तो तैयार है। बस पाव गरम करने की देर है। आप 5 मिनट रुकिए मैं अभी देता हूं।”
-The man smiled and said,
-“अरे भाई जल्दी करो। इस ठंड में कुछ गरमा गरम मिल जाए तो जान में जान आए।”
-For the first time that evening, Madhav's gloomy face lit up. He quickly lit the stove. The aroma of butter spread through the air. He mashed the bhaji carefully on the hot griddle and toasted the pav until it turned golden brown.
-The steaming pav bhaji made the travelers even hungrier.
-After serving the plate, Madhav said,
-“लीजिए साहब गरमागरम पाव भाजी खाइए।”
-The gentleman took a bite and exclaimed,
-“वाह भाई क्या स्वाद है। हमने शहर के बड़े होटलों में खाया है पर ऐसी चटपटी भाजी कहीं नहीं मिली। तुमने तो कमाल कर दिया।”
-His companion added,
-“सच में यार इस बारिश में इसका स्वाद दुगुना हो गया है। भाई दो प्लेट और लगाओ।”
-Madhav's hard work had finally paid off. They ate heartily. When it was time to pay, the gentleman handed him a ₹2000 note.
-Surprised, Madhav said,
-“साहब यह तो बहुत ज्यादा है। मेरे पास तो छुट्टी भी नहीं है।”
-The gentleman replied warmly,
-“रख लो भाई। इस मुसीबत में तुमने हमें खाना खिलाया। यह उसके लिए छोटा सा इनाम है। खुश रहो।”
-The car drove away.
-Madhav touched the note to his forehead and thanked God. He rushed home with his cart, feeling like the richest man in the world.
-However, he didn't know that a greedy villager named Rajesh had witnessed everything from a distance.
-Rajesh owned a small grocery store in the village, but he had a very small heart. Seeing Madhav earn ₹2000 in one evening filled him with jealousy.
-He thought, "If this poor pav bhaji seller keeps earning money like this, one day he'll become my equal."
-He turned to his assistant and said,
-“देख रहा है? कल तक जिसके पास नमक खरीदने के पैसे नहीं थे आज उसके ठाट देख। यह शहर वाले भी पागल हैं। कहीं भी रुक कर कुछ भी खा लेते हैं। हमें कुछ ऐसा करना होगा कि इसकी दुकान पर कोई कदम भी ना रखे।”
----
-The next evening, light rain began again. Madhav was preparing his bhaji when Rajesh arrived with a few companions and deliberately created a scene.
-He shouted,
-“अरे छी छी माधव ये कैसी बदबू आ रही है तेरे ठेले से? इस भाजी में सब्जियां सड़ी हुई इस्तेमाल कर रहा है क्या?”
-Then he continued,
-“कल रात शहर वालों को तो ठग लिया और अब हमें बीमार करने का इरादा है क्या?”
-Madhav defended himself,
-“नहीं राजेश भैया यह आप कैसी बात कर रहे हैं? सुमित्रा ने सुबह ही मंडी से ताजी गोभी और मटर लाकर दिए हैं और अपने ठेले पर सफाई का पूरा ध्यान भी रखता हूं।”
-Rajesh interrupted,
-“अरे चुप कर। सबको दिख रहा है कि तू बारिश के गंदे पानी में पाव सेक रहा है। गांव वालों सुन लो, अगर माधव की पाव भाजी खाई तो पेट खराब होना पक्का है। कल रात जो लोग खाकर गए थे सुना है उनकी तबीयत बिगड़ गई है।”
-The villagers became suspicious. Potential customers walked away. Despite Madhav's explanations, Rajesh's rumors spread like wildfire.
-For two hours, Madhav sat without a single customer while Rajesh watched from afar and laughed.
-Then, unexpectedly, the same car returned.
-The gentleman stepped out, this time accompanied by his wife.
-Smiling, he said,
-“नमस्ते भाई। आज हम खासतौर पर तुम्हारी पाव भाजी खाने के लिए शहर से यहां तक आए हैं। मेरी पत्नी को तुम्हारी भाजी का स्वाद इतना पसंद आया कि उसने आज घर पर खाना ही नहीं बनाया।”
-Confused, Madhav replied,
-“साहब पर यहां तो लोग कह रहे हैं कि मेरी भाजी खाकर आपकी तबीयत खराब हो गई थी।”
-The gentleman laughed loudly.
-“अरे कौन फैला रहा है यह झूठ? हम तो कल से और ज्यादा तरोताजा महसूस कर रहे हैं। बल्कि मैंने तो अपने ऑफिस के ग्रुप में भी तुम्हारी फोटो डाली है। देखो पीछे एक और गाड़ी आ रही है। वो सब मेरे दोस्त हैं।”
-Rajesh's face turned pale.
-Soon, several more cars arrived. Madhav got to work immediately. The aroma of fresh butter and spices filled the air.
-One elderly villager stepped forward and said,
-“माधव बेटा हमें माफ करना। हम इस राजेश की बातों में आ गए थे। हमें भी एक प्लेट पाव भाजी खिलाओ। इसकी खुशबू ने तो भूख जगा दी है।”
-That night, every last bit of Madhav's bhaji was sold.
-Rajesh slipped away in shame.
----
-Over the following months, Madhav's fame spread throughout both the village and the city. Customers gathered around his cart every evening. Sumitra started helping him, and together they perfected even more delicious spice blends.
-One rainy night, Madhav saw Sumitra placing pots under the leaking roof.
-Unable to sleep because the bed was soaked, he finally made a decision.
-He told her,
-“सुमित्रा अब बहुत हो गया। कब तक हम इस टपकती छत के नीचे रात गुजारेंगे। भगवान की दया से अब हमारे पास कुछ पैसे जमा हो गए हैं। मैं सोच रहा हूं कि अब ठेला छोड़कर एक छोटी सी दुकान किराए पर ले लूं।”
-Sumitra replied,
-“दुकान पर उसके लिए तो बहुत पैसे लगेंगे और गांव के चौराहे पर दुकान मिलना भी तो मुश्किल है।”
-Madhav answered,
-“कोशिश करने में क्या हर्ज है? अगर एक बार पक्की दुकान हो गई तो बारिश में भी धंधा बंद नहीं होगा और लोग आराम से बैठकर खा सकेंगे। मैं कल ही सरपंच जी से बात करूंगा।”
-The next day, the village head helped him rent an old shop near the crossroads.
-Madhav worked day and night to clean and renovate it.
-Soon, a small eatery called Madhav Pav Bhaji Center was born.
-On the opening day, he invited the entire village. Wanting peace, he even invited Rajesh.
-Standing at Rajesh's store, he said,
-“राजेश भाई आज मेरी छोटी सी दुकान का उद्घाटन है। आप जरूर आना मुझे बहुत खुशी होगी।”
-Rajesh sneered,
-“बड़ा आया दुकान खोलने वाला। दो दिन क्या शहर वाले रुक गए? तू तो अपने आप को राजा समझने लगा। जा मैं नहीं आने वाला तेरी सड़ी हुई दुकान पर।”
-Madhav returned sadly.
-That evening, the eatery was bustling with customers.
-But Rajesh wasn't finished.
-He had paid some local troublemakers to disrupt the opening.
-One of them deliberately dropped a plate and shouted,
-“अरे यह कैसी भाजी है? इसमें तो कंकड़ पत्थर है। तुम लोग हमें बीमार करना चाहते हो क्या?”
-Before the situation escalated, a stern voice interrupted:
-“रुको यह क्या बदतमीजी है।”
-It was the village's new Head Constable, Raghuveer Singh.
-Examining the plate, he said,
-“तुम कह रहे हो इसमें कंकड़ है। जरा मैं भी तो देखूं। अरे ये कंकड़ तो ऊपर से डाले गए लगते हैं क्योंकि इस कंकड़ पर भाजी का मसाला भी नहीं लगा है। सच-सच बताओ तुम्हें यहां हंगामा करने के लिए किसने भेजा है?”
-The frightened boys confessed,
-“वो... साहब हमें तो राजेश भैया ने बोला था कि माधव की दुकान जमने नहीं देनी है। उन्होंने हमें पैसे दिए थे।”
-The crowd immediately understood the truth.
-Raghuveer Singh scolded the boys and turned to Madhav.
-“माधव भाई डरो मत। तुम्हारी ईमानदारी ही तुम्हारी सबसे बड़ी ताकत है। आज से यहां तुम्हें कोई परेशान नहीं करेगा। चलो अब हमारे लिए दो प्लेट बढ़िया सी पाव भाजी लगाओ। बहुत भूख लगी है।”
-Tears welled up in Madhav's eyes.
----
-Years passed.
-Madhav's business flourished beyond imagination.
-Meanwhile, Rajesh's greed led him to start his own pav bhaji stall using stale vegetables and cheap ingredients.
-Soon customers began falling ill.
-One angry villager confronted him:
-“अरे राजेश, यह क्या खिला दिया तुमने? कल रात तुम्हारी पाव भाजी खाई थी, तब से पूरे घर का पेट खराब हो गया है। डॉक्टर के यहां चक्कर लगाने पड़ रहे हैं।”
-Complaints reached the village council.
-Rajesh was fined heavily, and his shop was temporarily shut down.
-His reputation collapsed.
-Meanwhile, Madhav's honesty brought him greater success. His story was featured in a major city newspaper.
-Soon, a businessman approached him with an offer.
-“माधव भाई आपकी भाजी में जो स्वाद है वो मैंने आज तक कहीं नहीं चखा। मैं चाहता हूं कि शहर के मुख्य हाईवे पर हम मिलकर एक बड़ा फैमिली रेस्टोरेंट खोलें। जगह और पैसा मेरा होगा और हुनर आपका।”
-Nervous, Madhav replied,
-“साहब मैं तो एक छोटा सा आदमी हूं। मुझे डर लगता है कि कहीं मैं इतनी बड़ी जिम्मेदारी संभाल पाऊंगा या नहीं।”
-The businessman encouraged him,
-“क्यों नहीं संभाल पाएंगे? आपने कीचड़ और बारिश में ठेला चलाया है। यह तो फिर भी छत के नीचे का काम है। आपको भगवान ने मौका दिया है। इसे मत छोड़िए।”
-Madhav agreed.
-Within months, a grand restaurant opened on the highway under the name Madhav Ki Asli Pav Bhaji.
----
-One day, while passing through his old village crossroads, Madhav noticed Rajesh sitting sadly outside his nearly abandoned shop.
-Madhav greeted him warmly.
-“राजेश भाई राम-राम। क्या हालचाल है?”
-Rajesh lowered his head and said,
-“माधव तुम यहां? भाई मुझे माफ कर दो। मैंने तुम्हारे साथ बहुत बुरा किया। तुम्हारी दुकान उजाड़ने की कोशिश की। आज देखो कुदरत ने मुझे वहीं लाकर खड़ा कर दिया है। मेरी दुकान बिकने की कगार पर है और मेरे पास कोई काम नहीं है।”
-Madhav smiled kindly.
-“पुरानी बातें भूल जाओ राजेश भाई। इंसान गलती का पुतला है। मुझे आपसे कोई शिकायत नहीं है। अगर आप चाहें तो मेरे नए होटल में स्टोर मैनेजर का काम संभाल सकते हैं। मुझे किसी भरोसेमंद आदमी की जरूरत है।”
-Rajesh's eyes filled with tears.
-“तुम सच में महान हो माधव। मैंने तुम्हें गिराना चाहा और तुम मुझे सहारा दे रहे हो। मैं वादा करता हूं अब कभी लालच नहीं करूंगा और पूरी ईमानदारी से काम करूंगा।”
-Madhav embraced him.
-The villagers were amazed to see how a poor pav bhaji seller had not only defeated poverty but had also won over his enemy through kindness.
-Moral: No matter how heavy the rain may be, if your determination remains strong, the sun will eventually shine again. Honesty, hard work, and kindness always triumph over jealousy and greed.
+चलो चलें हम जंगल में,
+हरे-भरे इस जंगल में!
+ऊँचे-ऊँचे पेड़ यहाँ,
+ठंडी-ठंडी छाँव यहाँ!
 
+बंदर झूले डाल-डाल, 
+कूदे-फाँदे धमाल-धमाल!
+पत्ते बोले सर-सर-सर,
+हवा चले तो फर-फर-फर!
+
+जंगल, जंगल, प्यारा जंगल,
+हरा-भरा है सारा जंगल!
+शेर बोले “दहाड़-दहाड़!” 
+हाथी बोले “फूँ-फूँ-फूँ!” 
+चिड़िया बोले “चूँ-चूँ-चूँ!” 
+सब मिल गाएँ “झूम-झूम-झूम!” 
+
+
+
+जिराफ़ लंबी गर्दन वाला, 
+पत्ते खाए ऊपर वाला!
+ज़ेब्रा दौड़े धूम-धड़ाम, 
+काले-सफेद उसकी शान!
+
+तोता उड़ता पंख फैलाकर, 
+तितली नाचे रंग सजाकर! 
+मोर नाचे पंख पसार, 
+जंगल में है कितना प्यार!
+
+
+
+जंगल, जंगल, प्यारा जंगल,
+हरा-भरा है सारा जंगल!
+शेर बोले “दहाड़-दहाड़!” 
+हाथी बोले “फूँ-फूँ-फूँ!” 
+चिड़िया बोले “चूँ-चूँ-चूँ!” 
+सब मिल गाएँ “झूम-झूम-झूम!” 
+
+छोटा सा संदेश
+
+पेड़ बचाएँ, जंगल बचाएँ,
+सारे जीवों को प्यार जताएँ।
+धरती माँ को रखें हरा,
+जंगल अपना सबसे प्यारा! 
+
+
+जंगल, जंगल, प्यारा जंगल,
+जीव-जंतुओं का न्यारा जंगल!
+ताली बजाओ, पैर पटकाओ,
+मिलकर जंगल गीत सुनाओ!
+
+झूमो-झूमो, गाओ-गाओ,
+जंगल को हम खूब बचाओ!

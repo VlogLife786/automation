@@ -209,7 +209,7 @@ async function generateSceneSequence(scene: Scene) {
         webhookUrl: "",
         startImageName: startImageName,
         audioFileName: "",
-        refrenceImageList: scene.prompt.includes('.png') ? refrenceImageList : [],
+        refrenceImageList: ['.png', '.jpg', '.jpeg'].some(ext => scene.prompt.includes(ext)) ? refrenceImageList : [],
         sendEmail: false
     });
 
