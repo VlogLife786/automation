@@ -52,23 +52,23 @@ export async function GenerateWANAiVideos(requestModel: ExecutionRequestModel, r
         console.log("Navigated to WAN AI Site.");
 
         page.on('response', async (response) => {
-            const request = response.request();
-            if (response.url().includes('wanx/api/common/v2/taskResult')) {
-                console.log("Received response for task result.");
-                config = {
-                    method: request.method(),
-                    maxBodyLength: Infinity,
-                    url: request.url(),
-                    headers: request.headers(),
-                    data: await request.fetchPostData()
-                };
+                const request = response.request();
+                if (response.url().includes('wanx/api/common/v2/taskResult')) {
+                    console.log("Received response for task result.");
+                    config = {
+                        method: request.method(),
+                        maxBodyLength: Infinity,
+                        url: request.url(),
+                        headers: request.headers(),
+                        data: await request.fetchPostData()
+                    };
 
-                taskResultResponse = await response.json() as TaskResultByIdResponse;
-            }
-            if (response.url().includes('wanx/api/common/imageGen')) {
-                console.log("Received response for video generation request.");
-                videoGenerationResponse = await response.json() as StartVideoGenerationResponse;
-            }
+                    taskResultResponse = await response.json() as TaskResultByIdResponse;
+                }
+                if (response.url().includes('wanx/api/common/imageGen')) {
+                    console.log("Received response for video generation request.");
+                    videoGenerationResponse = await response.json() as StartVideoGenerationResponse;
+                }
         });
 
         //Navigate to login page
@@ -143,6 +143,9 @@ export async function GenerateWANAiVideos(requestModel: ExecutionRequestModel, r
         if (requestModel.refrenceImageList.length > 0 || requestModel.startImageName == "") {
             try {
                 await selectVideoResolutionAndDuration(page);
+                await page.click('div[class="ant-switch-handle"]');
+                console.log("Disable to audio generation in video.");
+                await sleep(2000);
             } catch (error) {
                 console.log("Error while selecting video resolution and duration: ", error);
             }
@@ -242,10 +245,15 @@ export async function GenerateWANAiVideos(requestModel: ExecutionRequestModel, r
 
 async function selectVideoResolutionAndDuration(page: Page) {
     await clickOnElementByText(page, '720PSmart Ratio5s', 'div');
+    console.log("Clicked on resolution opening box");
+    
 
     await sleep(4000);
 
     const thumb = await page.waitForSelector('div[class*="Thumb"]');
+
+    console.log('Selected the duration slider.');
+    
 
     const box = await thumb?.boundingBox();
 
@@ -268,6 +276,7 @@ async function selectVideoResolutionAndDuration(page: Page) {
         console.log("Selected time: " + time);
 
         if (time && time.includes('4')) {
+            console.log("Timer is set for 4 second.");
             break;
         }
         startX -= 10;
@@ -283,6 +292,7 @@ async function selectVideoResolutionAndDuration(page: Page) {
     await sleep(4000);
 
     await clickOnElementByText(page, '16:9', 'div[class^="Label-sc-"]', true);
+    console.log("Clicked on aspect ratio option to set 16:9");
 
     await sleep(2000);
 }

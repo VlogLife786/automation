@@ -109,6 +109,9 @@ export async function GenerateWANAiVideos(requestModel, retries = 10) {
         if (requestModel.refrenceImageList.length > 0 || requestModel.startImageName == "") {
             try {
                 await selectVideoResolutionAndDuration(page);
+                await page.click('div[class="ant-switch-handle"]');
+                console.log("Disable to audio generation in video.");
+                await sleep(2000);
             }
             catch (error) {
                 console.log("Error while selecting video resolution and duration: ", error);
@@ -199,8 +202,10 @@ export async function GenerateWANAiVideos(requestModel, retries = 10) {
 }
 async function selectVideoResolutionAndDuration(page) {
     await clickOnElementByText(page, '720PSmart Ratio5s', 'div');
+    console.log("Clicked on resolution opening box");
     await sleep(4000);
     const thumb = await page.waitForSelector('div[class*="Thumb"]');
+    console.log('Selected the duration slider.');
     const box = await thumb?.boundingBox();
     if (!box)
         throw new Error('Thumb not visible');
@@ -213,6 +218,7 @@ async function selectVideoResolutionAndDuration(page) {
         let time = await page.$eval('div[class*="ThumbLabel"]', el => el.innerText);
         console.log("Selected time: " + time);
         if (time && time.includes('4')) {
+            console.log("Timer is set for 4 second.");
             break;
         }
         startX -= 10;
@@ -224,6 +230,7 @@ async function selectVideoResolutionAndDuration(page) {
     await page.mouse.up();
     await sleep(4000);
     await clickOnElementByText(page, '16:9', 'div[class^="Label-sc-"]', true);
+    console.log("Clicked on aspect ratio option to set 16:9");
     await sleep(2000);
 }
 async function closeBrowserInstances(incognitoContext, browser) {
