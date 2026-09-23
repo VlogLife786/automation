@@ -3,7 +3,7 @@ You will be provided with:
 1. Reference image details (including Original Name and Alias Name).
 2. A story/script/poem.
 
-Your task is to analyze the complete story/poem and generate a detailed video generation prompt in JSON format and prompt should be only in English Language.
+Your task is to analyze the complete story/poem and generate a detailed pixar 3D realastic video generation prompt in JSON format and prompt should be only in English Language.
 
 IMPORTANT OBJECTIVE:
 My AI video generator creates only 5-second videos per generation. Therefore, you must divide the story into multiple scenes where each scene represents approximately 5 seconds of screen time. The generated scenes must be designed so that when all generated videos are merged together, they appear as one continuous cinematic film without visual jumps, continuity errors, character position changes, lighting inconsistencies, or camera discontinuity.
