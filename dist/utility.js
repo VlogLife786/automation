@@ -518,3 +518,38 @@ export async function createFolderIfNotExist(folderPath) {
         console.log(`Folder already exists at: ${folderPath}`);
     }
 }
+export async function clickOnElementByTextContains(page, searchText, elementTag = "span", selectMatchingLastElement = false) {
+    await page.waitForSelector(elementTag);
+    const elements = await page.$$(elementTag);
+    let filteredElements = await Promise.all(elements.map(async (element) => {
+        const text = await page.evaluate(el => el.textContent?.trim(), element);
+        return text?.includes(searchText.trim()) ? element : null;
+    }));
+    filteredElements = filteredElements.filter(el => el !== null);
+    if (filteredElements && filteredElements.length > 0) {
+        let element = filteredElements[selectMatchingLastElement ? filteredElements.length - 1 : 0];
+        // Scroll into view first
+        await element?.evaluate(el => {
+            el.scrollIntoView({
+                behavior: "instant",
+                block: "center",
+            });
+        });
+        // Native puppeteer click
+        await element?.click();
+        return true;
+    }
+    return false;
+}
+export async function clickElememtByTextJs(page, searchText, elementTag = "span") {
+    await page.evaluate((searchText, elementTag) => {
+        const elements = document.querySelectorAll(elementTag);
+        for (const element of elements) {
+            console.log(element.innerText.trim());
+            if (element.innerText.trim() == searchText) {
+                element.click();
+                break;
+            }
+        }
+    }, searchText, elementTag);
+}

@@ -1,9 +1,9 @@
 You will be provided with:
 
 1. Reference image details (including Original Name and Alias Name).
-2. A story/script.
+2. A story/script/poem.
 
-Your task is to analyze the complete story and generate a detailed video generation prompt in JSON format.
+Your task is to analyze the complete story/poem and generate a detailed video generation prompt in JSON format and prompt should be only in English Language.
 
 IMPORTANT OBJECTIVE:
 My AI video generator creates only 5-second videos per generation. Therefore, you must divide the story into multiple scenes where each scene represents approximately 5 seconds of screen time. The generated scenes must be designed so that when all generated videos are merged together, they appear as one continuous cinematic film without visual jumps, continuity errors, character position changes, lighting inconsistencies, or camera discontinuity.
@@ -18,11 +18,10 @@ STRICT RULES:
 
 2. Scene Duration Rule
    * Every scene must be designed for approximately 5 seconds of video generation.
-   * Provide the video generation prompt in detail, as it mention every step, every camera detail, expression of character if any.
    * Do not overload a scene with too many actions.
    * Ensure all actions and dialogues comfortably fit within 5 seconds.
 
-3. Video Continuity Rule (VERY IMPORTANT)
+3. Video Continuity Rule (VERY IMPORTANT) only for story not for poem
    * Treat all scenes as parts of one continuous movie.
    * The ending frame of a scene must naturally connect to the starting frame of the next scene.
    * Preserve:
@@ -41,7 +40,7 @@ STRICT RULES:
    * Never suddenly reset character positions or camera angles unless the story explicitly requires a scene transition.
    * Each scene should mention how it continues from the previous scene's final frame.
 
-4. Previous Scene Reference Rule
+4. Previous Scene Reference Rule only for story not for poem
    * Starting from Scene 2, include a continuity instruction such as:
      "Continue seamlessly from the last frame of the previous scene."
    * Mention the exact character position, movement state, emotion, and camera state inherited from the previous scene.
@@ -78,8 +77,8 @@ STRICT RULES:
    * Correct any grammar issues.
    * Dialogues should sound natural and human.
    * Dialogue length must fit comfortably within a 5-second video.
-   * If dialogue is too long, split it into multiple consecutive scenes.
-   * In scenes where the dialouge is more than 3 to 5 words, Then split that scene across multiple consecutive scenes while maintaining conversational continuity.
+   * If dialogue is too long, split it into multiple consecutive scene, because each scenes will be 5 second long. You can modify the dialouges but keep in mind the meaning of dialouge should not change.
+   * Keep the dialouge short and simple for one scene otherwise AI tool make it too fast, Which will impact video.
    * If there is no dialouge in the scene then mention that there is no dialogue otherwise my AI tool automatically add english dialouge.
   
   For ex, refer the example below: 
@@ -104,7 +103,7 @@ STRICT RULES:
      * they
    * Always use the Alias Name. 
 
-10. Motion Consistency Rule
+10. Motion Consistency Rule only for story not for poem
     * Character movement must be continuous.
     * Example:
       * If Alias_A starts walking in Scene 1,
